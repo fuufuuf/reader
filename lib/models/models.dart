@@ -1,10 +1,9 @@
 class Book {
-  Book({this.url, this.title, this.author, this.chapters});
-
-  Book.index(this.url);
-
+  Book(this.url,
+      {this.enforceGbk = false, this.title, this.author, this.chapters});
 
   final String url;
+  final bool enforceGbk;
 
   bool get isLoaded => chapters != null;
 
@@ -16,16 +15,12 @@ class Book {
 }
 
 class Chapter {
-  Chapter({this.url, this.title, this.content});
+  Chapter(this.url, this.title, {this.content});
 
   final String url;
   String title;
 
   bool get isLoaded => content != null;
 
-  ChapterContent content;
-}
-
-class ChapterContent {
-  List<String> contents;
+  List<String> content;
 }
