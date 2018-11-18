@@ -1,9 +1,16 @@
-class Book {
-  Book(this.url,
-      {this.enforceGbk = false, this.title, this.author, this.chapters});
+abstract class WebContent {
+  final Uri url;
+  String title;
 
-  final String url;
-  final bool enforceGbk;
+  WebContent(this.url);
+}
+
+class Book implements WebContent {
+  Book(url, {this.title, this.author, this.chapters}) : url = Uri.parse(url);
+
+  final Uri url;
+
+  String get urlString => url.toString();
 
   bool get isLoaded => chapters != null;
 
@@ -14,10 +21,13 @@ class Book {
   List<Chapter> chapters;
 }
 
-class Chapter {
+class Chapter implements WebContent {
   Chapter(this.url, this.title, {this.content});
 
-  final String url;
+  final Uri url;
+
+  String get urlString => url.toString();
+
   String title;
 
   bool get isLoaded => content != null;
