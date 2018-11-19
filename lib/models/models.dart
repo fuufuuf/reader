@@ -6,7 +6,9 @@ abstract class WebContent {
 }
 
 class Book implements WebContent {
-  Book(url, {this.title, this.author, this.chapters}) : url = Uri.parse(url);
+  Book(this.url, {this.title, this.author, this.chapters});
+
+  Book.index(String url) : this(Uri.parse(url));
 
   final Uri url;
 

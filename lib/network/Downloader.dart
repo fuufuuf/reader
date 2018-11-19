@@ -1,8 +1,8 @@
-import 'package:reader/models/models.dart';
-import 'package:http/http.dart' as http;
-import 'package:html/parser.dart' as htmlParser;
-import 'package:html/dom.dart';
 import 'package:gbk2utf8/gbk2utf8.dart';
+import 'package:html/dom.dart';
+import 'package:html/parser.dart' as htmlParser;
+import 'package:http/http.dart' as http;
+import 'package:reader/models/models.dart';
 
 typedef Downloader DownloaderFactory();
 
@@ -23,7 +23,7 @@ abstract class Downloader {
 
   bool get enforceGbk;
 
-  Future<Book> fetchIndex(Book book) async {
+  Future<Book> fetchBook(Book book) async {
     final page = await fetchHtml(book.url, enforceGbk);
 
     parseBook(book, page);
@@ -31,7 +31,7 @@ abstract class Downloader {
     return book;
   }
 
-  Future<Chapter> fetchChapter(Book book, Chapter chapter) async {
+  Future<Chapter> fetchChapter(Chapter chapter) async {
     final page = await fetchHtml(chapter.url, enforceGbk);
 
     parseChapter(chapter, page);
