@@ -38,16 +38,41 @@ class _BookListView extends StatelessWidget {
   final List<Book> books;
 
   Widget _renderItem(BuildContext context, int index) {
-    return Container(
-      child: Column(
-        children: <Widget>[Text(books[index].title), Text(books[index].author)],
-      ),
-    );
+    return Padding(
+        padding: EdgeInsets.symmetric(vertical: 4),
+        child: Row(
+          children: <Widget>[
+            Icon(
+              Icons.local_library,
+              size: 32,
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 8),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      books[index].title,
+                      textAlign: TextAlign.start,
+                    ),
+                    Text(
+                      books[index].author,
+                      textAlign: TextAlign.start,
+                      style: DefaultTextStyle.of(context)
+                          .style
+                          .apply(color: Colors.black45),
+                    ),
+                  ]),
+            )
+          ],
+        ));
   }
 
   @override
-  Widget build(BuildContext context) => ListView.builder(
+  Widget build(BuildContext context) => Padding(
+      padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+      child: ListView.builder(
         itemBuilder: _renderItem,
         itemCount: books.length,
-      );
+      ));
 }
