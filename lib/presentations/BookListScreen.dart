@@ -7,7 +7,6 @@ class BookListScreen extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
         title: const Text("Books"),
-
       ),
       body: FutureBuilder<List<Book>>(
           initialData: [],
@@ -33,25 +32,46 @@ class _BookListView extends StatelessWidget {
 
   final List<Book> books;
 
-  Widget _renderItem(BuildContext context, int index) => ListTile(
-        leading: const Icon(
-          Icons.local_library,
-          size: 32,
-        ),
-        title: Text(books[index].title),
-        subtitle: Text(
-          books[index].author,
-          style:
-              DefaultTextStyle.of(context).style.apply(color: Colors.black45),
-        ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ChapterListScreen(books[index])),
-          );
-        },
-      );
+  Widget _renderItem(BuildContext context, int index) {
+    final book = books[index];
+    return FutureBuilder<Book>(
+      future: book.isMetaLoaded ? Future.value(book) : book.load(),
+      builder: _renderBookLoader,
+    );
+  }
+
+  Widget _renderBookLoader(BuildContext context, AsyncSnapshot<Book> snapshot) {
+    if (snapshot.connectionState != ConnectionState.done) {
+      return const ListTile(
+          leading: Icon(
+            Icons.cloud_download,
+            size: 32,
+          ),
+          title: Text("Loading...."));
+    }
+
+    if (snapshot.hasError) {
+      throw snapshot.error;
+    }
+    return ListTile(
+      leading: const Icon(
+        Icons.local_library,
+        size: 32,
+      ),
+      title: Text(snapshot.data.title),
+      subtitle: Text(
+        snapshot.data.author,
+        style: DefaultTextStyle.of(context).style.apply(color: Colors.black45),
+      ),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ChapterListScreen(snapshot.data)),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) => Padding(

@@ -10,7 +10,9 @@ abstract class WebContent<T> {
 
   String get urlString => url.toString();
 
-  String get displayTitle => title ?? url.toString();
+  bool get isMetaLoaded => title != null;
+
+  String get displayTitle => isMetaLoaded ? title : urlString;
 
   bool get isLoaded;
 
@@ -23,7 +25,11 @@ abstract class WebContent<T> {
 }
 
 class BookList {
-  static Future<List<Book>> loadAll() => Future.value([]);
+  static Future<List<Book>> loadAll() => Future.value(<Book>[
+        Book.url("https://www.piaotian.com/html/9/9054/"),
+        Book.url("https://www.piaotian.com/html/5/5623/"),
+        Book.url("https://www.piaotian.com/html/8/8491/")
+      ]);
 }
 
 class Book extends WebContent<Book> {
