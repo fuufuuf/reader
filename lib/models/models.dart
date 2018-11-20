@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
+import 'package:reader/network/Downloader.dart';
 
-abstract class WebContent {
+abstract class WebContent<T> {
   final Uri url;
 
   String title;
@@ -12,9 +13,16 @@ abstract class WebContent {
   String get displayTitle => title ?? url.toString();
 
   bool get isLoaded;
+
+  Downloader get _downloader => Downloader.findDownloader(this);
+
+  Future<T> load({bool reload: false}) =>
+      (!isLoaded || reload) ? _download() : Future.value(this as T);
+
+  Future<T> _download();
 }
 
-class Book extends WebContent {
+class Book extends WebContent<Book> {
   String title;
 
   String author;
@@ -28,9 +36,12 @@ class Book extends WebContent {
 
   @override
   bool get isLoaded => chapters != null;
+
+  @override
+  Future<Book> _download() => _downloader.loadBook(this);
 }
 
-class Chapter extends WebContent {
+class Chapter extends WebContent<Chapter> {
   List<String> content;
 
   Chapter({@required Uri url, String title, this.content})
@@ -38,4 +49,7 @@ class Chapter extends WebContent {
 
   @override
   bool get isLoaded => content != null;
+
+  @override
+  Future<Chapter> _download() => _downloader.loadChapter(this);
 }

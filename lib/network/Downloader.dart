@@ -23,7 +23,7 @@ abstract class Downloader {
 
   bool get enforceGbk;
 
-  Future<Book> fetchBook(Book book) async {
+  Future<Book> loadBook(Book book) async {
     final page = await fetchHtml(book.url, enforceGbk);
 
     parseBook(book, page);
@@ -31,7 +31,7 @@ abstract class Downloader {
     return book;
   }
 
-  Future<Chapter> fetchChapter(Chapter chapter) async {
+  Future<Chapter> loadChapter(Chapter chapter) async {
     final page = await fetchHtml(chapter.url, enforceGbk);
 
     parseChapter(chapter, page);
@@ -68,8 +68,9 @@ class PiaotianDownloader extends Downloader {
 
     book.chapters = document
         .querySelectorAll('.mainbody .centent ul li a')
-        .map((element) =>
-            Chapter(book.url.resolve(element.attributes['href']), element.text))
+        .map((element) => Chapter(
+            url: book.url.resolve(element.attributes['href']),
+            title: element.text))
         .toList(growable: false);
   }
 
