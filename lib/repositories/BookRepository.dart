@@ -3,13 +3,13 @@ import 'package:reader/network/Downloader.dart';
 
 class BookRepository {
   List<Book> _books = <Book>[
-    Book.index("https://www.piaotian.com/html/9/9054")
+    Book.index("https://www.piaotian.com/html/9/9054/")
   ];
 
   Future<List<Book>> loadBooks() => Future.value(_books);
 
   Future<List<Book>> sampleData() => Future.value(<Book>[
-        Book(Uri.parse("https://www.piaotian.com/html/9/9054"),
+        Book(Uri.parse("https://www.piaotian.com/html/9/9054/"),
             title: "大道朝天",
             author: "猫腻",
             chapters: <Chapter>[
@@ -79,9 +79,9 @@ class BookRepository {
                     "那么，现在就让我们开始吧。",
                   ]),
             ]),
-        Book(Uri.parse("https://www.piaotian.com/html/9/9054"),
+        Book(Uri.parse("https://www.piaotian.com/html/9/9054/"),
             title: "将夜", author: "猫腻", chapters: <Chapter>[]),
-        Book(Uri.parse("https://www.piaotian.com/html/9/9054"),
+        Book(Uri.parse("https://www.piaotian.com/html/9/9054/"),
             title: "择天记", author: "猫腻", chapters: <Chapter>[]),
       ]);
 
