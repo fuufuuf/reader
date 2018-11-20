@@ -25,11 +25,13 @@ abstract class WebContent<T> {
 }
 
 class BookList {
-  static Future<List<Book>> loadAll() => Future.value(<Book>[
-        Book.url("https://www.piaotian.com/html/9/9054/"),
-        Book.url("https://www.piaotian.com/html/5/5623/"),
-        Book.url("https://www.piaotian.com/html/8/8491/")
-      ]);
+  static List<Book> books = <Book>[
+    Book.url("https://www.piaotian.com/html/9/9054/"),
+    Book.url("https://www.piaotian.com/html/5/5623/"),
+    Book.url("https://www.piaotian.com/html/8/8491/")
+  ];
+
+  static Future<List<Book>> loadAll() => Future.value(books);
 }
 
 class Book extends WebContent<Book> {
