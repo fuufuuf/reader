@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:reader/models/models.dart';
 import 'package:screen/screen.dart';
 
@@ -36,16 +37,12 @@ class _ReaderScreenState extends State<ReaderScreen> {
     super.initState();
     _createFuture();
     Screen.keepOn(false);
+
+    SystemChrome.setEnabledSystemUIOverlays([]);
   }
 
   _createFuture({bool reload: false}) {
     future = chapterFromBook.load(reload: reload);
-  }
-
-  @override
-  void deactivate() {
-    super.deactivate();
-    Screen.keepOn(false);
   }
 
   Widget renderBottomSheet(BuildContext context) => ListView(children: <Widget>[
@@ -64,6 +61,8 @@ class _ReaderScreenState extends State<ReaderScreen> {
             leading: const Icon(Icons.note),
             title: const Text("Chapters"),
             onTap: () {
+              Screen.keepOn(false);
+              SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
               Navigator.pop(context);
               Navigator.pop(context, chapterIndex);
             }),
