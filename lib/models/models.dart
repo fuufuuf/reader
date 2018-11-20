@@ -1,38 +1,41 @@
+import 'package:meta/meta.dart';
+
 abstract class WebContent {
   final Uri url;
+
   String title;
 
-  WebContent(this.url);
-}
-
-class Book implements WebContent {
-  Book(this.url, {this.title, this.author, this.chapters});
-
-  Book.index(String url) : this(Uri.parse(url));
-
-  final Uri url;
+  WebContent({@required this.url, this.title});
 
   String get urlString => url.toString();
 
-  bool get isLoaded => chapters != null;
+  String get displayTitle => title ?? url.toString();
 
+  bool get isLoaded;
+}
+
+class Book extends WebContent {
   String title;
 
   String author;
 
   List<Chapter> chapters;
+
+  Book({@required Uri url, String title, this.author, this.chapters})
+      : super(url: url, title: title);
+
+  Book.url(String url) : this(url: Uri.parse(url));
+
+  @override
+  bool get isLoaded => chapters != null;
 }
 
-class Chapter implements WebContent {
-  Chapter(this.url, this.title, {this.content});
-
-  final Uri url;
-
-  String get urlString => url.toString();
-
-  String title;
-
-  bool get isLoaded => content != null;
-
+class Chapter extends WebContent {
   List<String> content;
+
+  Chapter({@required Uri url, String title, this.content})
+      : super(url: url, title: title);
+
+  @override
+  bool get isLoaded => content != null;
 }
