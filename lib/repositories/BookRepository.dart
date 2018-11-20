@@ -6,7 +6,7 @@ class BookRepository {
     Book.index("https://www.piaotian.com/html/9/9054")
   ];
 
-  Future<List<Book>> loadBooks() => Future.wait(_books.map(loadBook));
+  Future<List<Book>> loadBooks() => Future.value(_books);
 
   Future<List<Book>> sampleData() => Future.value(<Book>[
         Book(Uri.parse("https://www.piaotian.com/html/9/9054"),

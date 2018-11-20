@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reader/models/models.dart';
+import 'package:reader/presentations/ChapterListScreen.dart';
 import 'package:reader/repositories/BookRepository.dart';
 
 class BookListScreen extends StatelessWidget {
@@ -9,6 +10,7 @@ class BookListScreen extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
         title: const Text("Books"),
+
       ),
       body: FutureBuilder<List<Book>>(
           initialData: [],
@@ -34,8 +36,7 @@ class _BookListView extends StatelessWidget {
 
   final List<Book> books;
 
-  Widget _renderItem(BuildContext context, int index) =>
-      ListTile(
+  Widget _renderItem(BuildContext context, int index) => ListTile(
         leading: const Icon(
           Icons.local_library,
           size: 32,
@@ -46,6 +47,13 @@ class _BookListView extends StatelessWidget {
           style:
               DefaultTextStyle.of(context).style.apply(color: Colors.black45),
         ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ChapterListScreen(books[index])),
+          );
+        },
       );
 
   @override
