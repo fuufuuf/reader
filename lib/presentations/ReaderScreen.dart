@@ -85,6 +85,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
     if (hasNext) {
       setState(() {
         chapterIndex++;
+        _createFuture();
       });
     }
     Navigator.pop(context);
@@ -94,6 +95,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
     if (hasPrevious) {
       setState(() {
         chapterIndex--;
+        _createFuture();
       });
     }
     Navigator.pop(context);
