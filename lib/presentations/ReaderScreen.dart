@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:reader/models/models.dart';
+import 'package:screen/screen.dart';
 
 class ReaderScreen extends StatefulWidget {
   final Book book;
@@ -31,10 +32,17 @@ class _ReaderScreenState extends State<ReaderScreen> {
   void initState() {
     super.initState();
     _createFuture();
+    Screen.keepOn(false);
   }
 
   _createFuture({bool reload: false}) {
     future = chapterFromBook.load(reload: reload);
+  }
+
+  @override
+  void deactivate() {
+    super.deactivate();
+    Screen.keepOn(false);
   }
 
   Widget renderBottomSheet(BuildContext context) => ListView(children: <Widget>[
