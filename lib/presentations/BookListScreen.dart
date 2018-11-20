@@ -22,9 +22,6 @@ class BookListScreen extends StatelessWidget {
 
             if (snapshot.hasError) {
               throw snapshot.error;
-//              return Center(
-//                child: Text("Error: ${snapshot.error}"),
-//              );
             }
 
             return _BookListView(
@@ -37,36 +34,19 @@ class _BookListView extends StatelessWidget {
 
   final List<Book> books;
 
-  Widget _renderItem(BuildContext context, int index) {
-    return Padding(
-        padding: EdgeInsets.symmetric(vertical: 4),
-        child: Row(
-          children: <Widget>[
-            Icon(
-              Icons.local_library,
-              size: 32,
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 8),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      books[index].title,
-                      textAlign: TextAlign.start,
-                    ),
-                    Text(
-                      books[index].author,
-                      textAlign: TextAlign.start,
-                      style: DefaultTextStyle.of(context)
-                          .style
-                          .apply(color: Colors.black45),
-                    ),
-                  ]),
-            )
-          ],
-        ));
-  }
+  Widget _renderItem(BuildContext context, int index) =>
+      ListTile(
+        leading: const Icon(
+          Icons.local_library,
+          size: 32,
+        ),
+        title: Text(books[index].title),
+        subtitle: Text(
+          books[index].author,
+          style:
+              DefaultTextStyle.of(context).style.apply(color: Colors.black45),
+        ),
+      );
 
   @override
   Widget build(BuildContext context) => Padding(
