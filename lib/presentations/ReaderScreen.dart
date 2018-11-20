@@ -84,7 +84,8 @@ class _ReaderScreenState extends State<ReaderScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        backgroundColor: nightMode ? Colors.black : Colors.white,
+        backgroundColor:
+            nightMode ? Colors.black : const Color.fromARGB(255, 210, 180, 140),
         body: GestureDetector(
             onDoubleTap: () async {
               showModalBottomSheet(
