@@ -11,7 +11,8 @@ class ReaderScreen extends StatefulWidget {
   ReaderScreen(this.book, this.chapterIndex);
 
   @override
-  State<StatefulWidget> createState() => _ReaderScreenState(chapterIndex);
+  State<StatefulWidget> createState() =>
+      _ReaderScreenState(chapterIndex, false);
 }
 
 class _ReaderScreenState extends State<ReaderScreen> {
@@ -26,7 +27,9 @@ class _ReaderScreenState extends State<ReaderScreen> {
 
   bool get hasNext => chapterIndex < book.chapters.length - 1;
 
-  _ReaderScreenState(this.chapterIndex);
+  bool nightMode;
+
+  _ReaderScreenState(this.chapterIndex, this.nightMode);
 
   @override
   void initState() {
@@ -72,21 +75,30 @@ class _ReaderScreenState extends State<ReaderScreen> {
             leading: const Icon(Icons.refresh),
             title: const Text("Refresh Book"),
             onTap: refreshBook),
+        ListTile(
+            leading: nightMode
+                ? const Icon(Icons.brightness_3)
+                : const Icon(Icons.brightness_7),
+            title: const Text("Night Mode"),
+            onTap: toggleNightMode),
       ]);
 
   @override
   Widget build(BuildContext context) => Scaffold(
+        backgroundColor: nightMode ? Colors.black : Colors.white,
         body: GestureDetector(
-          onDoubleTap: () async {
-            showModalBottomSheet(
-                context: context,
-                builder: (context) {
-                  return BottomSheet(
-                      onClosing: () {}, builder: renderBottomSheet);
-                });
-          },
-          child: _ChapterLoader(future),
-        ),
+            onDoubleTap: () async {
+              showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return BottomSheet(
+                        onClosing: () {}, builder: renderBottomSheet);
+                  });
+            },
+            child: _DarkModePublisher(
+              nightMode: nightMode,
+              child: _ChapterLoader(future),
+            )),
       );
 
   void onNextChapter() {
@@ -124,6 +136,28 @@ class _ReaderScreenState extends State<ReaderScreen> {
     });
     Navigator.pop(context);
   }
+
+  void toggleNightMode() {
+    setState(() {
+      nightMode = !nightMode;
+    });
+    Navigator.pop(context);
+  }
+}
+
+class _DarkModePublisher extends InheritedWidget {
+  final bool nightMode;
+
+  _DarkModePublisher({Key key, this.nightMode, Widget child})
+      : super(key: key, child: child);
+
+  @override
+  bool updateShouldNotify(InheritedWidget oldWidget) => true;
+
+  static bool isNightMode(BuildContext context) =>
+      (context.inheritFromWidgetOfExactType(_DarkModePublisher)
+              as _DarkModePublisher)
+          .nightMode;
 }
 
 class _ChapterLoader extends StatelessWidget {
@@ -175,9 +209,17 @@ class _Paragraph extends StatelessWidget {
         padding: EdgeInsets.all(8),
         child: Text(
           content,
+          style: _applyStyle(context),
           textAlign: TextAlign.left,
         ),
       );
+
+  TextStyle _applyStyle(BuildContext context) {
+    if (_DarkModePublisher.isNightMode(context)) {
+      return DefaultTextStyle.of(context).style.apply(color: Colors.white10);
+    } else
+      return null;
+  }
 }
 
 class _ChapterTitle extends StatelessWidget {
@@ -190,8 +232,16 @@ class _ChapterTitle extends StatelessWidget {
         padding: EdgeInsets.all(8),
         child: Text(
           title,
+          style: _applyStyle(context),
           textAlign: TextAlign.center,
           textScaleFactor: 2.0,
         ),
       );
+
+  TextStyle _applyStyle(BuildContext context) {
+    if (_DarkModePublisher.isNightMode(context)) {
+      return DefaultTextStyle.of(context).style.apply(color: Colors.white10);
+    } else
+      return null;
+  }
 }
