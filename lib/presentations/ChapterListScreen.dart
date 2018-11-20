@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:reader/models/models.dart';
 import 'package:reader/presentations/ReaderScreen.dart';
-import 'package:reader/repositories/BookRepository.dart';
 
 class ChapterListScreen extends StatelessWidget {
   ChapterListScreen(this.book);
 
   final Book book;
-  final BookRepository repository = BookRepository();
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -16,7 +14,7 @@ class ChapterListScreen extends StatelessWidget {
       ),
       body: FutureBuilder<List<Chapter>>(
           initialData: [],
-          future: repository.loadBook(book).then((book) => book.chapters),
+          future: book.load().then((book) => book.chapters),
           builder:
               (BuildContext context, AsyncSnapshot<List<Chapter>> snapshot) {
             if (snapshot.connectionState != ConnectionState.done) {

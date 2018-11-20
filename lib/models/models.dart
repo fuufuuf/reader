@@ -22,6 +22,10 @@ abstract class WebContent<T> {
   Future<T> _download();
 }
 
+class BookList {
+  static Future<List<Book>> loadAll() => Future.value([]);
+}
+
 class Book extends WebContent<Book> {
   String title;
 

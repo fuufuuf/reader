@@ -2,10 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:reader/models/models.dart';
-import 'package:reader/repositories/BookRepository.dart';
 
 class ReaderScreen extends StatefulWidget {
-  final BookRepository repository = BookRepository();
   final Book book;
   final int chapterIndex;
 
@@ -16,9 +14,10 @@ class ReaderScreen extends StatefulWidget {
 }
 
 class _ReaderScreenState extends State<ReaderScreen> {
-  BookRepository get repository => widget.repository;
-
   Book get book => widget.book;
+
+  Chapter get chapterFromBook => book.chapters[chapterIndex];
+
   int chapterIndex;
   Future<Chapter> future;
 
@@ -35,8 +34,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
   }
 
   _createFuture({bool reload: false}) {
-    future =
-        repository.loadChapter(book.chapters[chapterIndex], reload: reload);
+    future = chapterFromBook.load(reload: reload);
   }
 
   Widget renderBottomSheet(BuildContext context) => ListView(children: <Widget>[
@@ -110,9 +108,9 @@ class _ReaderScreenState extends State<ReaderScreen> {
 
   void refreshBook() {
     setState(() {
-      future = repository
-          .loadBook(book, reload: true)
-          .then((book) => repository.loadChapter(book.chapters[chapterIndex]));
+      future = book
+          .load(reload: true)
+          .then((book) => book.chapters[chapterIndex].load());
     });
     Navigator.pop(context);
   }

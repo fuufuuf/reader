@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:reader/models/models.dart';
 import 'package:reader/presentations/ChapterListScreen.dart';
-import 'package:reader/repositories/BookRepository.dart';
 
 class BookListScreen extends StatelessWidget {
-  final BookRepository repository = BookRepository();
-
   @override
   Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
@@ -14,7 +11,7 @@ class BookListScreen extends StatelessWidget {
       ),
       body: FutureBuilder<List<Book>>(
           initialData: [],
-          future: repository.sampleData(),
+          future: BookList.loadAll(),
           builder: (BuildContext context, AsyncSnapshot<List<Book>> snapshot) {
             if (snapshot.connectionState != ConnectionState.done) {
               return Center(
