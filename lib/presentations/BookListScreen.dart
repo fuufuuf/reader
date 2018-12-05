@@ -1,30 +1,72 @@
 import 'package:flutter/material.dart';
 import 'package:reader/models/models.dart';
 import 'package:reader/presentations/ChapterListScreen.dart';
+import 'package:reader/presentations/TextForm.dart';
+import 'package:reader/repositories/BookRepository.dart';
 
-class BookListScreen extends StatelessWidget {
+class BookListScreen extends StatefulWidget {
   @override
-  Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(
-        title: const Text("Books"),
-      ),
-      body: FutureBuilder<List<Book>>(
-          initialData: [],
-          future: BookList.loadAll(),
-          builder: (BuildContext context, AsyncSnapshot<List<Book>> snapshot) {
-            if (snapshot.connectionState != ConnectionState.done) {
-              return Center(
-                child: const Text("Loading"),
-              );
-            }
+  State<StatefulWidget> createState() => _BookListScreenState();
+}
 
-            if (snapshot.hasError) {
-              throw snapshot.error;
-            }
+class _BookListScreenState extends State<BookListScreen> {
+  var booksFuture;
 
-            return _BookListView(
-                key: Key("BookListView"), books: snapshot.data);
-          }));
+  void _reload() => booksFuture = BookRepository.loadBooks();
+
+  @override
+  void initState() {
+    super.initState();
+    _reload();
+  }
+
+  @override
+  Widget build(BuildContext context) =>
+      Scaffold(
+        appBar: AppBar(
+          title: const Text("Books"),
+        ),
+        body: FutureBuilder<List<Book>>(
+            initialData: [],
+            future: booksFuture,
+            builder:
+                (BuildContext context, AsyncSnapshot<List<Book>> snapshot) {
+              if (snapshot.connectionState != ConnectionState.done) {
+                return Center(
+                  child: const Text("Loading"),
+                );
+              }
+
+              if (snapshot.hasError) {
+                throw snapshot.error;
+              }
+
+              return _BookListView(
+                  key: Key("BookListView"), books: snapshot.data);
+            }),
+        floatingActionButton:
+        FloatingActionButton(onPressed: _onAddBook, child: Icon(Icons.add)),
+      );
+
+  void _onAddBook() async {
+    bool result = await showDialog<bool>(
+        context: context,
+        builder: (BuildContext context) =>
+            TextForm(
+              question: "URL of the new book",
+              hint: "the url of the index page of the book",
+              onSubmitted: (String url) {
+                Navigator.of(context).pop(url);
+              },
+            )
+    );
+
+    if (result) {
+      setState(() {
+        _reload();
+      });
+    }
+  }
 }
 
 class _BookListView extends StatelessWidget {
@@ -61,7 +103,10 @@ class _BookListView extends StatelessWidget {
       title: Text(snapshot.data.title),
       subtitle: Text(
         snapshot.data.author,
-        style: DefaultTextStyle.of(context).style.apply(color: Colors.black45),
+        style: DefaultTextStyle
+            .of(context)
+            .style
+            .apply(color: Colors.black45),
       ),
       onTap: () {
         Navigator.push(
@@ -74,10 +119,11 @@ class _BookListView extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) => Padding(
-      padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      child: ListView.builder(
-        itemBuilder: _renderItem,
-        itemCount: books.length,
-      ));
+  Widget build(BuildContext context) =>
+      Padding(
+          padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+          child: ListView.builder(
+            itemBuilder: _renderItem,
+            itemCount: books.length,
+          ));
 }

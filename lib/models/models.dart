@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:reader/network/Downloader.dart';
+import 'package:reader/repositories/BookRepository.dart';
 
 abstract class WebContent<T> {
   final Uri url;
@@ -24,16 +25,6 @@ abstract class WebContent<T> {
   Future<T> _download();
 }
 
-class BookList {
-  static List<Book> books = <Book>[
-    Book.url("https://www.piaotian.com/html/9/9054/"),
-    Book.url("https://www.piaotian.com/html/5/5623/"),
-    Book.url("https://www.piaotian.com/html/8/8491/")
-  ];
-
-  static Future<List<Book>> loadAll() => Future.value(books);
-}
-
 class Book extends WebContent<Book> {
   String title;
 
@@ -50,7 +41,11 @@ class Book extends WebContent<Book> {
   bool get isLoaded => chapters != null;
 
   @override
-  Future<Book> _download() => _downloader.loadBook(this);
+  Future<Book> _download() async {
+    final book = await _downloader.loadBook(this);
+    await BookRepository.saveBooks();
+    return book;
+  }
 }
 
 class Chapter extends WebContent<Chapter> {
