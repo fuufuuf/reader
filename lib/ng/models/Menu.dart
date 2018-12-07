@@ -1,7 +1,4 @@
 import 'package:meta/meta.dart';
-import 'package:reader/ng/models/Book.dart';
-import 'package:reader/ng/models/Chapter.dart';
-import 'package:reader/ng/repositories/BookRepository.dart';
 
 class Menu {
   final Uri url;
@@ -11,13 +8,15 @@ class Menu {
 
   Menu({@required this.url, this.title, this.chapters, this.bookUrl});
 
-  Future<Book> openBook() => BookRepository.openBook(bookUrl);
-
   bool get hasChapters => chapters.isNotEmpty;
 
-  Future<Chapter> openFirstChapter() => chapters.first.open();
+  bool get hasMultipleChapters => chapters.length > 1;
 
-  Future<Chapter> openLastChapter() => chapters.last.open();
+  bool get hasBook => bookUrl != null;
+
+  Uri get firstChapterUrl => chapters.first.url;
+
+  Uri get lastChapterUrl => chapters.last.url;
 }
 
 class ChapterIndex {
@@ -25,6 +24,4 @@ class ChapterIndex {
   final String title;
 
   ChapterIndex({@required this.url, this.title});
-
-  Future<Chapter> open() => BookRepository.openChapter(url, title);
 }

@@ -1,7 +1,4 @@
 import 'package:meta/meta.dart';
-import 'package:reader/ng/models/Book.dart';
-import 'package:reader/ng/models/Menu.dart';
-import 'package:reader/ng/repositories/BookRepository.dart';
 
 class Chapter {
   final Uri url;
@@ -22,15 +19,9 @@ class Chapter {
       this.previousChapterUrl});
 
   bool get hasBook => bookUrl != null;
-
-  Future<Book> openBook() => BookRepository.openBook(bookUrl);
-
   bool get hasMenu => menuUrl != null;
 
-  Future<Menu> openMenu() => BookRepository.openMenu(menuUrl);
+  bool get hasPrevious => previousChapterUrl != null;
 
-  Future<Chapter> openPreviousChapter() =>
-      BookRepository.openChapter(previousChapterUrl);
-
-  Future<Chapter> openNextChapter() => BookRepository.openChapter(nextChapterUrl);
+  bool get hasNext => nextChapterUrl != null;
 }
