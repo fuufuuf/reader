@@ -1,5 +1,5 @@
 import 'package:meta/meta.dart';
-import 'package:reader/models/BookRepository.dart';
+import 'package:reader/ng/repositories/BookRepository.dart';
 
 class Book {
   final Uri url;
