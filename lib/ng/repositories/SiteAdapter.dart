@@ -1,4 +1,7 @@
-import 'package:reader/ng/models/Page.dart';
+
+import 'package:reader/ng/models/Book.dart';
+import 'package:reader/ng/models/Chapter.dart';
+import 'package:reader/ng/models/Menu.dart';
 
 abstract class SiteAdapter {
   Future<Book> openBook(Uri url);

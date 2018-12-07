@@ -1,22 +1,25 @@
-import 'package:meta/meta.dart';
-import 'package:reader/ng/models/Page.dart';
+import 'package:reader/ng/models/Book.dart';
+import 'package:reader/ng/models/Chapter.dart';
+import 'package:reader/ng/models/Menu.dart';
+import 'package:reader/ng/repositories/PiaotianAdapter.dart';
 import 'package:reader/ng/repositories/SiteAdapter.dart';
 
 class BookRepository {
   static Map<String, SiteAdapter> adapters = {
+    'www.piaotian.com': PiaotianAdapter()
   };
 
-  static Future<Chapter> openChapter(@required Uri url, [String title]) =>
+  static Future<Chapter> openChapter(Uri url, [String title]) =>
       _findAdapter(url).openChapter(url);
 
-  static Future<Book> openBook(@required Uri url) =>
+  static Future<Book> openBook(Uri url) =>
       _findAdapter(url).openBook(url);
 
-  static Future<Menu> openMenu(@required Uri url) =>
+  static Future<Menu> openMenu(Uri url) =>
       _findAdapter(url).openMenu(url);
 
-  static Future<Object> openUrl(@required Uri url) =>
+  static Future<Object> openUrl(Uri url) =>
       _findAdapter(url).open(url);
 
-  static _findAdapter(@required Uri url) => adapters[url.host];
+  static _findAdapter(Uri url) => adapters[url.host];
 }
