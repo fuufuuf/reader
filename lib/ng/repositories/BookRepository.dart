@@ -21,5 +21,8 @@ class BookRepository {
   static Future<Object> openUrl(Uri url) =>
       _findAdapter(url).open(url);
 
+  static Future<Type> checkType(Uri url) =>
+      _findAdapter(url).checkType(url);
+
   static _findAdapter(Uri url) => adapters[url.host];
 }

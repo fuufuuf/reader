@@ -1,4 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:reader/presentations/ReaderApp.dart';
+import 'package:reader/ng/presentations/ReaderApp.dart';
 
 void main() => runApp(ReaderApp());
