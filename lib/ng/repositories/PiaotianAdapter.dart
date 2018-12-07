@@ -5,6 +5,7 @@ import 'package:reader/ng/models/Chapter.dart';
 import 'package:reader/ng/models/Menu.dart';
 import 'package:reader/ng/repositories/SiteAdapter.dart';
 import 'package:reader/ng/repositories/fetchHtml.dart';
+import 'package:reader/ng/repositories/safeExtractors.dart';
 
 class PiaotianAdapter extends SiteAdapter {
   static final bookUrlPattern = RegExp(
@@ -46,14 +47,23 @@ class PiaotianAdapter extends SiteAdapter {
     return Book(
       url: url,
       title: document.querySelector('h1').text.trim(),
-      author: document
+      author: safeText(
+              () =>
+          document
           .querySelector(
               '#content > table > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(2) > td:nth-child(2)')
-          ?.text
-          ?.trim(),
-      menuUrl: url.resolve(
-          document.querySelector('a[tiptitle^="点击阅读"]').attributes['href']),
-      latestChapterUrl: url.resolve(document
+              ?.text
+      ),
+      menuUrl: safeUrl(
+          url,
+              () =>
+          document
+              .querySelector('a[tiptitle^="点击阅读"]')
+              ?.attributes['href']),
+      latestChapterUrl: safeUrl(
+          url,
+              () =>
+          document
           .querySelector(
               '#content > table > tbody > tr:nth-child(4) > td > table > tbody > tr > td:nth-child(2) > div > a')
           ?.attributes['href']),
@@ -67,17 +77,20 @@ class PiaotianAdapter extends SiteAdapter {
 
     return Menu(
         url: url,
-        title: document
+        title: safeText(() =>
+            document
             .querySelector('.title h1')
-            .text
-            .trim()
-            .replaceAll("最新章节", ""),
-        chapters: document
+                ?.text
+                ?.trim()
+                ?.replaceAll("最新章节", "")),
+        chapters: safeList(() =>
+            document
             .querySelectorAll('.mainbody .centent ul li a')
             .map((element) => ChapterIndex(
                 url: url.resolve(element.attributes['href']),
                 title: element.text))
-            .toList(growable: false));
+                .toList(growable: false)
+        ));
   }
 
   @override
@@ -87,25 +100,34 @@ class PiaotianAdapter extends SiteAdapter {
 
     return Chapter(
         url: url,
-        title: document.querySelector('h1').text.trim(),
-        bookUrl: url.resolve(document
+        title: safeText(() =>
+        document
+            .querySelector('h1')
+            .text),
+        bookUrl: safeUrl(url, () =>
+        document
             .querySelector('#content > div.toplink > a:nth-child(4)')
             .attributes['href']),
-        menuUrl: url.resolve(document
+        menuUrl: safeUrl(url, () =>
+        document
             .querySelector('#content > div.toplink > a:nth-child(2)')
             .attributes['href']),
-        previousChapterUrl: url.resolve(document
+
+        previousChapterUrl: safeUrl(url, () =>
+        document
             .querySelector('#content > div.toplink > a:nth-child(1)')
             .attributes['href']),
-        nextChapterUrl: url.resolve(document
+        nextChapterUrl: safeUrl(url, () =>
+        document
             .querySelector('#content > div.toplink > a:nth-child(3)')
             .attributes['href']),
-        paragraphs: document
+        paragraphs: safeList(() =>
+            document
             .getElementById('content')
             .nodes
             .where((node) => node.nodeType == Node.TEXT_NODE)
             .map((node) => node.text.trim())
             .where((text) => text.isNotEmpty)
-            .toList(growable: false));
+                .toList(growable: false)));
   }
 }
