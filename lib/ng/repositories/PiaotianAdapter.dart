@@ -1,13 +1,14 @@
 import 'package:html/dom.dart';
-import 'package:html/parser.dart' as htmlParser;
 import 'package:reader/ng/models/Book.dart';
 import 'package:reader/ng/models/Chapter.dart';
 import 'package:reader/ng/models/Menu.dart';
+import 'package:reader/ng/repositories/HttpClient.dart';
 import 'package:reader/ng/repositories/SiteAdapter.dart';
-import 'package:reader/ng/repositories/fetchHtml.dart';
 import 'package:reader/ng/repositories/safeExtractors.dart';
 
 class PiaotianAdapter extends SiteAdapter {
+  PiaotianAdapter(HttpClient client) :super(client);
+
   static final bookUrlPattern = RegExp(
       r"https://www.piaotian.com/bookinfo/(\d+)/(\d+).html",
       caseSensitive: false);
@@ -36,13 +37,12 @@ class PiaotianAdapter extends SiteAdapter {
       return Book;
     }
 
-    return throw "Unknown Url: $url";
+    throw "Unknown Url: $url";
   }
 
   @override
   Future<Book> openBook(Uri url) async {
-    var html = await fetchHtml(url, true);
-    final document = htmlParser.parse(html, encoding: 'utf8');
+    final document = await client.fetchDom(url, enforceGbk: true);
 
     return Book(
       url: url,
@@ -72,8 +72,7 @@ class PiaotianAdapter extends SiteAdapter {
 
   @override
   Future<Menu> openMenu(Uri url) async {
-    var html = await fetchHtml(url, true);
-    final document = htmlParser.parse(html, encoding: 'utf8');
+    final document = await client.fetchDom(url, enforceGbk: true);
 
     return Menu(
         url: url,
@@ -90,13 +89,13 @@ class PiaotianAdapter extends SiteAdapter {
                 url: url.resolve(element.attributes['href']),
                 title: element.text))
                 .toList(growable: false)
-        ));
+        )
+    );
   }
 
   @override
   Future<Chapter> openChapter(Uri url) async {
-    var html = await fetchHtml(url, true);
-    final document = htmlParser.parse(html, encoding: 'utf8');
+    final document = await client.fetchDom(url, enforceGbk: true);
 
     return Chapter(
         url: url,
@@ -128,6 +127,7 @@ class PiaotianAdapter extends SiteAdapter {
             .where((node) => node.nodeType == Node.TEXT_NODE)
             .map((node) => node.text.trim())
             .where((text) => text.isNotEmpty)
-                .toList(growable: false)));
+                .toList(growable: false))
+    );
   }
 }

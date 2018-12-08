@@ -1,9 +1,14 @@
-
+import 'package:meta/meta.dart';
 import 'package:reader/ng/models/Book.dart';
 import 'package:reader/ng/models/Chapter.dart';
 import 'package:reader/ng/models/Menu.dart';
+import 'package:reader/ng/repositories/HttpClient.dart';
 
 abstract class SiteAdapter {
+  @protected final HttpClient client;
+
+  SiteAdapter(this.client);
+
   Future<Book> openBook(Uri url);
 
   Future<Chapter> openChapter(Uri url);
