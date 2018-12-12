@@ -2,10 +2,10 @@ import 'package:meta/meta.dart';
 import 'package:reader/ng/models/Book.dart';
 import 'package:reader/ng/models/Chapter.dart';
 import 'package:reader/ng/models/Menu.dart';
-import 'package:reader/ng/repositories/HttpClient.dart';
+import 'package:reader/ng/repositories/ReaderHttpClient.dart';
 
 abstract class SiteAdapter {
-  @protected final HttpClient client;
+  @protected final ReaderHttpClient client;
 
   SiteAdapter(this.client);
 

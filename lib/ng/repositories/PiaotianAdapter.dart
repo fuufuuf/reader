@@ -2,12 +2,12 @@ import 'package:html/dom.dart';
 import 'package:reader/ng/models/Book.dart';
 import 'package:reader/ng/models/Chapter.dart';
 import 'package:reader/ng/models/Menu.dart';
-import 'package:reader/ng/repositories/HttpClient.dart';
+import 'package:reader/ng/repositories/ReaderHttpClient.dart';
 import 'package:reader/ng/repositories/SiteAdapter.dart';
 import 'package:reader/ng/repositories/safeExtractors.dart';
 
 class PiaotianAdapter extends SiteAdapter {
-  PiaotianAdapter(HttpClient client) :super(client);
+  PiaotianAdapter(ReaderHttpClient client) :super(client);
 
   static final bookUrlPattern = RegExp(
       r"https://www.piaotian.com/bookinfo/(\d+)/(\d+).html",
@@ -50,23 +50,17 @@ class PiaotianAdapter extends SiteAdapter {
       author: safeText(
               () =>
           document
-          .querySelector(
-              '#content > table > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(2) > td:nth-child(2)')
-              ?.text
+              .querySelectorAll(
+              '#content > table > tbody > tr > td > table[cellpadding="3"]')
+              .first
+              .querySelectorAll('tr > td')[3]
+              .text
+              .trim()
+              .replaceAll("作    者：", "")
       ),
-      menuUrl: safeUrl(
-          url,
-              () =>
-          document
-              .querySelector('a[tiptitle^="点击阅读"]')
-              ?.attributes['href']),
-      latestChapterUrl: safeUrl(
-          url,
-              () =>
-          document
-          .querySelector(
-              '#content > table > tbody > tr:nth-child(4) > td > table > tbody > tr > td:nth-child(2) > div > a')
-          ?.attributes['href']),
+        menuUrl: Uri.parse(
+            url.toString().replaceFirst("/bookinfo/", "/html/").replaceFirst(
+                ".html", "/"))
     );
   }
 
@@ -82,6 +76,9 @@ class PiaotianAdapter extends SiteAdapter {
                 ?.text
                 ?.trim()
                 ?.replaceAll("最新章节", "")),
+        bookUrl: safeUrl(url, () =>
+        document.querySelectorAll('#tl > a')[1].attributes['href']
+        ),
         chapters: safeList(() =>
             document
             .querySelectorAll('.mainbody .centent ul li a')
@@ -95,7 +92,11 @@ class PiaotianAdapter extends SiteAdapter {
 
   @override
   Future<Chapter> openChapter(Uri url) async {
-    final document = await client.fetchDom(url, enforceGbk: true);
+    final document = await client.fetchDom(
+        url, enforceGbk: true, patchHtml: (html) =>
+        html.replaceFirst(
+            '<script language="javascript">GetFont();</script>',
+            '<div id="content">'));
 
     return Chapter(
         url: url,
@@ -105,20 +106,20 @@ class PiaotianAdapter extends SiteAdapter {
             .text),
         bookUrl: safeUrl(url, () =>
         document
-            .querySelector('#content > div.toplink > a:nth-child(4)')
+            .querySelectorAll('.toplink > a')[3]
             .attributes['href']),
         menuUrl: safeUrl(url, () =>
         document
-            .querySelector('#content > div.toplink > a:nth-child(2)')
+            .querySelectorAll('.toplink > a')[1]
             .attributes['href']),
 
         previousChapterUrl: safeUrl(url, () =>
         document
-            .querySelector('#content > div.toplink > a:nth-child(1)')
+            .querySelectorAll('.toplink > a')[0]
             .attributes['href']),
         nextChapterUrl: safeUrl(url, () =>
         document
-            .querySelector('#content > div.toplink > a:nth-child(3)')
+            .querySelectorAll('.toplink > a')[2]
             .attributes['href']),
         paragraphs: safeList(() =>
             document

@@ -1,12 +1,12 @@
 import 'package:reader/ng/models/Book.dart';
 import 'package:reader/ng/models/Chapter.dart';
 import 'package:reader/ng/models/Menu.dart';
-import 'package:reader/ng/repositories/HttpClient.dart';
+import 'package:reader/ng/repositories/ReaderHttpClient.dart';
 import 'package:reader/ng/repositories/PiaotianAdapter.dart';
 import 'package:reader/ng/repositories/SiteAdapter.dart';
 
 class BookRepository {
-  static HttpClient client = HttpClient();
+  static ReaderHttpClient client = ReaderHttpClient();
 
   static Map<String, SiteAdapter> adapters = {
     'www.piaotian.com': PiaotianAdapter(client)
