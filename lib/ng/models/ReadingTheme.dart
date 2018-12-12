@@ -18,7 +18,7 @@ class ReadingTheme {
 
   static final ReadingTheme darkTheme = ReadingTheme(
       isNightMode: true,
-      chapterViewTextColor: Colors.white10,
+      chapterViewTextColor: Colors.white24,
       chapterViewBackgroundColor: Colors.black
   );
 }
