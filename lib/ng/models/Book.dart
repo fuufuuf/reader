@@ -16,6 +16,8 @@ class Book {
       this.firstChapterUrl,
       this.latestChapterUrl});
 
+  bool get hasAuthor => author != null;
+
   bool get hasMenu => menuUrl != null;
 
   bool get hasFirstChapter => firstChapterUrl != null;
