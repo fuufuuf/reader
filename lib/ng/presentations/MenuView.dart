@@ -20,6 +20,7 @@ class MenuView extends StatelessWidget {
       Scaffold(
           appBar: AppBar(
             title: Text(menu.title),
+              leading: _renderLeading(context)
           ),
           body: Padding(
             padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
@@ -42,4 +43,25 @@ class MenuView extends StatelessWidget {
           EventBus.post(OpenUrlEvent(index.url));
         },
       );
+
+  Widget _renderIf(bool condition, Widget render()) =>
+      condition ? render() : null;
+
+  Widget _renderLeading(BuildContext context) =>
+      _renderIf(menu.hasBook, () =>
+          IconButton(
+              icon: const BackButtonIcon(),
+              color: Colors.white,
+              tooltip: MaterialLocalizations
+                  .of(context)
+                  .backButtonTooltip,
+              onPressed: () {
+                EventBus.post(OpenUrlEvent(menu.bookUrl));
+              }
+          )
+      );
+
+  Iterable<Widget> _renderActions() sync* {
+
+  }
 }

@@ -10,15 +10,15 @@ class PiaotianAdapter extends SiteAdapter {
   PiaotianAdapter(ReaderHttpClient client) :super(client);
 
   static final bookUrlPattern = RegExp(
-      r"https://www.piaotian.com/bookinfo/(\d+)/(\d+).html",
+      r"https?://www.piaotian.com/bookinfo/(\d+)/(\d+).html",
       caseSensitive: false);
 
   static final menuUrlPattern = RegExp(
-      r"https://www.piaotian.com/html/(\d+)/(\d+)/(index.html)?",
+      r"https?://www.piaotian.com/html/(\d+)/(\d+)/(index.html)?",
       caseSensitive: false);
 
   static final chapterUrlPattern = RegExp(
-      r"https://www.piaotian.com/html/(\d+)/(\d+)/(\d+).html",
+      r"https?://www.piaotian.com/html/(\d+)/(\d+)/(\d+).html",
       caseSensitive: false);
 
   @override
