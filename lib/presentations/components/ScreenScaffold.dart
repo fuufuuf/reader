@@ -63,11 +63,8 @@ class ScreenScaffold extends StatelessWidget {
 
   Widget _renderTheme(BuildContext context, Widget inner) {
     if (readingTheme != null) {
-      final parentStyle = DefaultTextStyle
-          .of(context)
-          .style;
-      return DefaultTextStyle(
-          style: parentStyle.apply(color: readingTheme.textColor),
+      return DefaultTextStyle.merge(
+          style: TextStyle(color: readingTheme.textColor),
           child: inner
       );
     } else {
