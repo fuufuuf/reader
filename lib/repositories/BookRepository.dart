@@ -1,6 +1,6 @@
 import 'package:reader/models/Book.dart';
-import 'package:reader/models/Chapter.dart';
-import 'package:reader/models/Menu.dart';
+import 'package:reader/models/ChapterContent.dart';
+import 'package:reader/models/TableOfContents.dart';
 import 'package:reader/repositories/ReaderHttpClient.dart';
 import 'package:reader/repositories/PiaotianAdapter.dart';
 import 'package:reader/repositories/SiteAdapter.dart';
@@ -12,13 +12,13 @@ class BookRepository {
     'www.piaotian.com': PiaotianAdapter(client)
   };
 
-  static Future<Chapter> openChapter(Uri url, [String title]) =>
+  static Future<ChapterContent> openChapter(Uri url, [String title]) =>
       _findAdapter(url).openChapter(url);
 
   static Future<Book> openBook(Uri url) =>
       _findAdapter(url).openBook(url);
 
-  static Future<Menu> openMenu(Uri url) =>
+  static Future<TableOfContents> openMenu(Uri url) =>
       _findAdapter(url).openMenu(url);
 
   static Future<Object> openUrl(Uri url) =>

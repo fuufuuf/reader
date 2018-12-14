@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:reader/events/EventBus.dart';
 import 'package:reader/events/OpenUrlEvent.dart';
-import 'package:reader/models/Chapter.dart';
+import 'package:reader/models/ChapterContent.dart';
 import 'package:reader/presentations/providers/ReadingThemeProvider.dart';
 
-class ChapterScreenMenuSheet extends StatelessWidget {
-  final Chapter chapter;
+class ReadingMenu extends StatelessWidget {
+  final ChapterContent chapter;
 
-  const ChapterScreenMenuSheet({this.chapter});
+  const ReadingMenu({this.chapter});
 
   @override
   Widget build(BuildContext context) => BottomSheet(

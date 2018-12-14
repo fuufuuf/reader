@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 
-class Chapter {
+class ChapterContent {
   final Uri url;
   final String title;
   final List<String> paragraphs;
@@ -9,7 +9,7 @@ class Chapter {
   final Uri nextChapterUrl;
   final Uri previousChapterUrl;
 
-  Chapter(
+  ChapterContent(
       {@required this.url,
       this.title,
       this.paragraphs,

@@ -1,12 +1,12 @@
 import 'package:meta/meta.dart';
 
-class Menu {
+class TableOfContents {
   final Uri url;
   final String title;
-  final List<ChapterIndex> chapters;
+  final List<ChapterRef> chapters;
   final Uri bookUrl;
 
-  Menu({@required this.url, this.title, this.chapters, this.bookUrl});
+  TableOfContents({@required this.url, this.title, this.chapters, this.bookUrl});
 
   bool get hasChapters => chapters.isNotEmpty;
 
@@ -19,9 +19,9 @@ class Menu {
   Uri get lastChapterUrl => chapters.last.url;
 }
 
-class ChapterIndex {
+class ChapterRef {
   final Uri url;
   final String title;
 
-  ChapterIndex({@required this.url, this.title});
+  ChapterRef({@required this.url, this.title});
 }

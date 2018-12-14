@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:reader/events/EventBus.dart';
 import 'package:reader/events/OpenUrlEvent.dart';
-import 'package:reader/models/Chapter.dart';
+import 'package:reader/models/ChapterContent.dart';
 import 'package:reader/presentations/providers/ReadingThemeProvider.dart';
 
 class ChapterContentView extends StatelessWidget {
-  final Chapter chapter;
+  final ChapterContent chapter;
 
   const ChapterContentView({Key key, this.chapter}) : super(key: key);
 
@@ -59,7 +59,7 @@ class _Paragraph extends StatelessWidget {
 }
 
 class _NavigationView extends StatelessWidget {
-  final Chapter chapter;
+  final ChapterContent chapter;
   final Color textColor;
 
   _NavigationView(this.chapter, this.textColor);

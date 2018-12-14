@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:reader/models/Chapter.dart';
+import 'package:reader/models/ChapterContent.dart';
 import 'package:reader/presentations/components/ScreenScaffold.dart';
 import 'package:reader/presentations/providers/ReadingThemeProvider.dart';
-import 'package:reader/presentations/screens/chapterScreen/ChapterContentView.dart';
-import 'package:reader/presentations/screens/chapterScreen/ChapterScreenMenuSheet.dart';
+import 'package:reader/presentations/screens/readingScreen/ChapterContentView.dart';
+import 'package:reader/presentations/screens/readingScreen/ReadingMenu.dart';
 import 'package:screen/screen.dart';
 
-class ChapterScreen extends StatelessWidget {
-  final Chapter chapter;
+class ReadingScreen extends StatelessWidget {
+  final ChapterContent chapter;
 
-  ChapterScreen({@required this.chapter});
+  ReadingScreen({@required this.chapter});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class ChapterScreen extends StatelessWidget {
             onDoubleTap: () {
               showModalBottomSheet(
                   context: context,
-                  builder: (context) => ChapterScreenMenuSheet()
+                  builder: (context) => ReadingMenu()
               );
             },
             child: ChapterContentView(chapter: chapter)

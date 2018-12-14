@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:reader/events/EventBus.dart';
 import 'package:reader/events/OpenUrlEvent.dart';
-import 'package:reader/models/Menu.dart';
+import 'package:reader/models/TableOfContents.dart';
 import 'package:reader/presentations/components/ScreenScaffold.dart';
 
-class MenuScreen extends StatelessWidget {
-  final Menu menu;
+class ChapterListScreen extends StatelessWidget {
+  final TableOfContents menu;
 
-  MenuScreen({@required this.menu});
+  ChapterListScreen({@required this.menu});
 
   @override
   Widget build(BuildContext context) =>
@@ -23,7 +23,7 @@ class MenuScreen extends StatelessWidget {
           )
       );
 
-  Widget _renderChapterIndex(BuildContext context, ChapterIndex index) =>
+  Widget _renderChapterIndex(BuildContext context, ChapterRef index) =>
       ListTile(
         leading: const Icon(
           Icons.note,

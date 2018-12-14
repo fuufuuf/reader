@@ -1,7 +1,7 @@
 import 'package:html/dom.dart';
 import 'package:reader/models/Book.dart';
-import 'package:reader/models/Chapter.dart';
-import 'package:reader/models/Menu.dart';
+import 'package:reader/models/ChapterContent.dart';
+import 'package:reader/models/TableOfContents.dart';
 import 'package:reader/repositories/ReaderHttpClient.dart';
 import 'package:reader/repositories/SiteAdapter.dart';
 import 'package:reader/repositories/safeExtractors.dart';
@@ -26,11 +26,11 @@ class PiaotianAdapter extends SiteAdapter {
     var urlString = url.toString();
 
     if (chapterUrlPattern.hasMatch(urlString)) {
-      return Chapter;
+      return ChapterContent;
     }
 
     if (menuUrlPattern.hasMatch(urlString)) {
-      return Menu;
+      return TableOfContents;
     }
 
     if (bookUrlPattern.hasMatch(urlString)) {
@@ -65,10 +65,10 @@ class PiaotianAdapter extends SiteAdapter {
   }
 
   @override
-  Future<Menu> openMenu(Uri url) async {
+  Future<TableOfContents> openMenu(Uri url) async {
     final document = await client.fetchDom(url, enforceGbk: true);
 
-    return Menu(
+    return TableOfContents(
         url: url,
         title: safeText(() =>
             document
@@ -82,7 +82,7 @@ class PiaotianAdapter extends SiteAdapter {
         chapters: safeList(() =>
             document
             .querySelectorAll('.mainbody .centent ul li a')
-            .map((element) => ChapterIndex(
+            .map((element) => ChapterRef(
                 url: url.resolve(element.attributes['href']),
                 title: element.text))
                 .toList(growable: false)
@@ -91,14 +91,14 @@ class PiaotianAdapter extends SiteAdapter {
   }
 
   @override
-  Future<Chapter> openChapter(Uri url) async {
+  Future<ChapterContent> openChapter(Uri url) async {
     final document = await client.fetchDom(
         url, enforceGbk: true, patchHtml: (html) =>
         html.replaceFirst(
             '<script language="javascript">GetFont();</script>',
             '<div id="content">'));
 
-    return Chapter(
+    return ChapterContent(
         url: url,
         title: safeText(() =>
         document

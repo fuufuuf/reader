@@ -5,11 +5,11 @@ import 'package:reader/events/OpenUrlEvent.dart';
 import 'package:reader/models/Book.dart';
 import 'package:reader/presentations/components/ScreenScaffold.dart';
 
-class BookScreen extends StatelessWidget {
+class BookInfoScreen extends StatelessWidget {
   final Book book;
   final List<Widget> _items;
 
-  BookScreen({Book book})
+  BookInfoScreen({Book book})
       : book = book,
         _items =_buildItems(book).toList(growable: false);
 

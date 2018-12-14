@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:reader/models/Book.dart';
-import 'package:reader/models/Chapter.dart';
-import 'package:reader/models/Menu.dart';
+import 'package:reader/models/ChapterContent.dart';
+import 'package:reader/models/TableOfContents.dart';
 import 'package:reader/repositories/PiaotianAdapter.dart';
 import 'package:reader/repositories/ReaderHttpClient.dart';
 
@@ -54,14 +54,14 @@ void main() {
 
   test('should check type', () async {
     expect(await adapter.checkType(bookUrl), equals(Book));
-    expect(await adapter.checkType(menuUrl), equals(Menu));
-    expect(await adapter.checkType(chapterUrl), equals(Chapter));
+    expect(await adapter.checkType(menuUrl), equals(TableOfContents));
+    expect(await adapter.checkType(chapterUrl), equals(ChapterContent));
   });
 
   test('should parser as right type', () async {
     expect(await adapter.open(bookUrl), isInstanceOf<Book>());
-    expect(await adapter.open(menuUrl), isInstanceOf<Menu>());
-    expect(await adapter.open(chapterUrl), isInstanceOf<Chapter>());
+    expect(await adapter.open(menuUrl), isInstanceOf<TableOfContents>());
+    expect(await adapter.open(chapterUrl), isInstanceOf<ChapterContent>());
   });
 
   test('it should parse book', () async {
