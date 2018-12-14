@@ -1,9 +1,9 @@
 import 'package:reader/models/Book.dart';
 import 'package:reader/models/ChapterContent.dart';
 import 'package:reader/models/TableOfContents.dart';
-import 'package:reader/repositories/ReaderHttpClient.dart';
-import 'package:reader/repositories/PiaotianAdapter.dart';
-import 'package:reader/repositories/SiteAdapter.dart';
+import 'package:reader/repositories/network/ReaderHttpClient.dart';
+import 'package:reader/repositories/network/PiaotianAdapter.dart';
+import 'package:reader/repositories/network/SiteAdapter.dart';
 
 class BookRepository {
   static ReaderHttpClient client = ReaderHttpClient();

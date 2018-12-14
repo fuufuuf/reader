@@ -2,7 +2,7 @@ import 'package:meta/meta.dart';
 import 'package:reader/models/Book.dart';
 import 'package:reader/models/ChapterContent.dart';
 import 'package:reader/models/TableOfContents.dart';
-import 'package:reader/repositories/ReaderHttpClient.dart';
+import 'package:reader/repositories/network/ReaderHttpClient.dart';
 
 abstract class SiteAdapter {
   @protected final ReaderHttpClient client;

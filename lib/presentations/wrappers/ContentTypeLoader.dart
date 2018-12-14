@@ -8,7 +8,7 @@ import 'package:reader/presentations/screens/LoadingScreen.dart';
 import 'package:reader/presentations/screens/ChapterListScreen.dart';
 import 'package:reader/presentations/screens/ReadingScreen.dart';
 import 'package:reader/presentations/wrappers/ContentLoader.dart';
-import 'package:reader/repositories/BookRepository.dart';
+import 'package:reader/repositories/network/BookRepository.dart';
 
 class ContentTypeLoader extends StatelessWidget {
   final Uri url;
