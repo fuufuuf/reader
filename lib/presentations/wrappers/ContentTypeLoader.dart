@@ -2,12 +2,12 @@ import 'package:flutter/widgets.dart';
 import 'package:reader/models/Book.dart';
 import 'package:reader/models/Chapter.dart';
 import 'package:reader/models/Menu.dart';
-import 'package:reader/presentations/BookView.dart';
-import 'package:reader/presentations/ChapterView.dart';
-import 'package:reader/presentations/ContentLoader.dart';
-import 'package:reader/presentations/ErrorView.dart';
-import 'package:reader/presentations/LoadingView.dart';
-import 'package:reader/presentations/MenuView.dart';
+import 'package:reader/presentations/screens/BookScreen.dart';
+import 'package:reader/presentations/screens/ChapterScreen.dart';
+import 'package:reader/presentations/screens/ErrorScreen.dart';
+import 'package:reader/presentations/screens/LoadingScreen.dart';
+import 'package:reader/presentations/screens/MenuScreen.dart';
+import 'package:reader/presentations/wrappers/ContentLoader.dart';
 import 'package:reader/repositories/BookRepository.dart';
 
 class ContentTypeLoader extends StatelessWidget {
@@ -49,28 +49,28 @@ class ContentTypeLoader extends StatelessWidget {
     }
 
     if (snapshot.hasError) {
-      return ErrorView(error: snapshot.error);
+      return ErrorScreen(error: snapshot.error);
     }
 
-    return LoadingView();
+    return LoadingScreen();
   }
 
   Widget renderBook() => ContentLoader<Book>(
       url: url,
       action: BookRepository.openBook,
-      render: (book) => BookView(book: book));
+      render: (book) => BookScreen(book: book));
 
   Widget renderMenu() => ContentLoader<Menu>(
       url: url,
       action: BookRepository.openMenu,
-      render: (menu) => MenuView(menu: menu));
+      render: (menu) => MenuScreen(menu: menu));
 
   Widget renderChapter() => ContentLoader<Chapter>(
       url: url,
       action: BookRepository.openChapter,
-      render: (chapter) => ChapterView(chapter: chapter));
+      render: (chapter) => ChapterScreen(chapter: chapter));
 
-  Widget renderError(Object error) => ErrorView(error: error);
+  Widget renderError(Object error) => ErrorScreen(error: error);
 
-  Widget renderLoading() => LoadingView();
+  Widget renderLoading() => LoadingScreen();
 }

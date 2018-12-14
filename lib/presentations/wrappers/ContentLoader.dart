@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:reader/presentations/ErrorView.dart';
-import 'package:reader/presentations/LoadingView.dart';
+import 'package:reader/presentations/screens/ErrorScreen.dart';
+import 'package:reader/presentations/screens/LoadingScreen.dart';
 
 class ContentLoader<T> extends StatelessWidget {
   final Uri url;
@@ -22,10 +22,10 @@ class ContentLoader<T> extends StatelessWidget {
     }
 
     if (snapshot.hasError) {
-      return ErrorView(error: snapshot.error);
+      return ErrorScreen(error: snapshot.error);
     }
 
-    return LoadingView();
+    return LoadingScreen();
   }
 }
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reader/models/ReadingTheme.dart';
-import 'package:reader/presentations/EmptyContentView.dart';
-import 'package:reader/presentations/ReadingThemeProvider.dart';
+import 'package:reader/presentations/providers/ReadingThemeProvider.dart';
+import 'package:reader/presentations/screens/EmptyContentScreen.dart';
 
 class ReaderApp extends StatefulWidget {
   // This widget is the root of your application.
@@ -34,7 +34,7 @@ class _ReaderAppState extends State<ReaderApp> {
         home: ReadingThemeProvider(
             theme: currentTheme,
             switchTheme: updateTheme,
-            child: EmptyContentView()
+            child: EmptyContentScreen()
         )
     );
   }

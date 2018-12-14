@@ -3,12 +3,13 @@ import 'package:flutter/widgets.dart';
 import 'package:reader/events/EventBus.dart';
 import 'package:reader/events/OpenUrlEvent.dart';
 import 'package:reader/models/Book.dart';
+import 'package:reader/presentations/components/ScreenScaffold.dart';
 
-class BookView extends StatelessWidget {
+class BookScreen extends StatelessWidget {
   final Book book;
   final List<Widget> _items;
 
-  BookView({Book book})
+  BookScreen({Book book})
       : book = book,
         _items =_buildItems(book).toList(growable: false);
 
@@ -55,13 +56,10 @@ class BookView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      Scaffold(
+      ScreenScaffold(
           appBar: AppBar(
             title: Text(book.title),
           ),
-          body: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-              child: ListView(children: _items)
-          )
+          body: ListView(children: _items)
       );
 }

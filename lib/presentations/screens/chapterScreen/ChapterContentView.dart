@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:reader/events/EventBus.dart';
 import 'package:reader/events/OpenUrlEvent.dart';
 import 'package:reader/models/Chapter.dart';
-import 'package:reader/presentations/ReadingThemeProvider.dart';
+import 'package:reader/presentations/providers/ReadingThemeProvider.dart';
 
 class ChapterContentView extends StatelessWidget {
   final Chapter chapter;
