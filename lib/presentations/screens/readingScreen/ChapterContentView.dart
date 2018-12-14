@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:reader/events/EventBus.dart';
-import 'package:reader/events/OpenUrlEvent.dart';
 import 'package:reader/models/ChapterContent.dart';
+import 'package:reader/presentations/ReaderApp.dart';
 
 class ChapterContentView extends StatelessWidget {
   final ChapterContent chapter;
@@ -69,7 +68,11 @@ class _NavigationView extends StatelessWidget {
                   Icons.navigate_before,
                   color: textColor,
                 ),
-                onPressed: chapter.hasPrevious ? _gotoPrevious : null,
+                  onPressed: () {
+                    if (chapter.hasPrevious) {
+                      _gotoPrevious(context);
+                    }
+                  }
               )),
           Expanded(
             child: IconButton(
@@ -77,17 +80,23 @@ class _NavigationView extends StatelessWidget {
                 Icons.navigate_next,
                 color: textColor,
               ),
-              onPressed: chapter.hasNext ? _gotoNext : null,
+                onPressed: () {
+                  if (chapter.hasNext) {
+                    _gotoNext(context);
+                  }
+                }
             ),
           )
         ]));
   }
 
-  void _gotoPrevious() {
-    EventBus.post(OpenUrlEvent(chapter.previousChapterUrl));
+  void _gotoPrevious(BuildContext context) {
+    Navigator.pop(context);
+    ReaderApp.openUrl(context, chapter.previousChapterUrl);
   }
 
-  void _gotoNext() {
-    EventBus.post(OpenUrlEvent(chapter.nextChapterUrl));
+  void _gotoNext(BuildContext context) {
+    Navigator.pop(context);
+    ReaderApp.openUrl(context, chapter.nextChapterUrl);
   }
 }

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:reader/models/ChapterContent.dart';
+import 'package:reader/presentations/ReaderApp.dart';
 import 'package:reader/presentations/components/ScreenScaffold.dart';
 import 'package:reader/presentations/providers/ReadingThemeProvider.dart';
 import 'package:reader/presentations/screens/readingScreen/ChapterContentView.dart';
-import 'package:reader/presentations/screens/readingScreen/ReadingMenu.dart';
 import 'package:reader/presentations/screens/readingScreen/ReadingStatusBar.dart';
 import 'package:screen/screen.dart';
 
@@ -39,10 +39,86 @@ class ReadingScreen extends StatelessWidget {
   void _onDoubleTap(BuildContext context) {
     showModalBottomSheet(
         context: context,
+        builder: (BuildContext menuContext) => _buildMenu(context)
+    );
+  }
+
+  Widget _buildMenu(BuildContext context) {
+    final themeProvider = ReadingThemeProvider.fetch(context);
+
+    return BottomSheet(
+        key: const Key('ChapterScreenMenuSheet'),
+        onClosing: () {},
         builder: (BuildContext menuContext) =>
-            ReadingMenu(
-                chapter: chapter,
-                themeProvider: ReadingThemeProvider.fetch(context)
+            ListView(
+                children: <Widget>[
+                  ListTile(
+                      leading: const Icon(Icons.navigate_next),
+                      title: const Text("Next Chapter"),
+                      enabled: chapter.hasNext,
+                      onTap: () {
+                        Navigator.pop(menuContext);
+                        Navigator.pop(context);
+                        ReaderApp.openUrl(context, chapter.nextChapterUrl);
+                      }),
+                  ListTile(
+                    leading: const Icon(Icons.navigate_before),
+                    title: const Text("Previous Chapter"),
+                    enabled: chapter.hasPrevious,
+                    onTap: () {
+                      Navigator.pop(menuContext);
+                      Navigator.pop(context);
+                      ReaderApp.openUrl(context, chapter.previousChapterUrl);
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.list),
+                    title: const Text("Menu"),
+                    enabled: chapter.hasMenu,
+                    onTap: () {
+                      _disableReadingMode();
+                      Navigator.pop(menuContext);
+                      Navigator.pop(context);
+                      ReaderApp.openUrl(context, chapter.bookUrl);
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.book),
+                    title: const Text('Book'),
+                    enabled: chapter.hasBook,
+                    onTap: () {
+                      _disableReadingMode();
+                      Navigator.pop(menuContext);
+                      Navigator.pop(context);
+                      ReaderApp.openUrl(context, chapter.menuUrl);
+                    },
+                  ),
+                  ListTile(
+                      leading: const Icon(Icons.refresh),
+                      title: const Text("Reload Chapter"),
+                      onTap: () {
+                        Navigator.pop(menuContext);
+                        Navigator.pop(context);
+                        ReaderApp.openUrl(context, chapter.url);
+                      }),
+                  ListTile(
+                    leading: const Icon(Icons.keyboard_return),
+                    title: const Text("Return"),
+                    onTap: () {
+                      Navigator.pop(menuContext);
+                      Navigator.pop(context);
+                    },
+                  ),
+                  ListTile(
+                      leading: themeProvider.theme.isNightMode
+                          ? const Icon(Icons.brightness_3)
+                          : const Icon(Icons.brightness_7),
+                      title: const Text("Night Mode"),
+                      onTap: () {
+                        themeProvider.switchTheme(
+                            !themeProvider.theme.isNightMode);
+                      })
+                ]
             )
     );
   }

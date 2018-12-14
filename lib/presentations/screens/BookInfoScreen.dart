@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:reader/events/EventBus.dart';
-import 'package:reader/events/OpenUrlEvent.dart';
 import 'package:reader/models/Book.dart';
+import 'package:reader/presentations/ReaderApp.dart';
 import 'package:reader/presentations/components/ScreenScaffold.dart';
 
 class BookInfoScreen extends StatelessWidget {
   final Book book;
-  final List<Widget> _items;
 
-  BookInfoScreen({Book book})
-      : book = book,
-        _items =_buildItems(book).toList(growable: false);
+  BookInfoScreen({this.book});
 
-  static Iterable<Widget> _buildItems(Book book) sync* {
+  Iterable<Widget> _buildItems(BuildContext context) sync* {
     if (book.hasAuthor) {
       yield ListTile(key: Key('author'),
           leading: Icon(Icons.person),
@@ -26,7 +22,7 @@ class BookInfoScreen extends StatelessWidget {
         leading: Icon(Icons.list),
         title: const Text("目录"),
         onTap: () {
-          EventBus.post(OpenUrlEvent(book.menuUrl));
+          ReaderApp.openUrl(context, book.menuUrl);
         },
       );
     }
@@ -37,7 +33,7 @@ class BookInfoScreen extends StatelessWidget {
           leading: Icon(Icons.bookmark),
           title: const Text("最早章节"),
           onTap: () {
-            EventBus.post(OpenUrlEvent(book.firstChapterUrl));
+            ReaderApp.openUrl(context, book.firstChapterUrl);
           }
       );
     }
@@ -48,7 +44,7 @@ class BookInfoScreen extends StatelessWidget {
           leading: Icon(Icons.bookmark),
           title: const Text("最新章节"),
           onTap: () {
-            EventBus.post(OpenUrlEvent(book.latestChapterUrl));
+            ReaderApp.openUrl(context, book.latestChapterUrl);
           }
       );
     }
@@ -58,6 +54,6 @@ class BookInfoScreen extends StatelessWidget {
   Widget build(BuildContext context) =>
       ScreenScaffold(
           title: book.title,
-          body: ListView(children: _items)
+          body: ListView(children: _buildItems(context).toList(growable: false))
       );
 }

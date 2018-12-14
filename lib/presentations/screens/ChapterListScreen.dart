@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:reader/events/EventBus.dart';
-import 'package:reader/events/OpenUrlEvent.dart';
 import 'package:reader/models/TableOfContents.dart';
+import 'package:reader/presentations/ReaderApp.dart';
 import 'package:reader/presentations/components/ScreenScaffold.dart';
 
 class ChapterListScreen extends StatelessWidget {
@@ -29,7 +28,7 @@ class ChapterListScreen extends StatelessWidget {
         ),
         title: Text(index.title),
         onTap: () {
-          EventBus.post(OpenUrlEvent(index.url));
+          ReaderApp.openUrl(context, index.url);
         },
       );
 }
