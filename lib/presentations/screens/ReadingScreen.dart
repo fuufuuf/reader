@@ -6,6 +6,7 @@ import 'package:reader/presentations/components/ScreenScaffold.dart';
 import 'package:reader/presentations/providers/ReadingThemeProvider.dart';
 import 'package:reader/presentations/screens/readingScreen/ChapterContentView.dart';
 import 'package:reader/presentations/screens/readingScreen/ReadingMenu.dart';
+import 'package:reader/presentations/screens/readingScreen/ReadingStatusBar.dart';
 import 'package:screen/screen.dart';
 
 class ReadingScreen extends StatelessWidget {
@@ -21,7 +22,17 @@ class ReadingScreen extends StatelessWidget {
       ScreenScaffold(
           readingTheme: ReadingThemeProvider.fetchTheme(context),
           onDoubleTap: _onDoubleTap,
-          body: ChapterContentView(chapter: chapter)
+          body:
+          Column(
+            children: <Widget>[
+              ReadingStatusBar(),
+              Expanded(
+                  key: Key('ChapterContent'),
+                  child: ChapterContentView(chapter: chapter)
+              )
+            ],
+          )
+
       );
   }
 
