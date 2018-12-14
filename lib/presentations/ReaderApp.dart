@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reader/models/ReadingTheme.dart';
 import 'package:reader/presentations/providers/ReadingThemeProvider.dart';
-import 'package:reader/presentations/screens/EmptyContentScreen.dart';
+import 'package:reader/presentations/wrappers/ContentTypeLoader.dart';
 
 class ReaderApp extends StatefulWidget {
   // This widget is the root of your application.
@@ -34,7 +34,8 @@ class _ReaderAppState extends State<ReaderApp> {
         home: ReadingThemeProvider(
             theme: currentTheme,
             switchTheme: updateTheme,
-            child: EmptyContentScreen()
+          child: ContentTypeLoader.loadFromUriString(
+              'https://www.piaotian.com/html/9/9054/6877125.html'),
         )
     );
   }

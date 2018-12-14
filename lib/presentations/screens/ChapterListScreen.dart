@@ -13,9 +13,7 @@ class ChapterListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       ScreenScaffold(
-          appBar: AppBar(
-              title: Text(menu.title)
-          ),
+          title: menu.title,
           body: ListView.builder(
               itemBuilder: (context, index) =>
                   _renderChapterIndex(context, menu.chapters[index]),

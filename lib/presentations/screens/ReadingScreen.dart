@@ -16,17 +16,23 @@ class ReadingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _enableReadingMode();
-    return ScreenScaffold(
-        backgroundColor: _backgroundColor(context),
-        body: GestureDetector(
-            onDoubleTap: () {
-              showModalBottomSheet(
-                  context: context,
-                  builder: (context) => ReadingMenu()
-              );
-            },
-            child: ChapterContentView(chapter: chapter)
-        )
+
+    return
+      ScreenScaffold(
+          readingTheme: ReadingThemeProvider.fetchTheme(context),
+          onDoubleTap: _onDoubleTap,
+          body: ChapterContentView(chapter: chapter)
+      );
+  }
+
+  void _onDoubleTap(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext menuContext) =>
+            ReadingMenu(
+                chapter: chapter,
+                themeProvider: ReadingThemeProvider.fetch(context)
+            )
     );
   }
 
@@ -39,10 +45,4 @@ class ReadingScreen extends StatelessWidget {
     Screen.keepOn(false);
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
   }
-
-  _backgroundColor(BuildContext context) =>
-      ReadingThemeProvider
-          .fetch(context)
-          .theme
-          .chapterViewBackgroundColor;
 }

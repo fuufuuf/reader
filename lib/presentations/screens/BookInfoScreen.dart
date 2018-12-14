@@ -57,9 +57,7 @@ class BookInfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       ScreenScaffold(
-          appBar: AppBar(
-            title: Text(book.title),
-          ),
+          title: book.title,
           body: ListView(children: _items)
       );
 }

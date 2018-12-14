@@ -17,4 +17,7 @@ class ReadingThemeProvider extends InheritedWidget {
   static ReadingThemeProvider fetch(BuildContext context) =>
       context.inheritFromWidgetOfExactType(
           ReadingThemeProvider) as ReadingThemeProvider;
+
+  static ReadingTheme fetchTheme(BuildContext context) =>
+      fetch(context).theme;
 }

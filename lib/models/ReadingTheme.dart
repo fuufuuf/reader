@@ -4,21 +4,20 @@ class ReadingTheme {
 
   final bool isNightMode;
 
-  final Color chapterViewTextColor;
+  final Color textColor;
 
-  final Color chapterViewBackgroundColor;
+  final Color backgroundColor;
 
-  ReadingTheme(
-      {this.isNightMode, this.chapterViewTextColor, this.chapterViewBackgroundColor});
+  ReadingTheme({this.isNightMode, this.textColor, this.backgroundColor});
 
   static final ReadingTheme defaultTheme = ReadingTheme(
       isNightMode: false,
-      chapterViewTextColor: Colors.black,
-      chapterViewBackgroundColor: const Color.fromARGB(255, 210, 180, 140));
+      textColor: Colors.black,
+      backgroundColor: const Color.fromARGB(255, 210, 180, 140));
 
   static final ReadingTheme darkTheme = ReadingTheme(
       isNightMode: true,
-      chapterViewTextColor: Colors.white24,
-      chapterViewBackgroundColor: Colors.black
+      textColor: Colors.white24,
+      backgroundColor: Colors.black
   );
 }
