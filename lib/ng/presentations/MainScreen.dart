@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:reader/ng/events/EventBus.dart';
 import 'package:reader/ng/events/OpenUrlEvent.dart';
-import 'package:reader/ng/events/SwitchNightModeEvent.dart';
 import 'package:reader/ng/models/ReadingTheme.dart';
 import 'package:reader/ng/presentations/ContentTypeLoader.dart';
 import 'package:reader/ng/presentations/EmptyContentView.dart';
@@ -23,7 +22,6 @@ class _MainScreenState extends State<MainScreen> {
   ReadingTheme currentTheme;
 
   StreamSubscription<OpenUrlEvent> _subscription;
-  StreamSubscription<SwitchNightModeEvent> _subscription2;
 
   _MainScreenState({this.currentUrl, this.currentTheme});
 
@@ -31,7 +29,6 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _subscription = EventBus.on(_onOpenUrlEvent);
-    _subscription2 = EventBus.on(_onSwitchNightMode);
   }
 
   @override
@@ -49,12 +46,11 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  void _onSwitchNightMode(SwitchNightModeEvent event) {
+  void _onSwitchNightMode(bool nightMode) {
     this.setState(() {
-      this.setState(() {
-        this.currentTheme =
-        event.nightMode ? ReadingTheme.darkTheme : ReadingTheme.defaultTheme;
-      });
+      this.currentTheme = nightMode ?
+      ReadingTheme.darkTheme :
+      ReadingTheme.defaultTheme;
     });
   }
 
@@ -62,6 +58,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) =>
       ReadingThemeProvider(
           theme: currentTheme,
+          switchTheme: _onSwitchNightMode,
           child: _renderChild(context)
       );
 

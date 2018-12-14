@@ -13,7 +13,7 @@ class ChapterContentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textColor =
-        ReadingThemeProvider.fetchReadingTheme(context).chapterViewTextColor;
+        ReadingThemeProvider.fetch(context).theme.chapterViewTextColor;
     final style = DefaultTextStyle.of(context).style.apply(color: textColor);
 
     return ListView.builder(

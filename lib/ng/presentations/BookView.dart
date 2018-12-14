@@ -3,8 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:reader/ng/events/EventBus.dart';
 import 'package:reader/ng/events/OpenUrlEvent.dart';
 import 'package:reader/ng/models/Book.dart';
-import 'package:reader/ng/models/ReadingTheme.dart';
-import 'package:reader/ng/presentations/ReadingThemeProvider.dart';
 
 class BookView extends StatelessWidget {
   final Book book;
@@ -57,10 +55,6 @@ class BookView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      _buildWithTheme(context, ReadingThemeProvider.fetchReadingTheme(context));
-
-  Widget _buildWithTheme(BuildContext context,
-      ReadingTheme theme) =>
       Scaffold(
           appBar: AppBar(
             title: Text(book.title),

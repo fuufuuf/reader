@@ -68,10 +68,6 @@ class _ReaderScreenState extends State<ReaderScreen> {
             }),
         ListTile(
             leading: const Icon(Icons.refresh),
-            title: const Text("Reload Chapter"),
-            onTap: reloadChapter),
-        ListTile(
-            leading: const Icon(Icons.refresh),
             title: const Text("Refresh Book"),
             onTap: refreshBook),
         ListTile(

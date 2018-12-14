@@ -3,9 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:reader/ng/events/EventBus.dart';
 import 'package:reader/ng/events/OpenUrlEvent.dart';
-import 'package:reader/ng/events/SwitchNightModeEvent.dart';
 import 'package:reader/ng/models/Chapter.dart';
-import 'package:reader/ng/models/ReadingTheme.dart';
 import 'package:reader/ng/presentations/ChapterContentView.dart';
 import 'package:reader/ng/presentations/ReadingThemeProvider.dart';
 import 'package:screen/screen.dart';
@@ -19,12 +17,13 @@ class ChapterView extends StatelessWidget {
   Widget build(BuildContext context) {
     _enableReadingMode();
     return _buildWithTheme(
-        context, ReadingThemeProvider.fetchReadingTheme(context));
+        context, ReadingThemeProvider.fetch(context));
   }
 
-  Widget _buildWithTheme(BuildContext context, ReadingTheme theme) =>
+  Widget _buildWithTheme(BuildContext context,
+      ReadingThemeProvider themeProvider) =>
       Scaffold(
-          backgroundColor: theme.chapterViewBackgroundColor,
+          backgroundColor: themeProvider.theme.chapterViewBackgroundColor,
           body: GestureDetector(
               onDoubleTap: () async {
                 showModalBottomSheet(
@@ -33,7 +32,8 @@ class ChapterView extends StatelessWidget {
                         BottomSheet(
                             onClosing: () {},
                             builder: (BuildContext menuContext) =>
-                                _renderMenuWithTheme(menuContext, theme)
+                                _renderMenu(
+                                    menuContext, themeProvider)
                         )
                 );
               },
@@ -44,7 +44,8 @@ class ChapterView extends StatelessWidget {
           )
       );
 
-  Widget _renderMenuWithTheme(BuildContext context, ReadingTheme theme) =>
+  Widget _renderMenu(BuildContext context,
+      ReadingThemeProvider themeProvider) =>
       ListView(children: <Widget>[
         ListTile(
             leading: const Icon(Icons.navigate_next),
@@ -74,12 +75,12 @@ class ChapterView extends StatelessWidget {
             title: const Text("Reload Chapter"),
             onTap: _reload),
         ListTile(
-            leading: theme.isNightMode
+            leading: themeProvider.theme.isNightMode
                 ? const Icon(Icons.brightness_3)
                 : const Icon(Icons.brightness_7),
             title: const Text("Night Mode"),
             onTap: () {
-              _toggleNightMode(theme);
+              themeProvider.switchTheme(!themeProvider.theme.isNightMode);
             })
       ]);
 
@@ -113,9 +114,5 @@ class ChapterView extends StatelessWidget {
 
   void _reload() {
     EventBus.post(OpenUrlEvent(chapter.url));
-  }
-
-  void _toggleNightMode(ReadingTheme theme) {
-    EventBus.post(SwitchNightModeEvent(!theme.isNightMode));
   }
 }
