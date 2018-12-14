@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
-import 'package:reader/ng/events/EventBus.dart';
-import 'package:reader/ng/events/OpenUrlEvent.dart';
-import 'package:reader/ng/models/ReadingTheme.dart';
-import 'package:reader/ng/presentations/ContentTypeLoader.dart';
-import 'package:reader/ng/presentations/EmptyContentView.dart';
-import 'package:reader/ng/presentations/ReadingThemeProvider.dart';
+import 'package:reader/events/EventBus.dart';
+import 'package:reader/events/OpenUrlEvent.dart';
+import 'package:reader/models/ReadingTheme.dart';
+import 'package:reader/presentations/ContentTypeLoader.dart';
+import 'package:reader/presentations/EmptyContentView.dart';
+import 'package:reader/presentations/ReadingThemeProvider.dart';
 
 class MainScreen extends StatefulWidget {
   @override

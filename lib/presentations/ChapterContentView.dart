@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:reader/ng/events/EventBus.dart';
-import 'package:reader/ng/events/OpenUrlEvent.dart';
-import 'package:reader/ng/models/Chapter.dart';
-import 'package:reader/ng/presentations/ReadingThemeProvider.dart';
+import 'package:reader/events/EventBus.dart';
+import 'package:reader/events/OpenUrlEvent.dart';
+import 'package:reader/models/Chapter.dart';
+import 'package:reader/presentations/ReadingThemeProvider.dart';
 
 class ChapterContentView extends StatelessWidget {
   final Chapter chapter;

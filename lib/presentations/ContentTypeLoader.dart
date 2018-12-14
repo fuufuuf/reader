@@ -1,14 +1,14 @@
 import 'package:flutter/widgets.dart';
-import 'package:reader/ng/models/Book.dart';
-import 'package:reader/ng/models/Chapter.dart';
-import 'package:reader/ng/models/Menu.dart';
-import 'package:reader/ng/presentations/BookView.dart';
-import 'package:reader/ng/presentations/ChapterView.dart';
-import 'package:reader/ng/presentations/ContentLoader.dart';
-import 'package:reader/ng/presentations/ErrorView.dart';
-import 'package:reader/ng/presentations/LoadingView.dart';
-import 'package:reader/ng/presentations/MenuView.dart';
-import 'package:reader/ng/repositories/BookRepository.dart';
+import 'package:reader/models/Book.dart';
+import 'package:reader/models/Chapter.dart';
+import 'package:reader/models/Menu.dart';
+import 'package:reader/presentations/BookView.dart';
+import 'package:reader/presentations/ChapterView.dart';
+import 'package:reader/presentations/ContentLoader.dart';
+import 'package:reader/presentations/ErrorView.dart';
+import 'package:reader/presentations/LoadingView.dart';
+import 'package:reader/presentations/MenuView.dart';
+import 'package:reader/repositories/BookRepository.dart';
 
 class ContentTypeLoader extends StatelessWidget {
   final Uri url;

@@ -1,10 +1,10 @@
 import 'package:html/dom.dart';
-import 'package:reader/ng/models/Book.dart';
-import 'package:reader/ng/models/Chapter.dart';
-import 'package:reader/ng/models/Menu.dart';
-import 'package:reader/ng/repositories/ReaderHttpClient.dart';
-import 'package:reader/ng/repositories/SiteAdapter.dart';
-import 'package:reader/ng/repositories/safeExtractors.dart';
+import 'package:reader/models/Book.dart';
+import 'package:reader/models/Chapter.dart';
+import 'package:reader/models/Menu.dart';
+import 'package:reader/repositories/ReaderHttpClient.dart';
+import 'package:reader/repositories/SiteAdapter.dart';
+import 'package:reader/repositories/safeExtractors.dart';
 
 class PiaotianAdapter extends SiteAdapter {
   PiaotianAdapter(ReaderHttpClient client) :super(client);

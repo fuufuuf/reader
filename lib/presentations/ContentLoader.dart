@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:reader/ng/presentations/ErrorView.dart';
-import 'package:reader/ng/presentations/LoadingView.dart';
+import 'package:reader/presentations/ErrorView.dart';
+import 'package:reader/presentations/LoadingView.dart';
 
 class ContentLoader<T> extends StatelessWidget {
   final Uri url;

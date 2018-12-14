@@ -1,8 +1,8 @@
 import 'package:meta/meta.dart';
-import 'package:reader/ng/models/Book.dart';
-import 'package:reader/ng/models/Chapter.dart';
-import 'package:reader/ng/models/Menu.dart';
-import 'package:reader/ng/repositories/ReaderHttpClient.dart';
+import 'package:reader/models/Book.dart';
+import 'package:reader/models/Chapter.dart';
+import 'package:reader/models/Menu.dart';
+import 'package:reader/repositories/ReaderHttpClient.dart';
 
 abstract class SiteAdapter {
   @protected final ReaderHttpClient client;

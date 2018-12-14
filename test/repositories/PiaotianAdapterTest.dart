@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:reader/ng/models/Book.dart';
-import 'package:reader/ng/models/Chapter.dart';
-import 'package:reader/ng/models/Menu.dart';
-import 'package:reader/ng/repositories/PiaotianAdapter.dart';
-import 'package:reader/ng/repositories/ReaderHttpClient.dart';
+import 'package:reader/models/Book.dart';
+import 'package:reader/models/Chapter.dart';
+import 'package:reader/models/Menu.dart';
+import 'package:reader/repositories/PiaotianAdapter.dart';
+import 'package:reader/repositories/ReaderHttpClient.dart';
 
 class FakeClient extends ReaderHttpClient {
   final Map<Uri, Uri> _fixtureMap = Map<Uri, Uri>();

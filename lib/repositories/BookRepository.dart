@@ -1,52 +1,31 @@
-import 'dart:convert';
-
-import 'package:reader/models/models.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:reader/models/Book.dart';
+import 'package:reader/models/Chapter.dart';
+import 'package:reader/models/Menu.dart';
+import 'package:reader/repositories/ReaderHttpClient.dart';
+import 'package:reader/repositories/PiaotianAdapter.dart';
+import 'package:reader/repositories/SiteAdapter.dart';
 
 class BookRepository {
-  static final String _bookListKey = "book_list";
+  static ReaderHttpClient client = ReaderHttpClient();
 
-  static Map<String, Book> _books;
+  static Map<String, SiteAdapter> adapters = {
+    'www.piaotian.com': PiaotianAdapter(client)
+  };
 
-  static Future<List<Book>> _asList() =>
-      Future.value(_books.values.toList(growable: false));
+  static Future<Chapter> openChapter(Uri url, [String title]) =>
+      _findAdapter(url).openChapter(url);
 
-  static Future<List<Book>> loadBooks({reload: false}) =>
-      (_books == null || reload)
-          ? _doLoadAll().then(() => _asList())
-          : _asList();
+  static Future<Book> openBook(Uri url) =>
+      _findAdapter(url).openBook(url);
 
-  static saveBooks() async {
-    final prefs = await SharedPreferences.getInstance();
+  static Future<Menu> openMenu(Uri url) =>
+      _findAdapter(url).openMenu(url);
 
-    final value = _books.values
-        .map((b) => {'url': b.urlString, 'author': b.author, 'title': b.title})
-        .map(json.encode)
-        .toList(growable: false);
+  static Future<Object> openUrl(Uri url) =>
+      _findAdapter(url).open(url);
 
-    await prefs.setStringList(_bookListKey, value);
-  }
+  static Future<Type> checkType(Uri url) =>
+      _findAdapter(url).checkType(url);
 
-  static deleteBook(Book book) async {
-    _books.remove(book);
-    await saveBooks();
-  }
-
-  static Book findOrAddBook(String url) =>
-      _books.containsKey(url) ? _books[url] : _books[url] = Book.url(url);
-
-  static _doLoadAll() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    prefs.getStringList(_bookListKey).forEach(_updateBook);
-  }
-  
-  static void _updateBook(String jsonString) {
-    final Map<String, dynamic> data = json.decode(jsonString);
-
-    final Book book = findOrAddBook(data['url']);
-
-    book.author = data['author'];
-    book.title = data['title'];
-  }
+  static _findAdapter(Uri url) => adapters[url.host];
 }

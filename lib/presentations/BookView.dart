@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:reader/ng/events/EventBus.dart';
-import 'package:reader/ng/events/OpenUrlEvent.dart';
-import 'package:reader/ng/models/Book.dart';
+import 'package:reader/events/EventBus.dart';
+import 'package:reader/events/OpenUrlEvent.dart';
+import 'package:reader/models/Book.dart';
 
 class BookView extends StatelessWidget {
   final Book book;
