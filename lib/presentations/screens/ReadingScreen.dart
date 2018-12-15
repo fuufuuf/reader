@@ -115,6 +115,7 @@ class ReadingScreen extends StatelessWidget {
                           : const Icon(Icons.brightness_7),
                       title: const Text("Night Mode"),
                       onTap: () {
+                        Navigator.pop(menuContext);
                         themeProvider.switchTheme(
                             !themeProvider.theme.isNightMode);
                       })
