@@ -18,4 +18,4 @@ Uri safeUrl(Uri base, UnsafeExtract<String> action) => safe(() {
       return base.resolve(urlString);
     });
 
-List<T> safeList<T>(UnsafeExtract<List<T>> action) => safe(action) ?? <T>[];
+Iterable<T> safeList<T>(UnsafeExtract<Iterable<T>> action) => safe(action) ?? <T>[];

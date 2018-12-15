@@ -2,6 +2,7 @@ import 'package:html/dom.dart';
 import 'package:reader/models/BookInfo.dart';
 import 'package:reader/models/ChapterContent.dart';
 import 'package:reader/models/ChapterList.dart';
+import 'package:reader/models/ChapterRef.dart';
 import 'package:reader/repositories/network/ReaderHttpClient.dart';
 import 'package:reader/repositories/network/SiteAdapter.dart';
 import 'package:reader/repositories/network/safeExtractors.dart';
@@ -90,25 +91,30 @@ class PiaotianAdapter extends SiteAdapter {
   Future<ChapterList> fetchChapterList(Uri url) async {
     final document = await client.fetchDom(url, enforceGbk: true);
 
-    return ChapterList(
-        url: url,
-        title: safeText(() =>
+    return ChapterList((b) =>
+    b
+      ..url = url
+      ..title = safeText(() =>
             document
             .querySelector('.title h1')
                 ?.text
                 ?.trim()
-                ?.replaceAll("最新章节", "")),
-        bookUrl: safeUrl(url, () =>
+                ?.replaceAll("最新章节", ""))
+      ..bookUrl = safeUrl(url, () =>
         document.querySelectorAll('#tl > a')[1].attributes['href']
-        ),
-        chapters: safeList(() =>
-            document
-            .querySelectorAll('.mainbody .centent ul li a')
-            .map((element) => ChapterRef(
-                url: url.resolve(element.attributes['href']),
-                title: element.text))
-                .toList(growable: false)
-        )
+      )
+      ..chapters.addAll(safeList(() =>
+          document
+              .querySelectorAll('.mainbody .centent ul li a')
+              .map((element) =>
+              ChapterRef(
+                      (crb) =>
+                  crb
+                    ..url = url.resolve(element.attributes['href'])
+                    ..title = element.text
+              )
+          )
+      ))
     );
   }
 
@@ -120,33 +126,33 @@ class PiaotianAdapter extends SiteAdapter {
             '<script language="javascript">GetFont();</script>',
             '<div id="content">'));
 
-    return ChapterContent(
-        url: url,
-        title: safeText(() =>
+    return ChapterContent((b) =>
+    b
+      ..url = url
+      ..title = safeText(() =>
         document
             .querySelector('h1')
-            .text),
-        menuUrl: safeUrl(url, () =>
+            .text)
+      ..menuUrl = safeUrl(url, () =>
         document
             .querySelectorAll('.toplink > a')[1]
-            .attributes['href']),
-
-        previousChapterUrl: safeUrl(url, () =>
+            .attributes['href'])
+      ..previousChapterUrl = safeUrl(url, () =>
         document
             .querySelectorAll('.toplink > a')[0]
-            .attributes['href']),
-        nextChapterUrl: safeUrl(url, () =>
+            .attributes['href'])
+      ..nextChapterUrl = safeUrl(url, () =>
         document
             .querySelectorAll('.toplink > a')[2]
-            .attributes['href']),
-        paragraphs: safeList(() =>
+            .attributes['href'])
+      ..paragraphs.addAll(safeList(() =>
             document
             .getElementById('content')
             .nodes
             .where((node) => node.nodeType == Node.TEXT_NODE)
             .map((node) => node.text.trim())
             .where((text) => text.isNotEmpty)
-                .toList(growable: false))
+      ))
     );
   }
 }

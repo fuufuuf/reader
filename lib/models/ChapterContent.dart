@@ -1,4 +1,4 @@
-import 'package:meta/meta.dart';
+import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 
 part 'ChapterContent.g.dart';
@@ -13,7 +13,7 @@ abstract class ChapterContent
 
   String get title;
 
-  List<String> get paragraphs;
+  BuiltList<String> get paragraphs;
 
   Uri get menuUrl;
 

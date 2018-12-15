@@ -74,7 +74,6 @@ class ReadingScreen extends StatelessWidget {
                   ListTile(
                     leading: const Icon(Icons.list),
                     title: const Text("Menu"),
-                    enabled: chapter.hasMenu,
                     onTap: () {
                       _disableReadingMode();
                       Navigator.pop(menuContext);

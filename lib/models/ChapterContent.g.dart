@@ -12,7 +12,7 @@ class _$ChapterContent extends ChapterContent {
   @override
   final String title;
   @override
-  final List<String> paragraphs;
+  final BuiltList<String> paragraphs;
   @override
   final Uri menuUrl;
   @override
@@ -102,9 +102,11 @@ class ChapterContentBuilder
   String get title => _$this._title;
   set title(String title) => _$this._title = title;
 
-  List<String> _paragraphs;
-  List<String> get paragraphs => _$this._paragraphs;
-  set paragraphs(List<String> paragraphs) => _$this._paragraphs = paragraphs;
+  ListBuilder<String> _paragraphs;
+  ListBuilder<String> get paragraphs =>
+      _$this._paragraphs ??= new ListBuilder<String>();
+  set paragraphs(ListBuilder<String> paragraphs) =>
+      _$this._paragraphs = paragraphs;
 
   Uri _menuUrl;
   Uri get menuUrl => _$this._menuUrl;
@@ -126,7 +128,7 @@ class ChapterContentBuilder
     if (_$v != null) {
       _url = _$v.url;
       _title = _$v.title;
-      _paragraphs = _$v.paragraphs;
+      _paragraphs = _$v.paragraphs?.toBuilder();
       _menuUrl = _$v.menuUrl;
       _nextChapterUrl = _$v.nextChapterUrl;
       _previousChapterUrl = _$v.previousChapterUrl;
@@ -150,14 +152,27 @@ class ChapterContentBuilder
 
   @override
   _$ChapterContent build() {
-    final _$result = _$v ??
-        new _$ChapterContent._(
-            url: url,
-            title: title,
-            paragraphs: paragraphs,
-            menuUrl: menuUrl,
-            nextChapterUrl: nextChapterUrl,
-            previousChapterUrl: previousChapterUrl);
+    _$ChapterContent _$result;
+    try {
+      _$result = _$v ??
+          new _$ChapterContent._(
+              url: url,
+              title: title,
+              paragraphs: paragraphs.build(),
+              menuUrl: menuUrl,
+              nextChapterUrl: nextChapterUrl,
+              previousChapterUrl: previousChapterUrl);
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'paragraphs';
+        paragraphs.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'ChapterContent', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }
