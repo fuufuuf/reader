@@ -102,7 +102,7 @@ void main() {
     final chapter = await adapter.fetchChapterContent(chapterUrl);
 
     expect(chapter.url, equals(chapterUrl));
-    expect(chapter.menuUrl, equals(menuUrl));
+    expect(chapter.chapterListUrl, equals(menuUrl));
     expect(chapter.previousChapterUrl,
         equals(Uri.parse('https://www.piaotian.com/html/9/9054/5941035.html')));
     expect(chapter.nextChapterUrl,

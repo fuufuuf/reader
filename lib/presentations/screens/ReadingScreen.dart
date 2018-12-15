@@ -78,7 +78,7 @@ class ReadingScreen extends StatelessWidget {
                       _disableReadingMode();
                       Navigator.pop(menuContext);
                       Navigator.pop(context);
-                      ReaderApp.openUrl(context, chapter.menuUrl);
+                      ReaderApp.openUrl(context, chapter.chapterListUrl);
                     },
                   ),
                   ListTile(

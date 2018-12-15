@@ -15,7 +15,7 @@ abstract class ChapterContent
 
   BuiltList<String> get paragraphs;
 
-  Uri get menuUrl;
+  Uri get chapterListUrl;
 
   @nullable
   Uri get nextChapterUrl;

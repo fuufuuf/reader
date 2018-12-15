@@ -13,7 +13,7 @@ abstract class ChapterList implements Built<ChapterList, ChapterListBuilder> {
 
   String get title;
 
-  BuiltList<ChapterRef> get chapters;
-
   Uri get bookUrl;
+
+  BuiltList<ChapterRef> get chapters;
 }

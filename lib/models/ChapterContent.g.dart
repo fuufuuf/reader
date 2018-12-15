@@ -14,7 +14,7 @@ class _$ChapterContent extends ChapterContent {
   @override
   final BuiltList<String> paragraphs;
   @override
-  final Uri menuUrl;
+  final Uri chapterListUrl;
   @override
   final Uri nextChapterUrl;
   @override
@@ -27,7 +27,7 @@ class _$ChapterContent extends ChapterContent {
       {this.url,
       this.title,
       this.paragraphs,
-      this.menuUrl,
+      this.chapterListUrl,
       this.nextChapterUrl,
       this.previousChapterUrl})
       : super._() {
@@ -40,7 +40,7 @@ class _$ChapterContent extends ChapterContent {
     if (paragraphs == null) {
       throw new BuiltValueNullFieldError('ChapterContent', 'paragraphs');
     }
-    if (menuUrl == null) {
+    if (chapterListUrl == null) {
       throw new BuiltValueNullFieldError('ChapterContent', 'menuUrl');
     }
   }
@@ -60,7 +60,7 @@ class _$ChapterContent extends ChapterContent {
         url == other.url &&
         title == other.title &&
         paragraphs == other.paragraphs &&
-        menuUrl == other.menuUrl &&
+        chapterListUrl == other.chapterListUrl &&
         nextChapterUrl == other.nextChapterUrl &&
         previousChapterUrl == other.previousChapterUrl;
   }
@@ -72,7 +72,7 @@ class _$ChapterContent extends ChapterContent {
             $jc(
                 $jc($jc($jc(0, url.hashCode), title.hashCode),
                     paragraphs.hashCode),
-                menuUrl.hashCode),
+                chapterListUrl.hashCode),
             nextChapterUrl.hashCode),
         previousChapterUrl.hashCode));
   }
@@ -83,7 +83,7 @@ class _$ChapterContent extends ChapterContent {
           ..add('url', url)
           ..add('title', title)
           ..add('paragraphs', paragraphs)
-          ..add('menuUrl', menuUrl)
+          ..add('menuUrl', chapterListUrl)
           ..add('nextChapterUrl', nextChapterUrl)
           ..add('previousChapterUrl', previousChapterUrl))
         .toString();
@@ -129,7 +129,7 @@ class ChapterContentBuilder
       _url = _$v.url;
       _title = _$v.title;
       _paragraphs = _$v.paragraphs?.toBuilder();
-      _menuUrl = _$v.menuUrl;
+      _menuUrl = _$v.chapterListUrl;
       _nextChapterUrl = _$v.nextChapterUrl;
       _previousChapterUrl = _$v.previousChapterUrl;
       _$v = null;
@@ -159,7 +159,7 @@ class ChapterContentBuilder
               url: url,
               title: title,
               paragraphs: paragraphs.build(),
-              menuUrl: menuUrl,
+              chapterListUrl: menuUrl,
               nextChapterUrl: nextChapterUrl,
               previousChapterUrl: previousChapterUrl);
     } catch (_) {
