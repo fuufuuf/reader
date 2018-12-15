@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reader/models/ReadingTheme.dart';
+import 'package:reader/viewModels/ReadingTheme.dart';
 
 typedef void GestureCallback(BuildContext context);
 

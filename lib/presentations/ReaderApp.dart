@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reader/models/ReadingTheme.dart';
+import 'package:reader/viewModels/ReadingTheme.dart';
 import 'package:reader/presentations/providers/ReadingThemeProvider.dart';
 import 'package:reader/presentations/screens/EmptyContentScreen.dart';
 import 'package:reader/presentations/wrappers/ContentTypeLoader.dart';

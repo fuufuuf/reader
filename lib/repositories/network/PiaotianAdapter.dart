@@ -46,23 +46,40 @@ class PiaotianAdapter extends SiteAdapter {
 
     return Book(
       url: url,
-      title: document.querySelector('h1').text.trim(),
-      author: safeText(
-              () =>
-          document
-              .querySelectorAll(
-              '#content > table > tbody > tr > td > table[cellpadding="3"]')
-              .first
-              .querySelectorAll('tr > td')[3]
-              .text
-              .trim()
-              .replaceAll("作    者：", "")
-      ),
         menuUrl: Uri.parse(
-            url.toString().replaceFirst("/bookinfo/", "/html/").replaceFirst(
-                ".html", "/"))
+            url.toString()
+                .replaceFirst("/bookinfo/", "/html/")
+                .replaceFirst(".html", "/")
+        ),
+      title: document.querySelector('h1').text.trim(),
+        author: safeText(() =>
+            _extractMeta(document, 3, '作    者：')
+      ),
+        genre: safeText(() =>
+            _extractMeta(document, 2, '类    别：')
+        ),
+        completeness: safeText(() =>
+            _extractMeta(document, 7, '文章状态：')
+        ),
+        lastUpdated: safeText(() =>
+            _extractMeta(document, 6, '最后更新：')
+        ),
+        length: safeText(() =>
+            _extractMeta(document, 5, '全文长度：')
+        )
     );
   }
+
+  String _extractMeta(Document document, int index, String toRemove) =>
+      document
+          .querySelectorAll(
+          '#content > table > tbody > tr > td > table[cellpadding="3"]')
+          .first
+          .querySelectorAll('tr > td')[index]
+          .text
+          .trim()
+          .replaceAll(toRemove, '');
+
 
   @override
   Future<TableOfContents> openMenu(Uri url) async {
@@ -104,10 +121,6 @@ class PiaotianAdapter extends SiteAdapter {
         document
             .querySelector('h1')
             .text),
-        bookUrl: safeUrl(url, () =>
-        document
-            .querySelectorAll('.toplink > a')[3]
-            .attributes['href']),
         menuUrl: safeUrl(url, () =>
         document
             .querySelectorAll('.toplink > a')[1]

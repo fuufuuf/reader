@@ -2,25 +2,32 @@ import 'package:meta/meta.dart';
 
 class Book {
   final Uri url;
+  final Uri menuUrl;
   final String title;
   final String author;
-  final Uri menuUrl;
-  final Uri firstChapterUrl;
-  final Uri latestChapterUrl;
+  final String genre;
+  final String completeness;
+  final String lastUpdated;
+  Book({
+    @required this.url,
+    @required this.menuUrl,
+    @required this.title,
+    this.author,
+    this.genre,
+    this.completeness,
+    this.lastUpdated,
+    this.length
+  });
 
-  Book(
-      {@required this.url,
-      this.title,
-      this.author,
-      this.menuUrl,
-      this.firstChapterUrl,
-      this.latestChapterUrl});
+  final String length;
 
   bool get hasAuthor => author != null;
 
-  bool get hasMenu => menuUrl != null;
+  bool get hasGenre => genre != null;
 
-  bool get hasFirstChapter => firstChapterUrl != null;
+  bool get hasCompleteness => completeness != null;
 
-  bool get hasLatestChapter => latestChapterUrl != null;
+  bool get hasLastUpdated => lastUpdated != null;
+
+  bool get hasLength => length != null;
 }

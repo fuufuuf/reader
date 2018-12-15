@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:reader/models/ReadingTheme.dart';
+import 'package:reader/viewModels/ReadingTheme.dart';
 
 typedef void SwitchTheme(bool nightMode);
 

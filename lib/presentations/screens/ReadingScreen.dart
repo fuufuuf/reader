@@ -79,17 +79,6 @@ class ReadingScreen extends StatelessWidget {
                       _disableReadingMode();
                       Navigator.pop(menuContext);
                       Navigator.pop(context);
-                      ReaderApp.openUrl(context, chapter.bookUrl);
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.book),
-                    title: const Text('Book'),
-                    enabled: chapter.hasBook,
-                    onTap: () {
-                      _disableReadingMode();
-                      Navigator.pop(menuContext);
-                      Navigator.pop(context);
                       ReaderApp.openUrl(context, chapter.menuUrl);
                     },
                   ),

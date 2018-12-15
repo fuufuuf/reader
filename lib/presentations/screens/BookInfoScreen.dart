@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:reader/models/Book.dart';
-import 'package:reader/presentations/ReaderApp.dart';
 import 'package:reader/presentations/components/ScreenScaffold.dart';
 
 class BookInfoScreen extends StatelessWidget {
@@ -16,37 +15,28 @@ class BookInfoScreen extends StatelessWidget {
           title: Text('作者： ${book.author}'));
     }
 
-    if (book.hasMenu) {
-      yield ListTile(
-        key: Key('Menu Link'),
-        leading: Icon(Icons.list),
-        title: const Text("目录"),
-        onTap: () {
-          ReaderApp.openUrl(context, book.menuUrl);
-        },
-      );
+    if (book.hasGenre) {
+      yield ListTile(key: Key('genre'),
+          leading: Icon(Icons.category),
+          title: Text('类型： ${book.genre}'));
     }
 
-    if (book.hasFirstChapter) {
-      yield ListTile(
-          key: Key('First Chapter Link'),
-          leading: Icon(Icons.bookmark),
-          title: const Text("最早章节"),
-          onTap: () {
-            ReaderApp.openUrl(context, book.firstChapterUrl);
-          }
-      );
+    if (book.hasCompleteness) {
+      yield ListTile(key: Key('completeness'),
+          leading: Icon(Icons.more),
+          title: Text('状态： ${book.completeness}'));
     }
 
-    if (book.hasLatestChapter) {
-      yield ListTile(
-          key: Key('Latest Chapter Link'),
-          leading: Icon(Icons.bookmark),
-          title: const Text("最新章节"),
-          onTap: () {
-            ReaderApp.openUrl(context, book.latestChapterUrl);
-          }
-      );
+    if (book.hasLastUpdated) {
+      yield ListTile(key: Key('lastUpdated'),
+          leading: Icon(Icons.access_time),
+          title: Text('最近更新时间： ${book.lastUpdated}'));
+    }
+
+    if (book.hasLength) {
+      yield ListTile(key: Key('length'),
+          leading: Icon(Icons.translate),
+          title: Text('总字数： ${book.lastUpdated}'));
     }
   }
 

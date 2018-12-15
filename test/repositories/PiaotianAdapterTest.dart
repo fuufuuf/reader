@@ -68,10 +68,14 @@ void main() {
     final book = await adapter.openBook(bookUrl);
 
     expect(book.url, bookUrl);
-    expect(book.title, equals('大道朝天'));
-    expect(book.author, equals('猫腻'));
     expect(book.menuUrl,
         equals(Uri.parse('https://www.piaotian.com/html/9/9054/')));
+    expect(book.title, equals('大道朝天'));
+    expect(book.author, equals('猫腻'));
+    expect(book.genre, equals('玄幻魔法'));
+    expect(book.completeness, equals('连载中'));
+    expect(book.lastUpdated, equals('2018-12-07'));
+    expect(book.length, equals('1429051字'));
   });
 
   test('it should parse menu', () async {
@@ -98,7 +102,6 @@ void main() {
     final chapter = await adapter.openChapter(chapterUrl);
 
     expect(chapter.url, equals(chapterUrl));
-    expect(chapter.bookUrl.path, equals(bookUrl.path));
     expect(chapter.menuUrl, equals(menuUrl));
     expect(chapter.previousChapterUrl,
         equals(Uri.parse('https://www.piaotian.com/html/9/9054/5941035.html')));
