@@ -1,4 +1,5 @@
 import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 
 part 'BookEntry.g.dart';
 
@@ -17,4 +18,6 @@ abstract class BookEntry implements Built<BookEntry, BookEntryBuilder> {
 
   @nullable
   String get currentUrl;
+
+  static Serializer<BookEntry> get serializer => _$bookEntrySerializer;
 }

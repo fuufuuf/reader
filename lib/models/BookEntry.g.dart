@@ -6,6 +6,78 @@ part of 'BookEntry.dart';
 // BuiltValueGenerator
 // **************************************************************************
 
+Serializer<BookEntry> _$bookEntrySerializer = new _$BookEntrySerializer();
+
+class _$BookEntrySerializer implements StructuredSerializer<BookEntry> {
+  @override
+  final Iterable<Type> types = const [BookEntry, _$BookEntry];
+  @override
+  final String wireName = 'BookEntry';
+
+  @override
+  Iterable serialize(Serializers serializers, BookEntry object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[
+      'id',
+      serializers.serialize(object.id, specifiedType: const FullType(String)),
+      'bookName',
+      serializers.serialize(object.bookName,
+          specifiedType: const FullType(String)),
+      'menuUrl',
+      serializers.serialize(object.menuUrl,
+          specifiedType: const FullType(String)),
+      'bookUrl',
+      serializers.serialize(object.bookUrl,
+          specifiedType: const FullType(String)),
+    ];
+    if (object.currentUrl != null) {
+      result
+        ..add('currentUrl')
+        ..add(serializers.serialize(object.currentUrl,
+            specifiedType: const FullType(String)));
+    }
+
+    return result;
+  }
+
+  @override
+  BookEntry deserialize(Serializers serializers, Iterable serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new BookEntryBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'bookName':
+          result.bookName = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'menuUrl':
+          result.menuUrl = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'bookUrl':
+          result.bookUrl = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'currentUrl':
+          result.currentUrl = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
 class _$BookEntry extends BookEntry {
   @override
   final String id;
