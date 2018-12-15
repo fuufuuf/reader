@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:reader/models/Book.dart';
+import 'package:reader/models/BookInfo.dart';
 import 'package:reader/models/ChapterContent.dart';
-import 'package:reader/models/TableOfContents.dart';
+import 'package:reader/models/ChapterList.dart';
 import 'package:reader/repositories/network/PiaotianAdapter.dart';
 import 'package:reader/repositories/network/ReaderHttpClient.dart';
 
@@ -53,22 +53,22 @@ void main() {
   });
 
   test('should check type', () async {
-    expect(await adapter.checkType(bookUrl), equals(Book));
-    expect(await adapter.checkType(menuUrl), equals(TableOfContents));
-    expect(await adapter.checkType(chapterUrl), equals(ChapterContent));
+    expect(await adapter.fetchResourceType(bookUrl), equals(BookInfo));
+    expect(await adapter.fetchResourceType(menuUrl), equals(ChapterList));
+    expect(await adapter.fetchResourceType(chapterUrl), equals(ChapterContent));
   });
 
   test('should parser as right type', () async {
-    expect(await adapter.open(bookUrl), isInstanceOf<Book>());
-    expect(await adapter.open(menuUrl), isInstanceOf<TableOfContents>());
-    expect(await adapter.open(chapterUrl), isInstanceOf<ChapterContent>());
+    expect(await adapter.fetchFromUrl(bookUrl), isInstanceOf<BookInfo>());
+    expect(await adapter.fetchFromUrl(menuUrl), isInstanceOf<ChapterList>());
+    expect(await adapter.fetchFromUrl(chapterUrl), isInstanceOf<ChapterContent>());
   });
 
   test('it should parse book', () async {
-    final book = await adapter.openBook(bookUrl);
+    final book = await adapter.fetchBookInfo(bookUrl);
 
     expect(book.url, bookUrl);
-    expect(book.menuUrl,
+    expect(book.chapterListUrl,
         equals(Uri.parse('https://www.piaotian.com/html/9/9054/')));
     expect(book.title, equals('大道朝天'));
     expect(book.author, equals('猫腻'));
@@ -79,7 +79,7 @@ void main() {
   });
 
   test('it should parse menu', () async {
-    final menu = await adapter.openMenu(menuUrl);
+    final menu = await adapter.fetchChapterList(menuUrl);
 
     expect(menu.url, menuUrl);
     expect(menu.title, equals('大道朝天'));
@@ -99,7 +99,7 @@ void main() {
   });
 
   test('it should parse chapter', () async {
-    final chapter = await adapter.openChapter(chapterUrl);
+    final chapter = await adapter.fetchChapterContent(chapterUrl);
 
     expect(chapter.url, equals(chapterUrl));
     expect(chapter.menuUrl, equals(menuUrl));

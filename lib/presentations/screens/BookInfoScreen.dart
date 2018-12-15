@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:reader/models/Book.dart';
+import 'package:reader/models/BookInfo.dart';
 import 'package:reader/presentations/components/ScreenScaffold.dart';
 
 class BookInfoScreen extends StatelessWidget {
-  final Book book;
+  final BookInfo book;
 
   BookInfoScreen({this.book});
 

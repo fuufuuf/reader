@@ -1,7 +1,7 @@
 import 'package:html/dom.dart';
-import 'package:reader/models/Book.dart';
+import 'package:reader/models/BookInfo.dart';
 import 'package:reader/models/ChapterContent.dart';
-import 'package:reader/models/TableOfContents.dart';
+import 'package:reader/models/ChapterList.dart';
 import 'package:reader/repositories/network/ReaderHttpClient.dart';
 import 'package:reader/repositories/network/SiteAdapter.dart';
 import 'package:reader/repositories/network/safeExtractors.dart';
@@ -13,60 +13,65 @@ class PiaotianAdapter extends SiteAdapter {
       r"https?://www.piaotian.com/bookinfo/(\d+)/(\d+).html",
       caseSensitive: false);
 
-  static final menuUrlPattern = RegExp(
+  static final chapterListUrlPattern = RegExp(
       r"https?://www.piaotian.com/html/(\d+)/(\d+)/(index.html)?",
       caseSensitive: false);
 
-  static final chapterUrlPattern = RegExp(
+  static final chapterContentUrlPattern = RegExp(
       r"https?://www.piaotian.com/html/(\d+)/(\d+)/(\d+).html",
       caseSensitive: false);
 
   @override
-  Future<Type> checkType(Uri url) async {
+  Future<Type> fetchResourceType(Uri url) async {
     var urlString = url.toString();
 
-    if (chapterUrlPattern.hasMatch(urlString)) {
+    if (chapterContentUrlPattern.hasMatch(urlString)) {
       return ChapterContent;
     }
 
-    if (menuUrlPattern.hasMatch(urlString)) {
-      return TableOfContents;
+    if (chapterListUrlPattern.hasMatch(urlString)) {
+      return ChapterList;
     }
 
     if (bookUrlPattern.hasMatch(urlString)) {
-      return Book;
+      return BookInfo;
     }
 
     throw "Unknown Url: $url";
   }
 
   @override
-  Future<Book> openBook(Uri url) async {
+  Future<BookInfo> fetchBookInfo(Uri url) async {
     final document = await client.fetchDom(url, enforceGbk: true);
 
-    return Book(
-      url: url,
-        menuUrl: Uri.parse(
-            url.toString()
-                .replaceFirst("/bookinfo/", "/html/")
-                .replaceFirst(".html", "/")
-        ),
-      title: document.querySelector('h1').text.trim(),
-        author: safeText(() =>
+    return BookInfo((b) =>
+    b
+      ..url = url
+      ..chapterListUrl = Uri.parse(
+          url
+              .toString()
+              .replaceFirst("/bookinfo/", "/html/")
+              .replaceFirst(".html", "/")
+      )
+      ..title = document
+          .querySelector('h1')
+          .text
+          .trim()
+      ..author = safeText(() =>
             _extractMeta(document, 3, '作    者：')
-      ),
-        genre: safeText(() =>
-            _extractMeta(document, 2, '类    别：')
-        ),
-        completeness: safeText(() =>
-            _extractMeta(document, 7, '文章状态：')
-        ),
-        lastUpdated: safeText(() =>
-            _extractMeta(document, 6, '最后更新：')
-        ),
-        length: safeText(() =>
-            _extractMeta(document, 5, '全文长度：')
-        )
+      )
+      ..genre = safeText(() =>
+          _extractMeta(document, 2, '类    别：')
+      )
+      ..completeness = safeText(() =>
+          _extractMeta(document, 7, '文章状态：')
+      )
+      ..lastUpdated = safeText(() =>
+          _extractMeta(document, 6, '最后更新：')
+      )
+      ..length = safeText(() =>
+          _extractMeta(document, 5, '全文长度：')
+      )
     );
   }
 
@@ -82,10 +87,10 @@ class PiaotianAdapter extends SiteAdapter {
 
 
   @override
-  Future<TableOfContents> openMenu(Uri url) async {
+  Future<ChapterList> fetchChapterList(Uri url) async {
     final document = await client.fetchDom(url, enforceGbk: true);
 
-    return TableOfContents(
+    return ChapterList(
         url: url,
         title: safeText(() =>
             document
@@ -108,7 +113,7 @@ class PiaotianAdapter extends SiteAdapter {
   }
 
   @override
-  Future<ChapterContent> openChapter(Uri url) async {
+  Future<ChapterContent> fetchChapterContent(Uri url) async {
     final document = await client.fetchDom(
         url, enforceGbk: true, patchHtml: (html) =>
         html.replaceFirst(

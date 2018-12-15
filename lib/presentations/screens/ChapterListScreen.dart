@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:reader/models/TableOfContents.dart';
+import 'package:reader/models/ChapterList.dart';
 import 'package:reader/presentations/ReaderApp.dart';
 import 'package:reader/presentations/components/ScreenScaffold.dart';
 
 class ChapterListScreen extends StatelessWidget {
-  final TableOfContents menu;
+  final ChapterList menu;
 
   ChapterListScreen({@required this.menu});
 

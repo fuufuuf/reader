@@ -1,12 +1,12 @@
 import 'package:meta/meta.dart';
 
-class TableOfContents {
+class ChapterList {
   final Uri url;
   final String title;
   final List<ChapterRef> chapters;
   final Uri bookUrl;
 
-  TableOfContents({@required this.url, this.title, this.chapters, this.bookUrl});
+  ChapterList({@required this.url, this.title, this.chapters, this.bookUrl});
 
   bool get hasChapters => chapters.isNotEmpty;
 

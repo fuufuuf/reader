@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
-import 'package:reader/models/Book.dart';
+import 'package:reader/models/BookInfo.dart';
 import 'package:reader/models/ChapterContent.dart';
-import 'package:reader/models/TableOfContents.dart';
+import 'package:reader/models/ChapterList.dart';
 import 'package:reader/presentations/screens/BookInfoScreen.dart';
 import 'package:reader/presentations/screens/ErrorScreen.dart';
 import 'package:reader/presentations/screens/LoadingScreen.dart';
@@ -16,19 +16,19 @@ class ContentTypeLoader extends StatelessWidget {
 
   ContentTypeLoader(this.url, this.contentType);
 
-  ContentTypeLoader.loadBook(Uri url) : this(url, Future.value(Book));
+  ContentTypeLoader.loadBook(Uri url) : this(url, Future.value(BookInfo));
 
   ContentTypeLoader.loadMenu(Uri url)
-      : this(url, Future.value(TableOfContents));
+      : this(url, Future.value(ChapterList));
 
   ContentTypeLoader.loadChapter(Uri url)
       : this(url, Future.value(ChapterContent));
 
   ContentTypeLoader.loadFromUri(Uri url)
-      : this(url, BookRepository.checkType(url));
+      : this(url, BookRepository.fetchResourceType(url));
 
   ContentTypeLoader.loadFromUriString(String url)
-      : this(Uri.parse(url), BookRepository.checkType(Uri.parse(url)));
+      : this(Uri.parse(url), BookRepository.fetchResourceType(Uri.parse(url)));
 
   @override
   Widget build(BuildContext context) => FutureBuilder<Type>(
@@ -39,10 +39,10 @@ class ContentTypeLoader extends StatelessWidget {
   Widget buildChild(BuildContext context, AsyncSnapshot<Type> snapshot) {
     if (snapshot.hasData) {
       switch (snapshot.data) {
-        case Book:
+        case BookInfo:
           return renderBook();
 
-        case TableOfContents:
+        case ChapterList:
           return renderMenu();
 
         case ChapterContent:
@@ -57,21 +57,21 @@ class ContentTypeLoader extends StatelessWidget {
     return LoadingScreen();
   }
 
-  Widget renderBook() => ContentLoader<Book>(
+  Widget renderBook() => ContentLoader<BookInfo>(
       url: url,
-      action: BookRepository.openBook,
+      action: BookRepository.fetchBookInfo,
       render: (book) => BookInfoScreen(book: book));
 
   Widget renderMenu() =>
-      ContentLoader<TableOfContents>(
+      ContentLoader<ChapterList>(
       url: url,
-      action: BookRepository.openMenu,
+      action: BookRepository.fetchChapterList,
       render: (menu) => ChapterListScreen(menu: menu));
 
   Widget renderChapter() =>
       ContentLoader<ChapterContent>(
       url: url,
-      action: BookRepository.openChapter,
+      action: BookRepository.fetchChapterContent,
           render: (chapter) => ReadingScreen(chapter: chapter));
 
   Widget renderError(Object error) => ErrorScreen(error: error);
