@@ -1,5 +1,9 @@
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
+import 'package:reader/models/BookInfo.dart';
+import 'package:reader/models/ChapterContent.dart';
+import 'package:reader/models/ChapterList.dart';
+import 'package:reader/repositories/network/BookRepository.dart';
 
 part 'BookEntry.g.dart';
 
@@ -12,12 +16,20 @@ abstract class BookEntry implements Built<BookEntry, BookEntryBuilder> {
 
   String get bookName;
 
-  String get menuUrl;
+  Uri get chapterListUrl;
 
-  String get bookUrl;
+  Uri get bookInfoUrl;
 
   @nullable
-  String get currentUrl;
+  Uri get currentChapterUrl;
 
   static Serializer<BookEntry> get serializer => _$bookEntrySerializer;
+
+  Future<BookInfo> fetchBookInfo() => BookRepository.fetchBookInfo(bookInfoUrl);
+
+  Future<ChapterList> fetchChapterList() =>
+      BookRepository.fetchChapterList(chapterListUrl);
+
+  Future<ChapterContent> fetchCurrentChapterContent() =>
+      BookRepository.fetchChapterContent(currentChapterUrl);
 }

@@ -12,6 +12,8 @@ class _$BookInfo extends BookInfo {
   @override
   final Uri chapterListUrl;
   @override
+  final String bookId;
+  @override
   final String title;
   @override
   final String author;
@@ -30,6 +32,7 @@ class _$BookInfo extends BookInfo {
   _$BookInfo._(
       {this.url,
       this.chapterListUrl,
+      this.bookId,
       this.title,
       this.author,
       this.genre,
@@ -42,6 +45,9 @@ class _$BookInfo extends BookInfo {
     }
     if (chapterListUrl == null) {
       throw new BuiltValueNullFieldError('BookInfo', 'chapterListUrl');
+    }
+    if (bookId == null) {
+      throw new BuiltValueNullFieldError('BookInfo', 'bookId');
     }
   }
 
@@ -58,6 +64,7 @@ class _$BookInfo extends BookInfo {
     return other is BookInfo &&
         url == other.url &&
         chapterListUrl == other.chapterListUrl &&
+        bookId == other.bookId &&
         title == other.title &&
         author == other.author &&
         genre == other.genre &&
@@ -73,7 +80,11 @@ class _$BookInfo extends BookInfo {
             $jc(
                 $jc(
                     $jc(
-                        $jc($jc($jc(0, url.hashCode), chapterListUrl.hashCode),
+                        $jc(
+                            $jc(
+                                $jc($jc(0, url.hashCode),
+                                    chapterListUrl.hashCode),
+                                bookId.hashCode),
                             title.hashCode),
                         author.hashCode),
                     genre.hashCode),
@@ -87,6 +98,7 @@ class _$BookInfo extends BookInfo {
     return (newBuiltValueToStringHelper('BookInfo')
           ..add('url', url)
           ..add('chapterListUrl', chapterListUrl)
+          ..add('bookId', bookId)
           ..add('title', title)
           ..add('author', author)
           ..add('genre', genre)
@@ -108,6 +120,10 @@ class BookInfoBuilder implements Builder<BookInfo, BookInfoBuilder> {
   Uri get chapterListUrl => _$this._chapterListUrl;
   set chapterListUrl(Uri chapterListUrl) =>
       _$this._chapterListUrl = chapterListUrl;
+
+  String _bookId;
+  String get bookId => _$this._bookId;
+  set bookId(String bookId) => _$this._bookId = bookId;
 
   String _title;
   String get title => _$this._title;
@@ -139,6 +155,7 @@ class BookInfoBuilder implements Builder<BookInfo, BookInfoBuilder> {
     if (_$v != null) {
       _url = _$v.url;
       _chapterListUrl = _$v.chapterListUrl;
+      _bookId = _$v.bookId;
       _title = _$v.title;
       _author = _$v.author;
       _genre = _$v.genre;
@@ -169,6 +186,7 @@ class BookInfoBuilder implements Builder<BookInfo, BookInfoBuilder> {
         new _$BookInfo._(
             url: url,
             chapterListUrl: chapterListUrl,
+            bookId: bookId,
             title: title,
             author: author,
             genre: genre,

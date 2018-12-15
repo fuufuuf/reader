@@ -11,6 +11,8 @@ abstract class BookInfo implements Built<BookInfo, BookInfoBuilder> {
 
   Uri get chapterListUrl;
 
+  String get bookId;
+
   @nullable
   String get title;
 

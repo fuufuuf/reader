@@ -23,18 +23,18 @@ class _$BookEntrySerializer implements StructuredSerializer<BookEntry> {
       'bookName',
       serializers.serialize(object.bookName,
           specifiedType: const FullType(String)),
-      'menuUrl',
-      serializers.serialize(object.menuUrl,
-          specifiedType: const FullType(String)),
-      'bookUrl',
-      serializers.serialize(object.bookUrl,
-          specifiedType: const FullType(String)),
+      'chapterListUrl',
+      serializers.serialize(object.chapterListUrl,
+          specifiedType: const FullType(Uri)),
+      'bookInfoUrl',
+      serializers.serialize(object.bookInfoUrl,
+          specifiedType: const FullType(Uri)),
     ];
-    if (object.currentUrl != null) {
+    if (object.currentChapterUrl != null) {
       result
-        ..add('currentUrl')
-        ..add(serializers.serialize(object.currentUrl,
-            specifiedType: const FullType(String)));
+        ..add('currentChapterUrl')
+        ..add(serializers.serialize(object.currentChapterUrl,
+            specifiedType: const FullType(Uri)));
     }
 
     return result;
@@ -59,17 +59,17 @@ class _$BookEntrySerializer implements StructuredSerializer<BookEntry> {
           result.bookName = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
-        case 'menuUrl':
-          result.menuUrl = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+        case 'chapterListUrl':
+          result.chapterListUrl = serializers.deserialize(value,
+              specifiedType: const FullType(Uri)) as Uri;
           break;
-        case 'bookUrl':
-          result.bookUrl = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+        case 'bookInfoUrl':
+          result.bookInfoUrl = serializers.deserialize(value,
+              specifiedType: const FullType(Uri)) as Uri;
           break;
-        case 'currentUrl':
-          result.currentUrl = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+        case 'currentChapterUrl':
+          result.currentChapterUrl = serializers.deserialize(value,
+              specifiedType: const FullType(Uri)) as Uri;
           break;
       }
     }
@@ -84,17 +84,21 @@ class _$BookEntry extends BookEntry {
   @override
   final String bookName;
   @override
-  final String menuUrl;
+  final Uri chapterListUrl;
   @override
-  final String bookUrl;
+  final Uri bookInfoUrl;
   @override
-  final String currentUrl;
+  final Uri currentChapterUrl;
 
   factory _$BookEntry([void updates(BookEntryBuilder b)]) =>
       (new BookEntryBuilder()..update(updates)).build();
 
   _$BookEntry._(
-      {this.id, this.bookName, this.menuUrl, this.bookUrl, this.currentUrl})
+      {this.id,
+      this.bookName,
+      this.chapterListUrl,
+      this.bookInfoUrl,
+      this.currentChapterUrl})
       : super._() {
     if (id == null) {
       throw new BuiltValueNullFieldError('BookEntry', 'id');
@@ -102,11 +106,11 @@ class _$BookEntry extends BookEntry {
     if (bookName == null) {
       throw new BuiltValueNullFieldError('BookEntry', 'bookName');
     }
-    if (menuUrl == null) {
-      throw new BuiltValueNullFieldError('BookEntry', 'menuUrl');
+    if (chapterListUrl == null) {
+      throw new BuiltValueNullFieldError('BookEntry', 'chapterListUrl');
     }
-    if (bookUrl == null) {
-      throw new BuiltValueNullFieldError('BookEntry', 'bookUrl');
+    if (bookInfoUrl == null) {
+      throw new BuiltValueNullFieldError('BookEntry', 'bookInfoUrl');
     }
   }
 
@@ -123,17 +127,19 @@ class _$BookEntry extends BookEntry {
     return other is BookEntry &&
         id == other.id &&
         bookName == other.bookName &&
-        menuUrl == other.menuUrl &&
-        bookUrl == other.bookUrl &&
-        currentUrl == other.currentUrl;
+        chapterListUrl == other.chapterListUrl &&
+        bookInfoUrl == other.bookInfoUrl &&
+        currentChapterUrl == other.currentChapterUrl;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc($jc(0, id.hashCode), bookName.hashCode), menuUrl.hashCode),
-            bookUrl.hashCode),
-        currentUrl.hashCode));
+        $jc(
+            $jc($jc($jc(0, id.hashCode), bookName.hashCode),
+                chapterListUrl.hashCode),
+            bookInfoUrl.hashCode),
+        currentChapterUrl.hashCode));
   }
 
   @override
@@ -141,9 +147,9 @@ class _$BookEntry extends BookEntry {
     return (newBuiltValueToStringHelper('BookEntry')
           ..add('id', id)
           ..add('bookName', bookName)
-          ..add('menuUrl', menuUrl)
-          ..add('bookUrl', bookUrl)
-          ..add('currentUrl', currentUrl))
+          ..add('chapterListUrl', chapterListUrl)
+          ..add('bookInfoUrl', bookInfoUrl)
+          ..add('currentChapterUrl', currentChapterUrl))
         .toString();
   }
 }
@@ -159,17 +165,19 @@ class BookEntryBuilder implements Builder<BookEntry, BookEntryBuilder> {
   String get bookName => _$this._bookName;
   set bookName(String bookName) => _$this._bookName = bookName;
 
-  String _menuUrl;
-  String get menuUrl => _$this._menuUrl;
-  set menuUrl(String menuUrl) => _$this._menuUrl = menuUrl;
+  Uri _chapterListUrl;
+  Uri get chapterListUrl => _$this._chapterListUrl;
+  set chapterListUrl(Uri chapterListUrl) =>
+      _$this._chapterListUrl = chapterListUrl;
 
-  String _bookUrl;
-  String get bookUrl => _$this._bookUrl;
-  set bookUrl(String bookUrl) => _$this._bookUrl = bookUrl;
+  Uri _bookInfoUrl;
+  Uri get bookInfoUrl => _$this._bookInfoUrl;
+  set bookInfoUrl(Uri bookInfoUrl) => _$this._bookInfoUrl = bookInfoUrl;
 
-  String _currentUrl;
-  String get currentUrl => _$this._currentUrl;
-  set currentUrl(String currentUrl) => _$this._currentUrl = currentUrl;
+  Uri _currentChapterUrl;
+  Uri get currentChapterUrl => _$this._currentChapterUrl;
+  set currentChapterUrl(Uri currentChapterUrl) =>
+      _$this._currentChapterUrl = currentChapterUrl;
 
   BookEntryBuilder();
 
@@ -177,9 +185,9 @@ class BookEntryBuilder implements Builder<BookEntry, BookEntryBuilder> {
     if (_$v != null) {
       _id = _$v.id;
       _bookName = _$v.bookName;
-      _menuUrl = _$v.menuUrl;
-      _bookUrl = _$v.bookUrl;
-      _currentUrl = _$v.currentUrl;
+      _chapterListUrl = _$v.chapterListUrl;
+      _bookInfoUrl = _$v.bookInfoUrl;
+      _currentChapterUrl = _$v.currentChapterUrl;
       _$v = null;
     }
     return this;
@@ -204,9 +212,9 @@ class BookEntryBuilder implements Builder<BookEntry, BookEntryBuilder> {
         new _$BookEntry._(
             id: id,
             bookName: bookName,
-            menuUrl: menuUrl,
-            bookUrl: bookUrl,
-            currentUrl: currentUrl);
+            chapterListUrl: chapterListUrl,
+            bookInfoUrl: bookInfoUrl,
+            currentChapterUrl: currentChapterUrl);
     replace(_$result);
     return _$result;
   }

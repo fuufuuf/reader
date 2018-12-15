@@ -64,10 +64,11 @@ void main() {
     expect(await adapter.fetchFromUrl(chapterUrl), isInstanceOf<ChapterContent>());
   });
 
-  test('it should parse book', () async {
+  test('it should parse book info', () async {
     final book = await adapter.fetchBookInfo(bookUrl);
 
     expect(book.url, bookUrl);
+    expect(book.bookId, equals('piaotian.com/9/9054'));
     expect(book.chapterListUrl,
         equals(Uri.parse('https://www.piaotian.com/html/9/9054/')));
     expect(book.title, equals('大道朝天'));
@@ -78,7 +79,7 @@ void main() {
     expect(book.length, equals('1429051字'));
   });
 
-  test('it should parse menu', () async {
+  test('it should parse chapter list', () async {
     final menu = await adapter.fetchChapterList(menuUrl);
 
     expect(menu.url, menuUrl);
@@ -98,7 +99,7 @@ void main() {
     expect(menu.bookUrl.path, equals(bookUrl.path));
   });
 
-  test('it should parse chapter', () async {
+  test('it should parse chapte content', () async {
     final chapter = await adapter.fetchChapterContent(chapterUrl);
 
     expect(chapter.url, equals(chapterUrl));

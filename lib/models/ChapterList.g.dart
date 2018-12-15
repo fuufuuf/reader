@@ -12,14 +12,14 @@ class _$ChapterList extends ChapterList {
   @override
   final String title;
   @override
-  final BuiltList<ChapterRef> chapters;
-  @override
   final Uri bookUrl;
+  @override
+  final BuiltList<ChapterRef> chapters;
 
   factory _$ChapterList([void updates(ChapterListBuilder b)]) =>
       (new ChapterListBuilder()..update(updates)).build();
 
-  _$ChapterList._({this.url, this.title, this.chapters, this.bookUrl})
+  _$ChapterList._({this.url, this.title, this.bookUrl, this.chapters})
       : super._() {
     if (url == null) {
       throw new BuiltValueNullFieldError('ChapterList', 'url');
@@ -27,11 +27,11 @@ class _$ChapterList extends ChapterList {
     if (title == null) {
       throw new BuiltValueNullFieldError('ChapterList', 'title');
     }
-    if (chapters == null) {
-      throw new BuiltValueNullFieldError('ChapterList', 'chapters');
-    }
     if (bookUrl == null) {
       throw new BuiltValueNullFieldError('ChapterList', 'bookUrl');
+    }
+    if (chapters == null) {
+      throw new BuiltValueNullFieldError('ChapterList', 'chapters');
     }
   }
 
@@ -48,15 +48,15 @@ class _$ChapterList extends ChapterList {
     return other is ChapterList &&
         url == other.url &&
         title == other.title &&
-        chapters == other.chapters &&
-        bookUrl == other.bookUrl;
+        bookUrl == other.bookUrl &&
+        chapters == other.chapters;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc(0, url.hashCode), title.hashCode), chapters.hashCode),
-        bookUrl.hashCode));
+        $jc($jc($jc(0, url.hashCode), title.hashCode), bookUrl.hashCode),
+        chapters.hashCode));
   }
 
   @override
@@ -64,8 +64,8 @@ class _$ChapterList extends ChapterList {
     return (newBuiltValueToStringHelper('ChapterList')
           ..add('url', url)
           ..add('title', title)
-          ..add('chapters', chapters)
-          ..add('bookUrl', bookUrl))
+          ..add('bookUrl', bookUrl)
+          ..add('chapters', chapters))
         .toString();
   }
 }
@@ -81,14 +81,14 @@ class ChapterListBuilder implements Builder<ChapterList, ChapterListBuilder> {
   String get title => _$this._title;
   set title(String title) => _$this._title = title;
 
+  Uri _bookUrl;
+  Uri get bookUrl => _$this._bookUrl;
+  set bookUrl(Uri bookUrl) => _$this._bookUrl = bookUrl;
+
   ListBuilder<ChapterRef> _chapters;
   ListBuilder<ChapterRef> get chapters =>
       _$this._chapters ??= new ListBuilder<ChapterRef>();
   set chapters(ListBuilder<ChapterRef> chapters) => _$this._chapters = chapters;
-
-  Uri _bookUrl;
-  Uri get bookUrl => _$this._bookUrl;
-  set bookUrl(Uri bookUrl) => _$this._bookUrl = bookUrl;
 
   ChapterListBuilder();
 
@@ -96,8 +96,8 @@ class ChapterListBuilder implements Builder<ChapterList, ChapterListBuilder> {
     if (_$v != null) {
       _url = _$v.url;
       _title = _$v.title;
-      _chapters = _$v.chapters?.toBuilder();
       _bookUrl = _$v.bookUrl;
+      _chapters = _$v.chapters?.toBuilder();
       _$v = null;
     }
     return this;
@@ -124,8 +124,8 @@ class ChapterListBuilder implements Builder<ChapterList, ChapterListBuilder> {
           new _$ChapterList._(
               url: url,
               title: title,
-              chapters: chapters.build(),
-              bookUrl: bookUrl);
+              bookUrl: bookUrl,
+              chapters: chapters.build());
     } catch (_) {
       String _$failedField;
       try {

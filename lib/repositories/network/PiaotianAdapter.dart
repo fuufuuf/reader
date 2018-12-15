@@ -41,6 +41,12 @@ class PiaotianAdapter extends SiteAdapter {
     throw "Unknown Url: $url";
   }
 
+  String _extractBookId(Uri bookInfoUrl) {
+    final match = bookUrlPattern.firstMatch(bookInfoUrl.toString());
+
+    return 'piaotian.com/${ match.group(1)}/${match.group(2)}';
+  }
+
   @override
   Future<BookInfo> fetchBookInfo(Uri url) async {
     final document = await client.fetchDom(url, enforceGbk: true);
@@ -48,6 +54,7 @@ class PiaotianAdapter extends SiteAdapter {
     return BookInfo((b) =>
     b
       ..url = url
+      ..bookId = _extractBookId(url)
       ..chapterListUrl = Uri.parse(
           url
               .toString()
@@ -133,7 +140,7 @@ class PiaotianAdapter extends SiteAdapter {
         document
             .querySelector('h1')
             .text)
-      ..menuUrl = safeUrl(url, () =>
+      ..chapterListUrl = safeUrl(url, () =>
         document
             .querySelectorAll('.toplink > a')[1]
             .attributes['href'])
@@ -155,4 +162,6 @@ class PiaotianAdapter extends SiteAdapter {
       ))
     );
   }
+
+
 }
