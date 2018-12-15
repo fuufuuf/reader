@@ -68,7 +68,7 @@ void main() {
     final book = await adapter.fetchBookInfo(bookUrl);
 
     expect(book.url, bookUrl);
-    expect(book.bookId, equals('piaotian.com/9/9054'));
+    expect(book.bookId, equals('piaotian-9-9054'));
     expect(book.chapterListUrl,
         equals(Uri.parse('https://www.piaotian.com/html/9/9054/')));
     expect(book.title, equals('大道朝天'));

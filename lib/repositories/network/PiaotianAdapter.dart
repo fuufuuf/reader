@@ -44,7 +44,7 @@ class PiaotianAdapter extends SiteAdapter {
   String _extractBookId(Uri bookInfoUrl) {
     final match = bookUrlPattern.firstMatch(bookInfoUrl.toString());
 
-    return 'piaotian.com/${ match.group(1)}/${match.group(2)}';
+    return 'piaotian-${ match.group(1)}-${match.group(2)}';
   }
 
   @override
