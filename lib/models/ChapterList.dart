@@ -1,27 +1,19 @@
-import 'package:meta/meta.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:built_value/built_value.dart';
+import 'package:reader/models/ChapterRef.dart';
 
-class ChapterList {
-  final Uri url;
-  final String title;
-  final List<ChapterRef> chapters;
-  final Uri bookUrl;
+part 'ChapterList.g.dart';
 
-  ChapterList({@required this.url, this.title, this.chapters, this.bookUrl});
+abstract class ChapterList implements Built<ChapterList, ChapterListBuilder> {
+  ChapterList._();
 
-  bool get hasChapters => chapters.isNotEmpty;
+  factory ChapterList([updates(ChapterListBuilder b)]) = _$ChapterList;
 
-  bool get hasMultipleChapters => chapters.length > 1;
+  Uri get url;
 
-  bool get hasBook => bookUrl != null;
+  String get title;
 
-  Uri get firstChapterUrl => chapters.first.url;
+  BuiltList<ChapterRef> get chapters;
 
-  Uri get lastChapterUrl => chapters.last.url;
-}
-
-class ChapterRef {
-  final Uri url;
-  final String title;
-
-  ChapterRef({@required this.url, this.title});
+  Uri get bookUrl;
 }

@@ -1,22 +1,27 @@
 import 'package:meta/meta.dart';
+import 'package:built_value/built_value.dart';
 
-class ChapterContent {
-  final Uri url;
-  final String title;
-  final List<String> paragraphs;
-  final Uri menuUrl;
-  final Uri nextChapterUrl;
-  final Uri previousChapterUrl;
+part 'ChapterContent.g.dart';
 
-  ChapterContent(
-      {@required this.url,
-      this.title,
-      this.paragraphs,
-      this.menuUrl,
-      this.nextChapterUrl,
-      this.previousChapterUrl});
+abstract class ChapterContent
+    implements Built<ChapterContent, ChapterContentBuilder> {
+  ChapterContent._();
 
-  bool get hasMenu => menuUrl != null;
+  factory ChapterContent([updates(ChapterContentBuilder b)]) = _$ChapterContent;
+
+  Uri get url;
+
+  String get title;
+
+  List<String> get paragraphs;
+
+  Uri get menuUrl;
+
+  @nullable
+  Uri get nextChapterUrl;
+
+  @nullable
+  Uri get previousChapterUrl;
 
   bool get hasPrevious => previousChapterUrl != null;
 
