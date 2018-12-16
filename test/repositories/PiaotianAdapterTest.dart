@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:reader/models/BookEntry.dart';
 import 'package:reader/models/BookInfo.dart';
 import 'package:reader/models/ChapterContent.dart';
 import 'package:reader/models/ChapterList.dart';
@@ -59,9 +60,12 @@ void main() {
   });
 
   test('should parser as right type', () async {
-    expect(await adapter.fetchFromUrl(bookUrl), isInstanceOf<BookInfo>());
-    expect(await adapter.fetchFromUrl(menuUrl), isInstanceOf<ChapterList>());
-    expect(await adapter.fetchFromUrl(chapterUrl), isInstanceOf<ChapterContent>());
+    expect(await adapter.fetchFromUrl(bookUrl),
+        allOf(isNotNull, isInstanceOf<BookInfo>()));
+    expect(await adapter.fetchFromUrl(menuUrl),
+        allOf(isNotNull, isInstanceOf<ChapterList>()));
+    expect(await adapter.fetchFromUrl(chapterUrl),
+        allOf(isNotNull, isInstanceOf<ChapterContent>()));
   });
 
   test('it should parse book info', () async {
@@ -96,10 +100,10 @@ void main() {
     expect(lastChapter.url,
         equals(Uri.parse('https://www.piaotian.com/html/9/9054/6868941.html')));
 
-    expect(menu.bookUrl.path, equals(bookUrl.path));
+    expect(menu.bookInfoUrl, equals(bookUrl));
   });
 
-  test('it should parse chapte content', () async {
+  test('it should parse chapter content', () async {
     final chapter = await adapter.fetchChapterContent(chapterUrl);
 
     expect(chapter.url, equals(chapterUrl));
@@ -112,5 +116,33 @@ void main() {
     expect(chapter.paragraphs.length, equals(86));
     expect(chapter.paragraphs.first, equals('“稍后看着何等样的天地异变，都莫要惊慌。”'));
     expect(chapter.paragraphs.last, equals('无论是镇上的民宅还是峰间的崖洞，都镀上了一层金光，仿佛真实的仙境，或者神国。'));
+  });
+
+  group('parse book entry', () {
+    final bookEntry = BookEntry((b) =>
+    b
+      ..id = 'piaotian-9-9054'
+      ..bookName = '大道朝天'
+      ..bookInfoUrl = Uri.parse('https://www.piaotian.com/bookinfo/9/9054.html')
+      ..chapterListUrl = Uri.parse('https://www.piaotian.com/html/9/9054/')
+    );
+
+    test('should parse from book info page', () async {
+      final entry = await adapter.fetchBookEntry(bookUrl);
+
+      expect(entry, equals(bookEntry));
+    });
+
+    test('should parse from chapter list', () async {
+      final entry = await adapter.fetchBookEntry(menuUrl);
+
+      expect(entry, equals(bookEntry));
+    });
+
+    test('should parse from chapter content', () async {
+      final entry = await adapter.fetchBookEntry(chapterUrl);
+
+      expect(entry, equals(bookEntry));
+    });
   });
 }

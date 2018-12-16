@@ -1,3 +1,4 @@
+import 'package:reader/models/BookEntry.dart';
 import 'package:reader/models/BookInfo.dart';
 import 'package:reader/models/ChapterContent.dart';
 import 'package:reader/models/ChapterList.dart';
@@ -11,6 +12,14 @@ class BookRepository {
   static Map<String, SiteAdapter> adapters = {
     'www.piaotian.com': PiaotianAdapter(client)
   };
+
+  static Future<BookEntry> fetchBookEntry(Uri url) =>
+      _findAdapter(url).fetchBookEntry(url);
+
+  static Future<BookEntry> fetchBookEntryByUrlString(String url) async {
+    Uri uri = Uri.parse(url);
+    return _findAdapter(uri).fetchBookEntry(uri);
+  }
 
   static Future<ChapterContent> fetchChapterContent(Uri url, [String title]) =>
       _findAdapter(url).fetchChapterContent(url);
@@ -27,5 +36,5 @@ class BookRepository {
   static Future<Type> fetchResourceType(Uri url) =>
       _findAdapter(url).fetchResourceType(url);
 
-  static _findAdapter(Uri url) => adapters[url.host];
+  static SiteAdapter _findAdapter(Uri url) => adapters[url.host];
 }

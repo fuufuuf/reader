@@ -16,9 +16,9 @@ class _$ChapterContent extends ChapterContent {
   @override
   final Uri chapterListUrl;
   @override
-  final Uri nextChapterUrl;
-  @override
   final Uri previousChapterUrl;
+  @override
+  final Uri nextChapterUrl;
 
   factory _$ChapterContent([void updates(ChapterContentBuilder b)]) =>
       (new ChapterContentBuilder()..update(updates)).build();
@@ -28,8 +28,8 @@ class _$ChapterContent extends ChapterContent {
       this.title,
       this.paragraphs,
       this.chapterListUrl,
-      this.nextChapterUrl,
-      this.previousChapterUrl})
+      this.previousChapterUrl,
+      this.nextChapterUrl})
       : super._() {
     if (url == null) {
       throw new BuiltValueNullFieldError('ChapterContent', 'url');
@@ -61,8 +61,8 @@ class _$ChapterContent extends ChapterContent {
         title == other.title &&
         paragraphs == other.paragraphs &&
         chapterListUrl == other.chapterListUrl &&
-        nextChapterUrl == other.nextChapterUrl &&
-        previousChapterUrl == other.previousChapterUrl;
+        previousChapterUrl == other.previousChapterUrl &&
+        nextChapterUrl == other.nextChapterUrl;
   }
 
   @override
@@ -73,8 +73,8 @@ class _$ChapterContent extends ChapterContent {
                 $jc($jc($jc(0, url.hashCode), title.hashCode),
                     paragraphs.hashCode),
                 chapterListUrl.hashCode),
-            nextChapterUrl.hashCode),
-        previousChapterUrl.hashCode));
+            previousChapterUrl.hashCode),
+        nextChapterUrl.hashCode));
   }
 
   @override
@@ -84,8 +84,8 @@ class _$ChapterContent extends ChapterContent {
           ..add('title', title)
           ..add('paragraphs', paragraphs)
           ..add('chapterListUrl', chapterListUrl)
-          ..add('nextChapterUrl', nextChapterUrl)
-          ..add('previousChapterUrl', previousChapterUrl))
+          ..add('previousChapterUrl', previousChapterUrl)
+          ..add('nextChapterUrl', nextChapterUrl))
         .toString();
   }
 }
@@ -113,15 +113,15 @@ class ChapterContentBuilder
   set chapterListUrl(Uri chapterListUrl) =>
       _$this._chapterListUrl = chapterListUrl;
 
-  Uri _nextChapterUrl;
-  Uri get nextChapterUrl => _$this._nextChapterUrl;
-  set nextChapterUrl(Uri nextChapterUrl) =>
-      _$this._nextChapterUrl = nextChapterUrl;
-
   Uri _previousChapterUrl;
   Uri get previousChapterUrl => _$this._previousChapterUrl;
   set previousChapterUrl(Uri previousChapterUrl) =>
       _$this._previousChapterUrl = previousChapterUrl;
+
+  Uri _nextChapterUrl;
+  Uri get nextChapterUrl => _$this._nextChapterUrl;
+  set nextChapterUrl(Uri nextChapterUrl) =>
+      _$this._nextChapterUrl = nextChapterUrl;
 
   ChapterContentBuilder();
 
@@ -131,8 +131,8 @@ class ChapterContentBuilder
       _title = _$v.title;
       _paragraphs = _$v.paragraphs?.toBuilder();
       _chapterListUrl = _$v.chapterListUrl;
-      _nextChapterUrl = _$v.nextChapterUrl;
       _previousChapterUrl = _$v.previousChapterUrl;
+      _nextChapterUrl = _$v.nextChapterUrl;
       _$v = null;
     }
     return this;
@@ -161,8 +161,8 @@ class ChapterContentBuilder
               title: title,
               paragraphs: paragraphs.build(),
               chapterListUrl: chapterListUrl,
-              nextChapterUrl: nextChapterUrl,
-              previousChapterUrl: previousChapterUrl);
+              previousChapterUrl: previousChapterUrl,
+              nextChapterUrl: nextChapterUrl);
     } catch (_) {
       String _$failedField;
       try {

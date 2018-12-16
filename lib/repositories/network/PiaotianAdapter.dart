@@ -1,4 +1,5 @@
 import 'package:html/dom.dart';
+import 'package:reader/models/BookEntry.dart';
 import 'package:reader/models/BookInfo.dart';
 import 'package:reader/models/ChapterContent.dart';
 import 'package:reader/models/ChapterList.dart';
@@ -39,6 +40,48 @@ class PiaotianAdapter extends SiteAdapter {
     }
 
     throw "Unknown Url: $url";
+  }
+
+  @override
+  Future<BookEntry> fetchBookEntry(Uri url) async {
+    final content = await fetchFromUrl(url);
+
+    if (content is BookInfo) {
+      return _buildBookEntryFromBookInfo(content);
+    }
+
+    if (content is ChapterList) {
+      return _buildBookEntryFromChapterList(content);
+    }
+
+    if (content is ChapterContent) {
+      return _buildBookEntryFromChapterContent(content);
+    }
+
+    throw 'Unkonwn url';
+  }
+
+  BookEntry _buildBookEntryFromBookInfo(BookInfo bookInfo) =>
+      BookEntry((builder) =>
+      builder
+        ..id = _extractBookId(bookInfo.url)
+        ..bookName = bookInfo.title
+        ..bookInfoUrl = bookInfo.url
+        ..chapterListUrl = bookInfo.chapterListUrl
+      );
+
+  BookEntry _buildBookEntryFromChapterList(ChapterList list) =>
+      BookEntry((builder) =>
+      builder
+        ..id = _extractBookId(list.bookInfoUrl)
+        ..bookName = list.title
+        ..bookInfoUrl = list.bookInfoUrl
+        ..chapterListUrl = list.url
+      );
+
+  Future<BookEntry> _buildBookEntryFromChapterContent(
+      ChapterContent content) async {
+    return _buildBookEntryFromChapterList(await content.fetchChapterList());
   }
 
   String _extractBookId(Uri bookInfoUrl) {
@@ -107,7 +150,7 @@ class PiaotianAdapter extends SiteAdapter {
                 ?.text
                 ?.trim()
                 ?.replaceAll("最新章节", ""))
-      ..bookUrl = safeUrl(url, () =>
+      ..bookInfoUrl = safeUrl(url, () =>
         document.querySelectorAll('#tl > a')[1].attributes['href']
       )
       ..chapters.addAll(safeList(() =>

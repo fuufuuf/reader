@@ -49,6 +49,9 @@ class _$BookInfo extends BookInfo {
     if (bookId == null) {
       throw new BuiltValueNullFieldError('BookInfo', 'bookId');
     }
+    if (title == null) {
+      throw new BuiltValueNullFieldError('BookInfo', 'title');
+    }
   }
 
   @override

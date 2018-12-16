@@ -15,7 +15,7 @@ Uri safeUrl(Uri base, UnsafeExtract<String> action) => safe(() {
       final urlString = action();
       if (urlString == null) return null;
 
-      return base.resolve(urlString);
+      return base.resolve(urlString).replace(scheme: 'https');
     });
 
 Iterable<T> safeList<T>(UnsafeExtract<Iterable<T>> action) => safe(action) ?? <T>[];

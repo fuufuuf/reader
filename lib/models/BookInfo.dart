@@ -1,4 +1,6 @@
 import 'package:built_value/built_value.dart';
+import 'package:reader/models/ChapterList.dart';
+import 'package:reader/repositories/network/BookRepository.dart';
 
 part 'BookInfo.g.dart';
 
@@ -9,11 +11,15 @@ abstract class BookInfo implements Built<BookInfo, BookInfoBuilder> {
 
   Uri get url;
 
+  Future<BookInfo> reload() => BookRepository.fetchBookInfo(url);
+
   Uri get chapterListUrl;
+
+  Future<ChapterList> fetchChapterList() =>
+      BookRepository.fetchChapterList(chapterListUrl);
 
   String get bookId;
 
-  @nullable
   String get title;
 
   @nullable
