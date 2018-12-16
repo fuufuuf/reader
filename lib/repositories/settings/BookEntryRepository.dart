@@ -9,65 +9,42 @@ class BookEntryRepository {
   static const listKey = 'bookEntryIds';
   static const bookEntryPrefix = 'bookEntry';
 
-  static Future<BuiltList<BookEntry>> fetchAll() async {
+  static Future<T> invokeEntry<T>(String bookId,
+      Future<T> invoker(BookEntry entry)) async {
     final prefs = await SharedPreferences.getInstance();
 
-    return _parseAllEntries(prefs);
+    final entry = _parseBookEntry(prefs, bookId);
+
+    return invoker(entry);
   }
 
-  static Future<BuiltList<BookEntry>> addBookEntry(
-      BuiltList<BookEntry> entries, BookEntry entry) async {
+  static Future<BookEntryRepository> open() async {
     final prefs = await SharedPreferences.getInstance();
 
-    await _saveEntry(prefs, entry);
-
-    final builder = entries.toBuilder()..add(entry);
-
-    return _saveList(prefs, builder.build());
+    return BookEntryRepository._(prefs);
   }
 
-  static Future<BuiltList<BookEntry>> updateBookEntry(
-          BuiltList<BookEntry> entries,
-          BookEntry entry,
-          void updates(BookEntryBuilder b)) =>
-      updateBookEntryByIndex(entries, entries.indexOf(entry), updates);
+  SharedPreferences _prefs;
 
-  static Future<BuiltList<BookEntry>> updateBookEntryByCondition(
-          BuiltList<BookEntry> entries,
-          bool criteria(BookEntry e),
-          void updates(BookEntryBuilder b)) =>
-      updateBookEntryByIndex(entries, entries.indexWhere(criteria), updates);
+  BookEntryRepository._(this._prefs);
 
-  static Future<BuiltList<BookEntry>> updateBookEntryByIndex(
-      BuiltList<BookEntry> entries,
-      int index,
-      void updates(BookEntryBuilder b)) async {
-    final prefs = await SharedPreferences.getInstance();
+  BuiltList<BookEntry> buildList() {
+    final ids = _prefs.getStringList(listKey) ?? [];
 
-    final builder = entries.toBuilder();
-
-    final entryBuilder = builder[index].toBuilder()..update(updates);
-    builder[index] = await _saveEntry(prefs, entryBuilder.build());
-
-    return builder.build();
+    return BuiltList.of(ids.map((id) => _parseBookEntry(_prefs, id)));
   }
 
-  static Future<BuiltList<BookEntry>> removeBookEntryByIndex(
-      BuiltList<BookEntry> entries, int index) async {
-    final prefs = await SharedPreferences.getInstance();
-
-    await _removeEntry(prefs, entries[index].id);
-
-    final builder = entries.toBuilder()..removeAt(index);
-
-    return _saveList(prefs, builder.build());
+  Future<void> add(BuiltList<BookEntry> list, BookEntry entry) async {
+    await _saveEntry(entry);
+    await _saveList(list);
   }
 
-  static BuiltList<BookEntry> _parseAllEntries(SharedPreferences prefs) {
-    final ids = prefs.getStringList(listKey) ?? [];
-
-    return BuiltList<BookEntry>.of(ids.map((id) => _parseBookEntry(prefs, id)));
+  void remove(BuiltList<BookEntry> list, BookEntry entry) async {
+    await _removeEntry(entry.id);
+    await _saveList(list);
   }
+
+  static String _entryKey(String id) => "$bookEntryPrefix-$id";
 
   static BookEntry _parseBookEntry(SharedPreferences prefs, String id) {
     final key = _entryKey(id);
@@ -78,28 +55,21 @@ class BookEntryRepository {
     return serializers.deserializeWith(BookEntry.serializer, entryData);
   }
 
-  static String _entryKey(String id) => "$bookEntryPrefix-$id";
-
-  static Future<BookEntry> _saveEntry(
-      SharedPreferences prefs, BookEntry entry) async {
+  Future<bool> _saveEntry(BookEntry entry) {
     final key = _entryKey(entry.id);
 
     final entryData = serializers.serializeWith(BookEntry.serializer, entry);
     final entryJson = jsonEncode(entryData);
 
-    await prefs.setString(key, entryJson);
-
-    return entry;
+    return _prefs.setString(key, entryJson);
   }
 
-  static Future<bool> _removeEntry(SharedPreferences prefs, String id) =>
-      prefs.remove(_entryKey(id));
-
-  static Future<BuiltList<BookEntry>> _saveList(
-      SharedPreferences prefs, BuiltList<BookEntry> entries) async {
+  Future<bool> _saveList(BuiltList<BookEntry> entries) {
     final List<String> ids =
         entries.map((entry) => entry.id).toList(growable: false);
-    await prefs.setStringList(listKey, ids);
-    return entries;
+    return _prefs.setStringList(listKey, ids);
   }
+
+  Future<bool> _removeEntry(String id) =>
+      _prefs.remove(_entryKey(id));
 }

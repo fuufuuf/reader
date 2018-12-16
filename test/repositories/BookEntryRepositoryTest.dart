@@ -74,7 +74,7 @@ void main() {
       ..currentChapterUrl = currentChapterUrl
       ..bookName = bookName);
 
-    final newList = await BookEntryRepository.addBookEntry(list, newEntry);
+    final newList = await BookEntryRepository._addBookEntry(list, newEntry);
 
     expect(newList, contains(newEntry));
 
