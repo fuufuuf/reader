@@ -1,87 +1,106 @@
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 import 'package:reader/presentations/wrappers/ContentLoader.dart';
 
+class ContentController<T> {
+  final T initialData;
+  final bool respondToReloading;
+  final Future<T> initialFuture;
+  final StreamController<Future<T>> _controller;
+
+  ContentController({
+    this.initialData,
+    this.respondToReloading,
+    this.initialFuture
+  }) : _controller = StreamController(sync: true);
+
+  void setValue(T value) {
+    _controller.add(Future.value(value));
+  }
+
+  void setFuture(Future<T> future) {
+    _controller.add(future);
+  }
+
+  Stream<Future<T>> get stream => _controller.stream;
+
+  static ContentController<T> of<T>(BuildContext context) =>
+      (context.inheritFromWidgetOfExactType(
+          _typeOf<ControllerProvider<T>>()
+      ) as ControllerProvider<T>)
+          .controller;
+}
+
+Type _typeOf<T>() => T;
+
+class ControllerProvider<T> extends InheritedWidget {
+  final ContentController<T> controller;
+
+  ControllerProvider(
+      {@required this.controller, Key key, @required Widget child})
+      :super(key: key, child: child);
+
+  @override
+  bool updateShouldNotify(InheritedWidget oldWidget) =>
+      !identical(this, oldWidget) &&
+          runtimeType == oldWidget.runtimeType &&
+          controller != (oldWidget as ControllerProvider<T>).controller;
+}
+
 class ContentOwner<T> extends StatefulWidget {
   final ContentRender<T> render;
-  final Future<T> future;
+  final ContentController<T> controller;
 
-  const ContentOwner({Key key, this.render, this.future})
+  const ContentOwner(
+      {Key key, @required this.render, @required this.controller})
       : super(key: key);
 
   @override
   State<StatefulWidget> createState() =>
-      ContentState(render: render, future: future);
+      ContentState(render: render, controller: controller);
 }
 
 class ContentState<T> extends State<ContentOwner<T>> {
   final ContentRender<T> render;
-
+  final ContentController<T> controller;
+  StreamSubscription<Future<T>> _subscription;
   Future<T> future;
 
-  ContentState({@required this.render, @required this.future});
+  ContentState({
+    @required this.render,
+    @required this.controller});
 
-  void syncUpdate(ContentUpdater<T> updater) {
-    setState(() {
-      this.future = updater(future);
+  @override
+  void initState() {
+    super.initState();
+
+    _subscription = controller.stream.listen((Future<T> newFuture) {
+      setState(() {
+        future = newFuture;
+      });
     });
   }
 
-  void asyncUpdate(ContentUpdater<T> updater) async {
-    try {
-      final T newValue = await updater(future);
-
-      setState(() {
-        future = Future.value(newValue);
-      });
-    } catch (ex) {
-      setState(() {
-        future = Future.error(ex);
-      });
+  @override
+  void dispose() {
+    if (_subscription != null) {
+      _subscription.cancel();
     }
+    super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) => ContentApi<T>(
-      asyncUpdateApi: asyncUpdate,
-      syncUpdateApi: syncUpdate,
-      child: ContentLoader(
-        future: future,
-        render: render,
-      ));
+  Widget build(BuildContext context) =>
+      ControllerProvider<T>(
+          controller: controller,
+          child: ContentLoader<T>(
+              initialData: controller.initialData,
+              respondToReloading: controller.respondToReloading,
+              future: future,
+              render: render
+          )
+      )
+  ;
 }
 
-typedef void InvokeUpdater<T>(ContentUpdater<T> updater);
-typedef Future<T> ContentUpdater<T>(Future<T> currentValue);
-
-class ContentApi<T> extends InheritedWidget {
-  final InvokeUpdater<T> asyncUpdateApi;
-  final InvokeUpdater<T> syncUpdateApi;
-
-  ContentApi(
-      {@required this.asyncUpdateApi,
-      @required this.syncUpdateApi,
-      Key key,
-      Widget child})
-      : super(key: key, child: child);
-
-  @override
-  bool updateShouldNotify(InheritedWidget oldWidget) {
-    final oldConsole = oldWidget as ContentApi<T>;
-
-    return oldConsole == null ||
-        (oldConsole.syncUpdateApi != syncUpdateApi) ||
-        (oldConsole.asyncUpdateApi != asyncUpdateApi);
-  }
-
-  static Type _typeOf<T>() => T;
-
-  static ContentApi<T> of<T>(BuildContext context) =>
-      context.inheritFromWidgetOfExactType(_typeOf<ContentApi<T>>())
-          as ContentApi<T>;
-
-  static void asyncUpdate<T>(BuildContext context, ContentUpdater<T> updater) =>
-      of<T>(context).asyncUpdateApi(updater);
-
-  static void syncUpdate<T>(BuildContext context, ContentUpdater<T> updater) =>
-      of<T>(context).syncUpdateApi(updater);
-}
