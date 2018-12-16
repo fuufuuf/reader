@@ -4,46 +4,46 @@ import 'package:reader/models/BookInfo.dart';
 import 'package:reader/presentations/components/ScreenScaffold.dart';
 
 class BookInfoScreen extends StatelessWidget {
-  final BookInfo book;
+  final BookInfo bookInfo;
 
-  BookInfoScreen({this.book});
+  BookInfoScreen({this.bookInfo});
 
   Iterable<Widget> _buildItems(BuildContext context) sync* {
-    if (book.hasAuthor) {
+    if (bookInfo.hasAuthor) {
       yield ListTile(key: Key('author'),
           leading: Icon(Icons.person),
-          title: Text('作者： ${book.author}'));
+          title: Text('作者： ${bookInfo.author}'));
     }
 
-    if (book.hasGenre) {
+    if (bookInfo.hasGenre) {
       yield ListTile(key: Key('genre'),
           leading: Icon(Icons.category),
-          title: Text('类型： ${book.genre}'));
+          title: Text('类型： ${bookInfo.genre}'));
     }
 
-    if (book.hasCompleteness) {
+    if (bookInfo.hasCompleteness) {
       yield ListTile(key: Key('completeness'),
           leading: Icon(Icons.more),
-          title: Text('状态： ${book.completeness}'));
+          title: Text('状态： ${bookInfo.completeness}'));
     }
 
-    if (book.hasLastUpdated) {
+    if (bookInfo.hasLastUpdated) {
       yield ListTile(key: Key('lastUpdated'),
           leading: Icon(Icons.access_time),
-          title: Text('最近更新时间： ${book.lastUpdated}'));
+          title: Text('最近更新时间： ${bookInfo.lastUpdated}'));
     }
 
-    if (book.hasLength) {
+    if (bookInfo.hasLength) {
       yield ListTile(key: Key('length'),
           leading: Icon(Icons.translate),
-          title: Text('总字数： ${book.lastUpdated}'));
+          title: Text('总字数： ${bookInfo.lastUpdated}'));
     }
   }
 
   @override
   Widget build(BuildContext context) =>
       ScreenScaffold(
-          title: book.title,
+          title: bookInfo.title,
           body: ListView(children: _buildItems(context).toList(growable: false))
       );
 }

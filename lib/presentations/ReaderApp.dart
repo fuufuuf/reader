@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:reader/viewModels/ReadingTheme.dart';
+import 'package:reader/presentations/ReaderApp.AppRouter.dart';
 import 'package:reader/presentations/providers/ReadingThemeProvider.dart';
-import 'package:reader/presentations/screens/EmptyContentScreen.dart';
-import 'package:reader/presentations/wrappers/ContentTypeLoader.dart';
+import 'package:reader/viewModels/ReadingTheme.dart';
 
 class ReaderApp extends StatefulWidget {
   @override
@@ -10,19 +9,17 @@ class ReaderApp extends StatefulWidget {
       _ReaderAppState(ReadingTheme.defaultTheme);
 
   static void openUrl(BuildContext context, Uri url) {
-    Navigator.of(context).push(
-        MaterialPageRoute(
-            builder: (BuildContext context) =>
-                ContentTypeLoader.loadFromUri(url)
-        )
-    );
+//TODO: fix this
   }
 }
 
 class _ReaderAppState extends State<ReaderApp> {
+  final AppRouter _router;
+
   ReadingTheme currentTheme;
 
-  _ReaderAppState(this.currentTheme);
+  _ReaderAppState(this.currentTheme)
+      : _router = AppRouter();
 
   void updateTheme(bool nightMode) {
     this.setState(() {
@@ -33,19 +30,21 @@ class _ReaderAppState extends State<ReaderApp> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return ReadingThemeProvider(
-        theme: currentTheme,
-        switchTheme: updateTheme,
-        child: MaterialApp(
-            title: 'Reader',
-            theme: ThemeData(
-              primarySwatch: Colors.blue,
-            ),
-            home: EmptyContentScreen()
-        )
-    );
-  }
+  Widget build(BuildContext context) =>
+      ReadingThemeProvider(
+          theme: currentTheme,
+          switchTheme: updateTheme,
+          child: _renderApp()
+      );
+
+  Widget _renderApp() =>
+      MaterialApp(
+        title: 'Reader',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        initialRoute: _router.initialRoute,
+        onGenerateRoute: _router.generateRoute,
+        onUnknownRoute: _router.onUnknownRoute,
+      );
 }
-
-

@@ -10,9 +10,9 @@ import 'package:reader/presentations/screens/readingScreen/ReadingStatusBar.dart
 import 'package:screen/screen.dart';
 
 class ReadingScreen extends StatelessWidget {
-  final ChapterContent chapter;
+  final ChapterContent chapterContent;
 
-  ReadingScreen({@required this.chapter});
+  ReadingScreen({@required this.chapterContent});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class ReadingScreen extends StatelessWidget {
               ReadingStatusBar(),
               Expanded(
                   key: Key('ChapterContent'),
-                  child: ChapterContentView(chapter: chapter)
+                  child: ChapterContentView(chapter: chapterContent)
               )
             ],
           )
@@ -44,7 +44,7 @@ class ReadingScreen extends StatelessWidget {
   }
 
   Widget _buildMenu(BuildContext context) {
-    final themeProvider = ReadingThemeProvider.fetch(context);
+    final themeProvider = ReadingThemeProvider.of(context);
 
     return BottomSheet(
         key: const Key('ChapterScreenMenuSheet'),
@@ -55,20 +55,20 @@ class ReadingScreen extends StatelessWidget {
                   ListTile(
                       leading: const Icon(Icons.navigate_next),
                       title: const Text("Next Chapter"),
-                      enabled: chapter.hasNext,
+                      enabled: chapterContent.hasNext,
                       onTap: () {
                         Navigator.pop(menuContext);
                         Navigator.pop(context);
-                        ReaderApp.openUrl(context, chapter.nextChapterUrl);
+                        ReaderApp.openUrl(context, chapterContent.nextChapterUrl);
                       }),
                   ListTile(
                     leading: const Icon(Icons.navigate_before),
                     title: const Text("Previous Chapter"),
-                    enabled: chapter.hasPrevious,
+                    enabled: chapterContent.hasPrevious,
                     onTap: () {
                       Navigator.pop(menuContext);
                       Navigator.pop(context);
-                      ReaderApp.openUrl(context, chapter.previousChapterUrl);
+                      ReaderApp.openUrl(context, chapterContent.previousChapterUrl);
                     },
                   ),
                   ListTile(
@@ -78,7 +78,7 @@ class ReadingScreen extends StatelessWidget {
                       _disableReadingMode();
                       Navigator.pop(menuContext);
                       Navigator.pop(context);
-                      ReaderApp.openUrl(context, chapter.chapterListUrl);
+                      ReaderApp.openUrl(context, chapterContent.chapterListUrl);
                     },
                   ),
                   ListTile(
@@ -87,7 +87,7 @@ class ReadingScreen extends StatelessWidget {
                       onTap: () {
                         Navigator.pop(menuContext);
                         Navigator.pop(context);
-                        ReaderApp.openUrl(context, chapter.url);
+                        ReaderApp.openUrl(context, chapterContent.url);
                       }),
                   ListTile(
                     leading: const Icon(Icons.keyboard_return),

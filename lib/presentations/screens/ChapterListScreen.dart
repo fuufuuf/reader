@@ -6,18 +6,18 @@ import 'package:reader/presentations/ReaderApp.dart';
 import 'package:reader/presentations/components/ScreenScaffold.dart';
 
 class ChapterListScreen extends StatelessWidget {
-  final ChapterList menu;
+  final ChapterList chapterList;
 
-  ChapterListScreen({@required this.menu});
+  ChapterListScreen({@required this.chapterList});
 
   @override
   Widget build(BuildContext context) =>
       ScreenScaffold(
-          title: menu.title,
+          title: chapterList.title,
           body: ListView.builder(
               itemBuilder: (context, index) =>
-                  _renderChapterIndex(context, menu.chapters[index]),
-              itemCount: menu.chapters.length
+                  _renderChapterIndex(context, chapterList.chapters[index]),
+              itemCount: chapterList.chapters.length
           )
       );
 

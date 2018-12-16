@@ -14,10 +14,10 @@ class ReadingThemeProvider extends InheritedWidget {
   bool updateShouldNotify(InheritedWidget oldWidget) =>
       (oldWidget as ReadingThemeProvider).theme == theme;
 
-  static ReadingThemeProvider fetch(BuildContext context) =>
+  static ReadingThemeProvider of(BuildContext context) =>
       context.inheritFromWidgetOfExactType(
           ReadingThemeProvider) as ReadingThemeProvider;
 
   static ReadingTheme fetchTheme(BuildContext context) =>
-      fetch(context).theme;
+      of(context).theme;
 }
