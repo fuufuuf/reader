@@ -44,6 +44,13 @@ class _BookListScreenState extends State<BookListScreen> {
 
   Widget _renderBookItem(BuildContext context, BookEntry entry) => Dismissible(
       key: Key(entry.id),
+      background: Container(
+        color: Colors.redAccent,
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.only(right: 16),
+        child: Text('Swipe to remove',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+      ),
       direction: DismissDirection.endToStart,
       onDismissed: (DismissDirection direction) {
         _removeBookEntry(entry);
