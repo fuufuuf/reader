@@ -59,6 +59,9 @@ class _BookListScreenState extends State<BookListScreen> {
       child: ListTile(
           leading: Icon(Icons.book),
           title: Text(entry.bookName),
+          trailing: IconButton(icon: Icon(Icons.info_outline), onPressed: () {
+            AppRouter.openBookInfo(context, entry);
+          }),
           onTap: () {
             AppRouter.openBookChapters(context, entry);
           }));

@@ -13,7 +13,14 @@ class ChapterListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       ScreenScaffold(
-          title: chapterList.title,
+          appBar: AppBar(
+            title: Text(chapterList.title),
+            actions: <Widget>[
+              IconButton(icon: Icon(Icons.info_outline), onPressed: () {
+
+              })
+            ],
+          ),
           body: ListView.builder(
               itemBuilder: (context, index) =>
                   _renderChapterIndex(context, chapterList.chapters[index]),
@@ -23,10 +30,7 @@ class ChapterListScreen extends StatelessWidget {
 
   Widget _renderChapterIndex(BuildContext context, ChapterRef index) =>
       ListTile(
-        leading: const Icon(
-          Icons.note,
-          size: 32,
-        ),
+        leading: Icon(Icons.bookmark_border),
         title: Text(index.title),
         onTap: () {
           ReaderApp.openUrl(context, index.url);
