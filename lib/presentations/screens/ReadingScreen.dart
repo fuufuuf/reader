@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:reader/models/ChapterContent.dart';
 import 'package:reader/presentations/ReaderApp.dart';
 import 'package:reader/presentations/components/ScreenScaffold.dart';
-import 'package:reader/presentations/providers/ReadingThemeProvider.dart';
+import 'package:reader/presentations/wrappers/ReadingThemeProvider.dart';
 import 'package:reader/presentations/screens/readingScreen/ChapterContentView.dart';
 import 'package:reader/presentations/screens/readingScreen/ReadingStatusBar.dart';
 import 'package:screen/screen.dart';

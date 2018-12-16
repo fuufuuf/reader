@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reader/presentations/ReaderApp.AppRouter.dart';
-import 'package:reader/presentations/providers/ReadingThemeProvider.dart';
+import 'package:reader/presentations/wrappers/ReadingThemeProvider.dart';
 import 'package:reader/viewModels/ReadingTheme.dart';
 
 class ReaderApp extends StatefulWidget {

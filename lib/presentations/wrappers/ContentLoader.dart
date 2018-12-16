@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:reader/presentations/screens/ErrorScreen.dart';
-import 'package:reader/presentations/screens/LoadingScreen.dart';
+import 'package:reader/presentations/components/ErrorView.dart';
+import 'package:reader/presentations/components/LoadingView.dart';
 
 class ContentLoader<T> extends StatelessWidget {
   final Future<T> future;
