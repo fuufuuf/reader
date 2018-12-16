@@ -3,22 +3,20 @@ import 'package:reader/presentations/screens/ErrorScreen.dart';
 import 'package:reader/presentations/screens/LoadingScreen.dart';
 
 class ContentLoader<T> extends StatelessWidget {
-  final Uri url;
-  final LoadAction<T> action;
+  final Future<T> future;
   final ContentRender<T> render;
 
-  ContentLoader({this.url, this.action, this.render});
+  ContentLoader({Key key, this.future, this.render}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => FutureBuilder<T>(
-        key: Key("ContentLoader<$T>"),
-        future: action(url),
+        future: future,
         builder: renderChild,
       );
 
   Widget renderChild(BuildContext context, AsyncSnapshot<T> snapshot) {
     if (snapshot.hasData) {
-      return render(snapshot.data);
+      return render(context, snapshot.data);
     }
 
     if (snapshot.hasError) {
@@ -29,5 +27,4 @@ class ContentLoader<T> extends StatelessWidget {
   }
 }
 
-typedef Future<T> LoadAction<T>(Uri url);
-typedef Widget ContentRender<T>(T content);
+typedef Widget ContentRender<T>(BuildContext context, T content);
