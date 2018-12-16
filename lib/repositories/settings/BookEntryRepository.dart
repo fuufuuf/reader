@@ -9,14 +9,19 @@ class BookEntryRepository {
   static const listKey = 'bookEntryIds';
   static const bookEntryPrefix = 'bookEntry';
 
-  static Future<T> invokeEntry<T>(String bookId,
-      Future<T> invoker(BookEntry entry)) async {
+  static Future<BookEntry> fetchEntry(String bookId) async {
     final prefs = await SharedPreferences.getInstance();
 
-    final entry = buildEntry(prefs, bookId);
+    return buildEntry(prefs, bookId);
+  }
+
+  static Future<T> invokeEntry<T>(String bookId,
+      Future<T> invoker(BookEntry entry)) async {
+    final entry = await fetchEntry(bookId);
 
     return invoker(entry);
   }
+
 
   static String _entryKey(String id) => "$bookEntryPrefix-$id";
 
