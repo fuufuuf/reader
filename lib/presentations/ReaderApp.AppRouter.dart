@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:reader/models/BookEntry.dart';
-`import 'package:reader/presentations/screens/BookInfoScreen.dart';
+import 'package:reader/presentations/screens/BookInfoScreen.dart';
 import 'package:reader/presentations/screens/BookListScreen.dart';
+import 'package:reader/presentations/screens/ChapterListScreen.dart';
 import 'package:reader/presentations/screens/NotFoudnScreen.dart';
 import 'package:reader/presentations/wrappers/ContentLoader.dart';
 import 'package:reader/repositories/settings/BookEntryRepository.dart';
@@ -14,7 +15,7 @@ class AppRouter {
     Uri uri = Uri.parse(settings.name);
 
     switch (uri.path) {
-      case rootPath: // Home Screen
+      case rootPath:
         return buildBookList();
       case bookInfoPath:
         return buildBookInfo(uri);
@@ -54,8 +55,6 @@ class AppRouter {
   Route buildRoute(WidgetBuilder builder) =>
       MaterialPageRoute(builder: builder);
 
-  Route buildSplash(RouteSettings settings) {}
-
   Route buildBookList() =>
       buildRoute((BuildContext context) => ContentLoader<BookEntryList>(
           future: BookEntryList.create(),
@@ -69,14 +68,13 @@ class AppRouter {
           )
       );
 
-  Route buildChapterList(Uri uri) => null;
-
-//      buildRoute((BuildContext context) => ContentOwner<ChapterList>(
-//          future: BookEntryRepository.invokeEntry(
-//              uri.queryParameters[_bookIdKey],
-//              (entry) => entry.fetchChapterList()),
-//          render: (BuildContext context, ChapterList chapterList) =>
-//              ChapterListScreen(chapterList: chapterList)));
+  Route buildChapterList(Uri uri) =>
+      buildRoute((BuildContext context) =>
+          ChapterListScreen(
+              bookEntry: BookEntryRepository.fetchEntry(
+                  uri.queryParameters[_bookIdKey])
+          )
+      );
 
   Route buildReader(Uri uri) => null;
 
