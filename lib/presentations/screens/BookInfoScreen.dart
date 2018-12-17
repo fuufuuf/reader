@@ -1,12 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:reader/models/BookEntry.dart';
 import 'package:reader/models/BookInfo.dart';
 import 'package:reader/presentations/components/ScreenScaffold.dart';
+import 'package:reader/presentations/wrappers/ContentOwner.dart';
 
 class BookInfoScreen extends StatelessWidget {
+  final Future<BookEntry> bookEntry;
+  final ContentController<BookInfo> controller;
+
+  BookInfoScreen({Key key, this.bookEntry})
+      :
+        controller = ContentController(
+          initialFuture: bookEntry.then((entry) => entry.fetchBookInfo()),
+        ),
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) =>
+      ScreenScaffold(
+        title: '???',
+        body: ContentOwner<BookInfo>(
+            controller: controller,
+            render: (BuildContext context, BookInfo bookInfo) =>
+                BookInfoView(bookInfo: bookInfo)
+        ),
+      );
+}
+
+class BookInfoView extends StatelessWidget {
   final BookInfo bookInfo;
 
-  BookInfoScreen({this.bookInfo});
+  BookInfoView({this.bookInfo});
 
   Iterable<Widget> _buildItems(BuildContext context) sync* {
     if (bookInfo.hasAuthor) {
@@ -42,8 +67,5 @@ class BookInfoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      ScreenScaffold(
-          title: bookInfo.title,
-          body: ListView(children: _buildItems(context).toList(growable: false))
-      );
+      ListView(children: _buildItems(context).toList(growable: false));
 }

@@ -22,7 +22,6 @@ class BookEntryRepository {
     return invoker(entry);
   }
 
-
   static String _entryKey(String id) => "$bookEntryPrefix-$id";
 
   static BuiltList<BookEntry> buildList(SharedPreferences prefs) {

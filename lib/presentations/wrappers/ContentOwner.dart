@@ -6,14 +6,17 @@ import 'package:reader/presentations/wrappers/ContentLoader.dart';
 class ContentController<T> {
   final T initialData;
   final bool respondToReloading;
-  final Future<T> initialFuture;
   final StreamController<Future<T>> _controller;
 
   ContentController({
     this.initialData,
-    this.respondToReloading,
-    this.initialFuture
-  }) : _controller = StreamController(sync: true);
+    this.respondToReloading = false,
+    Future<T> initialFuture,
+  }) : _controller = StreamController() {
+    if (initialFuture != null) {
+      _controller.add(initialFuture);
+    }
+  }
 
   void setValue(T value) {
     _controller.add(Future.value(value));
