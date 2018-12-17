@@ -6,15 +6,15 @@ typedef void GestureCallback(BuildContext context);
 class ScreenScaffold extends StatelessWidget {
   final ReadingTheme readingTheme;
   final Widget floatingActionButton;
-  final AppBar appBar;
   final String title;
+  final Iterable<Widget> appBarActions;
   final Widget body;
   final GestureCallback onDoubleTap;
 
   ScreenScaffold({
     this.readingTheme,
-    this.appBar,
     this.title,
+    this.appBarActions,
     this.body,
     this.floatingActionButton,
     this.onDoubleTap
@@ -24,24 +24,35 @@ class ScreenScaffold extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
       key: Key('ScreenScaffold'),
       backgroundColor: _renderBackground(),
-      appBar: _renderAppBar(),
+      appBar: _renderAppBar(context),
       floatingActionButton: floatingActionButton,
       body: _renderBody(context));
 
   Color _renderBackground() =>
       readingTheme?.backgroundColor;
 
-  Widget _renderAppBar() {
-    if (appBar != null) {
-      return appBar;
-    }
+  Widget _renderAppBar(BuildContext context) =>
+      AppBar(
+          title: _renderTitle(context),
+          actions: _renderAppBarActions(context)
+      );
 
+  Widget _renderTitle(BuildContext context) {
     if (title != null) {
-      return AppBar(title: Text(title));
+      return Text(title);
+    } else {
+      return null;
     }
-
-    return null;
   }
+
+  _renderAppBarActions(BuildContext context) {
+    if (appBarActions != null) {
+      return appBarActions.toList(growable: false);
+    } else {
+      return null;
+    }
+  }
+
 
   Widget _renderBody(BuildContext context) {
     return _renderGestureDetector(

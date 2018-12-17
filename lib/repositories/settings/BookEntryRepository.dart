@@ -9,52 +9,46 @@ class BookEntryRepository {
   static const listKey = 'bookEntryIds';
   static const bookEntryPrefix = 'bookEntry';
 
-  static Future<BookEntry> fetchEntry(String bookId) async {
-    final prefs = await SharedPreferences.getInstance();
+  static SharedPreferences _prefs;
 
-    return buildEntry(prefs, bookId);
-  }
+  static bool get isInitialized => _prefs != null;
 
-  static Future<T> invokeEntry<T>(String bookId,
-      Future<T> invoker(BookEntry entry)) async {
-    final entry = await fetchEntry(bookId);
-
-    return invoker(entry);
+  static Future<SharedPreferences> init() async {
+    return _prefs = await SharedPreferences.getInstance();
   }
 
   static String _entryKey(String id) => "$bookEntryPrefix-$id";
 
-  static BuiltList<BookEntry> buildList(SharedPreferences prefs) {
-    final ids = prefs.getStringList(listKey) ?? [];
-
-    return BuiltList.of(ids.map((id) => buildEntry(prefs, id)));
-  }
-
-  static Future<bool> saveList(SharedPreferences prefs,
-      Iterable<BookEntry> entries) {
-    final List<String> ids =
-    entries.map((entry) => entry.id).toList(growable: false);
-    return prefs.setStringList(listKey, ids);
-  }
-
-  static BookEntry buildEntry(SharedPreferences prefs, String id) {
+  static BookEntry fetchEntry(String id) {
     final key = _entryKey(id);
 
-    final entryJson = prefs.getString(key);
+    final entryJson = _prefs.getString(key);
     final entryData = jsonDecode(entryJson);
 
     return serializers.deserializeWith(BookEntry.serializer, entryData);
   }
 
-  static Future<bool> saveEntry(SharedPreferences prefs, BookEntry entry) {
+  static Future<bool> saveEntry(BookEntry entry) {
     final key = _entryKey(entry.id);
 
     final entryData = serializers.serializeWith(BookEntry.serializer, entry);
     final entryJson = jsonEncode(entryData);
 
-    return prefs.setString(key, entryJson);
+    return _prefs.setString(key, entryJson);
   }
 
-  static Future<bool> removeEntry(SharedPreferences prefs, String id) =>
-      prefs.remove(_entryKey(id));
+  static Future<bool> removeEntry(String id) =>
+      _prefs.remove(_entryKey(id));
+
+  static BuiltList<BookEntry> buildList() {
+    final ids = _prefs.getStringList(listKey) ?? [];
+
+    return BuiltList.of(ids.map((id) => fetchEntry(id)));
+  }
+
+  static Future<bool> saveList(Iterable<BookEntry> entries) {
+    final List<String> ids =
+    entries.map((entry) => entry.id).toList(growable: false);
+    return _prefs.setStringList(listKey, ids);
+  }
 }

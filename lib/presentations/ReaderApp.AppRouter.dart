@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:reader/models/BookEntry.dart';
-import 'package:reader/viewModels/BookEntryList.dart';
-import 'package:reader/models/BookInfo.dart';
-import 'package:reader/models/ChapterContent.dart';
-import 'package:reader/models/ChapterList.dart';
-import 'package:reader/presentations/screens/BookInfoScreen.dart';
+`import 'package:reader/presentations/screens/BookInfoScreen.dart';
 import 'package:reader/presentations/screens/BookListScreen.dart';
-import 'package:reader/presentations/screens/ChapterListScreen.dart';
-import 'package:reader/presentations/screens/ErrorScreen.dart';
-import 'package:reader/presentations/screens/ReadingScreen.dart';
+import 'package:reader/presentations/screens/NotFoudnScreen.dart';
 import 'package:reader/presentations/wrappers/ContentLoader.dart';
-import 'package:reader/presentations/wrappers/ContentOwner.dart';
 import 'package:reader/repositories/settings/BookEntryRepository.dart';
+import 'package:reader/viewModels/BookEntryList.dart';
 
 class AppRouter {
   get initialRoute => rootPath;
@@ -55,10 +49,12 @@ class AppRouter {
           context, AppRouter.buildBookPath(AppRouter.bookReaderPath, entry.id));
 
   Route onUnknownRoute(RouteSettings settings) =>
-      buildRoute((BuildContext context) => ErrorScreen(error: "404"));
+      buildRoute((BuildContext context) => NotFoundScreen());
 
   Route buildRoute(WidgetBuilder builder) =>
       MaterialPageRoute(builder: builder);
+
+  Route buildSplash(RouteSettings settings) {}
 
   Route buildBookList() =>
       buildRoute((BuildContext context) => ContentLoader<BookEntryList>(
@@ -67,26 +63,27 @@ class AppRouter {
               BookListScreen(entryList)));
 
   Route buildBookInfo(Uri uri) =>
-      buildRoute((BuildContext context) => ContentOwner<BookInfo>(
-          future: BookEntryRepository.invokeEntry(
-              uri.queryParameters[_bookIdKey],
-              (entry) => entry.fetchBookInfo()),
-          render: (BuildContext context, BookInfo bookInfo) =>
-              BookInfoScreen(bookInfo: bookInfo)));
+      buildRoute((BuildContext context) =>
+          BookInfoScreen(
+              bookEntry: BookEntryRepository.fetchEntry(uri.queryParameters[_bookIdKey])
+          )
+      );
 
-  Route buildChapterList(Uri uri) =>
-      buildRoute((BuildContext context) => ContentOwner<ChapterList>(
-          future: BookEntryRepository.invokeEntry(
-              uri.queryParameters[_bookIdKey],
-              (entry) => entry.fetchChapterList()),
-          render: (BuildContext context, ChapterList chapterList) =>
-              ChapterListScreen(chapterList: chapterList)));
+  Route buildChapterList(Uri uri) => null;
 
-  Route buildReader(Uri uri) =>
-      buildRoute((BuildContext context) => ContentOwner<ChapterContent>(
-          future: BookEntryRepository.invokeEntry(
-              uri.queryParameters[_bookIdKey],
-              (entry) => entry.fetchCurrentChapterContent()),
-          render: (BuildContext context, ChapterContent chapterContent) =>
-              ReadingScreen(chapterContent: chapterContent)));
+//      buildRoute((BuildContext context) => ContentOwner<ChapterList>(
+//          future: BookEntryRepository.invokeEntry(
+//              uri.queryParameters[_bookIdKey],
+//              (entry) => entry.fetchChapterList()),
+//          render: (BuildContext context, ChapterList chapterList) =>
+//              ChapterListScreen(chapterList: chapterList)));
+
+  Route buildReader(Uri uri) => null;
+
+//      buildRoute((BuildContext context) => ContentOwner<ChapterContent>(
+//          future: BookEntryRepository.invokeEntry(
+//              uri.queryParameters[_bookIdKey],
+//              (entry) => entry.fetchCurrentChapterContent()),
+//          render: (BuildContext context, ChapterContent chapterContent) =>
+//              ReadingScreen(chapterContent: chapterContent)));
 }

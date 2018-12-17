@@ -6,20 +6,20 @@ import 'package:reader/presentations/components/ScreenScaffold.dart';
 import 'package:reader/presentations/wrappers/ContentOwner.dart';
 
 class BookInfoScreen extends StatelessWidget {
-  final Future<BookEntry> bookEntry;
+  final BookEntry bookEntry;
   final ContentController<BookInfo> controller;
 
   BookInfoScreen({Key key, this.bookEntry})
       :
         controller = ContentController(
-          initialFuture: bookEntry.then((entry) => entry.fetchBookInfo()),
+          initialFuture: bookEntry.fetchBookInfo(),
         ),
         super(key: key);
 
   @override
   Widget build(BuildContext context) =>
       ScreenScaffold(
-        title: '???',
+        title: bookEntry.bookName,
         body: ContentOwner<BookInfo>(
             controller: controller,
             render: (BuildContext context, BookInfo bookInfo) =>
