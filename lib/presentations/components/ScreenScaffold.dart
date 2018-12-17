@@ -7,6 +7,7 @@ class ScreenScaffold extends StatelessWidget {
   final ReadingTheme readingTheme;
   final Widget floatingActionButton;
   final String title;
+  final Widget titleWidget;
   final Iterable<Widget> appBarActions;
   final Widget body;
   final GestureCallback onDoubleTap;
@@ -14,6 +15,7 @@ class ScreenScaffold extends StatelessWidget {
   ScreenScaffold({
     this.readingTheme,
     this.title,
+    this.titleWidget,
     this.appBarActions,
     this.body,
     this.floatingActionButton,
@@ -31,18 +33,21 @@ class ScreenScaffold extends StatelessWidget {
   Color _renderBackground() =>
       readingTheme?.backgroundColor;
 
-  Widget _renderAppBar(BuildContext context) =>
-      AppBar(
-          title: _renderTitle(context),
-          actions: _renderAppBarActions(context)
-      );
+  Widget _renderAppBar(BuildContext context) {
+    final renderedTitle = _renderTitle(context);
 
-  Widget _renderTitle(BuildContext context) {
-    if (title != null) {
-      return Text(title);
-    } else {
+    if (renderedTitle == null) {
       return null;
     }
+
+    return AppBar(
+        title: renderedTitle,
+        actions: _renderAppBarActions(context)
+    );
+  }
+
+  Widget _renderTitle(BuildContext context) {
+    return titleWidget ?? Text(title);
   }
 
   _renderAppBarActions(BuildContext context) {
