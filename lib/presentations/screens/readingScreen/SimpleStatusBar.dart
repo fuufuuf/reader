@@ -5,19 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-class ReadingStatusBar extends StatefulWidget {
+class SimpleStatusBar extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _ReadingStatusBarState();
+  State<StatefulWidget> createState() => _SimpleStatusBarState();
 }
 
-class _ReadingStatusBarState extends State<ReadingStatusBar> {
+class _SimpleStatusBarState extends State<SimpleStatusBar> {
   Battery battery;
 
   DateTime now;
   int batteryLevel;
   BatteryState batteryState;
 
-  _ReadingStatusBarState() {
+  _SimpleStatusBarState() {
     battery = Battery();
 
     batteryLevel = null;
