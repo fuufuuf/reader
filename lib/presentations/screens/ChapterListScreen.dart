@@ -4,7 +4,6 @@ import 'package:reader/models/BookEntry.dart';
 import 'package:reader/models/ChapterList.dart';
 import 'package:reader/models/ChapterRef.dart';
 import 'package:reader/presentations/ReaderApp.AppRouter.dart';
-import 'package:reader/presentations/ReaderApp.dart';
 import 'package:reader/presentations/components/ScreenScaffold.dart';
 import 'package:reader/presentations/wrappers/ContentOwner.dart';
 
@@ -31,15 +30,16 @@ class ChapterListScreen extends StatelessWidget {
         body: ContentOwner<ChapterList>(
             controller: controller,
             render: (BuildContext context, ChapterList chapterList) =>
-                ChapterListView(chapterList: chapterList)
+                ChapterListView(bookEntry: bookEntry, chapterList: chapterList)
         ),
       );
 }
 
 class ChapterListView extends StatelessWidget {
+  final BookEntry bookEntry;
   final ChapterList chapterList;
 
-  ChapterListView({@required this.chapterList});
+  ChapterListView({@required this.bookEntry, @required this.chapterList});
 
   @override
   Widget build(BuildContext context) =>
@@ -54,7 +54,7 @@ class ChapterListView extends StatelessWidget {
         leading: Icon(Icons.bookmark_border),
         title: Text(index.title),
         onTap: () {
-          ReaderApp.openUrl(context, index.url);
+          AppRouter.openBookReader(context, bookEntry, index.url);
         },
       );
 }

@@ -4,6 +4,7 @@ import 'package:reader/presentations/screens/BookInfoScreen.dart';
 import 'package:reader/presentations/screens/BookListScreen.dart';
 import 'package:reader/presentations/screens/ChapterListScreen.dart';
 import 'package:reader/presentations/screens/NotFoudnScreen.dart';
+import 'package:reader/presentations/screens/ReadingScreen.dart';
 import 'package:reader/presentations/wrappers/ContentLoader.dart';
 import 'package:reader/repositories/settings/BookEntryRepository.dart';
 import 'package:reader/viewModels/BookEntryList.dart';
@@ -33,6 +34,7 @@ class AppRouter {
   static const bookChaptersPath = '/book/chapters';
   static const bookReaderPath = '/book/reader';
   static const _bookIdKey = 'bookId';
+  static const _contentUrlKey = 'contentUrl';
 
   static String buildBookPath(String pathName, String bookId) =>
       Uri(path: pathName, queryParameters: {_bookIdKey: bookId}).toString();
@@ -45,9 +47,14 @@ class AppRouter {
       Navigator.pushNamed(context,
           AppRouter.buildBookPath(AppRouter.bookChaptersPath, entry.id));
 
-  static Future<Object> openBookReader(BuildContext context, BookEntry entry) =>
+  static Future<Object> openBookReader(BuildContext context, BookEntry entry,
+      Uri chapterContentUrl) =>
       Navigator.pushNamed(
-          context, AppRouter.buildBookPath(AppRouter.bookReaderPath, entry.id));
+          context, Uri(path: AppRouter.bookReaderPath,
+          queryParameters: {
+            _bookIdKey: entry.id,
+            _contentUrlKey: chapterContentUrl.toString()
+          }).toString());
 
   Route onUnknownRoute(RouteSettings settings) =>
       buildRoute((BuildContext context) => NotFoundScreen());
@@ -76,12 +83,12 @@ class AppRouter {
           )
       );
 
-  Route buildReader(Uri uri) => null;
-
-//      buildRoute((BuildContext context) => ContentOwner<ChapterContent>(
-//          future: BookEntryRepository.invokeEntry(
-//              uri.queryParameters[_bookIdKey],
-//              (entry) => entry.fetchCurrentChapterContent()),
-//          render: (BuildContext context, ChapterContent chapterContent) =>
-//              ReadingScreen(chapterContent: chapterContent)));
+  Route buildReader(Uri uri) =>
+      buildRoute((BuildContext context) =>
+          ReadingScreen(
+              bookEntry: BookEntryRepository.fetchEntry(
+                  uri.queryParameters[_bookIdKey]),
+              contentUrl: Uri.parse(uri.queryParameters[_contentUrlKey])
+          )
+      );
 }

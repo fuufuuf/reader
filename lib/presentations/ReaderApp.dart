@@ -7,10 +7,6 @@ class ReaderApp extends StatefulWidget {
   @override
   State<StatefulWidget> createState() =>
       _ReaderAppState(ReadingTheme.defaultTheme);
-
-  static void openUrl(BuildContext context, Uri url) {
-//TODO: fix this
-  }
 }
 
 class _ReaderAppState extends State<ReaderApp> {

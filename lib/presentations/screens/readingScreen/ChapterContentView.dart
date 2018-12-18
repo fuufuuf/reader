@@ -9,7 +9,7 @@ class ChapterContentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PageView.builder(
+    return ListView.builder(
         itemBuilder: _renderParagraph,
         itemCount: chapter.paragraphs.length + 1);
   }
