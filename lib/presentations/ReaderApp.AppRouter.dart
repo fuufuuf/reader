@@ -77,10 +77,7 @@ class AppRouter {
 
   Route buildChapterList(Uri uri) =>
       buildRoute((BuildContext context) =>
-          ChapterListScreen(
-              bookEntry: BookEntryRepository.fetchEntry(
-                  uri.queryParameters[_bookIdKey])
-          )
+          ChapterListScreen(bookId: uri.queryParameters[_bookIdKey])
       );
 
   Route buildReader(Uri uri) =>

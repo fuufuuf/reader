@@ -63,7 +63,9 @@ class _BookListScreenState extends State<BookListScreen> {
             AppRouter.openBookInfo(context, entry);
           }),
           onTap: () {
-            AppRouter.openBookChapters(context, entry);
+            AppRouter.openBookChapters(context, entry).then((value) {
+              entryList.reload();
+            });
             if (entry.hasCurrentChapter) {
               AppRouter.openBookReader(context, entry, entry.currentChapterUrl);
             }

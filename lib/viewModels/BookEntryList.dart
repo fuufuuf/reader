@@ -31,4 +31,8 @@ class BookEntryList {
     BookEntryRepository.saveList(entries);
     BookEntryRepository.removeEntry(entry.id);
   }
+
+  void reload() {
+    _list = BookEntryRepository.buildList();
+  }
 }
