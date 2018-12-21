@@ -132,7 +132,9 @@ class _AddBookDialogState extends State<AddBookDialog> {
             _renderEntryItem(Icons.vpn_key, entry.id),
             _renderEntryItem(Icons.title, entry.bookName),
             _renderEntryItem(Icons.book, entry.bookInfoUrl.toString()),
-            _renderEntryItem(Icons.list, entry.chapterListUrl.toString())
+            _renderEntryItem(Icons.list, entry.chapterListUrl.toString()),
+            _renderEntryItem(Icons.bookmark_border,
+                entry.currentChapterUrl?.toString() ?? "")
           ]
       );
 
