@@ -23,6 +23,8 @@ abstract class BookEntry implements Built<BookEntry, BookEntryBuilder> {
   @nullable
   Uri get currentChapterUrl;
 
+  bool get hasCurrentChapter => currentChapterUrl != null;
+
   static Serializer<BookEntry> get serializer => _$bookEntrySerializer;
 
   Future<BookInfo> fetchBookInfo() => BookRepository.fetchBookInfo(bookInfoUrl);
@@ -32,4 +34,10 @@ abstract class BookEntry implements Built<BookEntry, BookEntryBuilder> {
 
   Future<ChapterContent> fetchCurrentChapterContent() =>
       BookRepository.fetchChapterContent(currentChapterUrl);
+
+  BookEntry updateCurrentChapterUrl(Uri contentUrl) {
+    final builder = toBuilder();
+    builder.currentChapterUrl = contentUrl;
+    return builder.build();
+  }
 }

@@ -64,6 +64,9 @@ class _BookListScreenState extends State<BookListScreen> {
           }),
           onTap: () {
             AppRouter.openBookChapters(context, entry);
+            if (entry.hasCurrentChapter) {
+              AppRouter.openBookReader(context, entry, entry.currentChapterUrl);
+            }
           }));
 
   Widget _renderFab(BuildContext context) => FloatingActionButton(

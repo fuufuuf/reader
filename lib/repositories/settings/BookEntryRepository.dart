@@ -6,8 +6,8 @@ import 'package:reader/models/serializers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BookEntryRepository {
-  static const listKey = 'bookEntryIds';
-  static const bookEntryPrefix = 'bookEntry';
+  static const _listKey = 'bookEntryIds';
+  static const _bookEntryPrefix = 'bookEntry';
 
   static SharedPreferences _prefs;
 
@@ -17,7 +17,7 @@ class BookEntryRepository {
     return _prefs = await SharedPreferences.getInstance();
   }
 
-  static String _entryKey(String id) => "$bookEntryPrefix-$id";
+  static String _entryKey(String id) => "$_bookEntryPrefix-$id";
 
   static BookEntry fetchEntry(String id) {
     final key = _entryKey(id);
@@ -41,7 +41,7 @@ class BookEntryRepository {
       _prefs.remove(_entryKey(id));
 
   static BuiltList<BookEntry> buildList() {
-    final ids = _prefs.getStringList(listKey) ?? [];
+    final ids = _prefs.getStringList(_listKey) ?? [];
 
     return BuiltList.of(ids.map((id) => fetchEntry(id)));
   }
@@ -49,6 +49,6 @@ class BookEntryRepository {
   static Future<bool> saveList(Iterable<BookEntry> entries) {
     final List<String> ids =
     entries.map((entry) => entry.id).toList(growable: false);
-    return _prefs.setStringList(listKey, ids);
+    return _prefs.setStringList(_listKey, ids);
   }
 }

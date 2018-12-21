@@ -8,6 +8,7 @@ import 'package:reader/presentations/screens/readingScreen/ReadingScaffold.dart'
 import 'package:reader/presentations/wrappers/ContentLoader.dart';
 import 'package:reader/presentations/wrappers/ReadingThemeProvider.dart';
 import 'package:reader/repositories/network/BookRepository.dart';
+import 'package:reader/repositories/settings/BookEntryRepository.dart';
 import 'package:screen/screen.dart';
 
 class ReadingScreen extends StatefulWidget {
@@ -25,7 +26,7 @@ class ReadingScreen extends StatefulWidget {
 class _ReadingScreenState extends State<ReadingScreen> {
   static const double threshold = 150;
 
-  final BookEntry bookEntry;
+  BookEntry bookEntry;
 
   Future<ChapterContent> future;
   ChapterContent currentContent;
@@ -42,6 +43,10 @@ class _ReadingScreenState extends State<ReadingScreen> {
 
     currentContent = null;
     currentContent = await BookRepository.fetchChapterContent(contentUrl);
+
+    bookEntry = bookEntry.updateCurrentChapterUrl(contentUrl);
+    await BookEntryRepository.saveEntry(bookEntry);
+
     return currentContent;
   }
 
