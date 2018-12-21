@@ -29,7 +29,7 @@ class _ReaderAppState extends State<ReaderApp> {
   Widget build(BuildContext context) =>
       ReadingThemeProvider(
           theme: currentTheme,
-          switchTheme: updateTheme,
+          switchThemeApi: updateTheme,
           child: _renderApp()
       );
 

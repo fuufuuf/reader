@@ -5,19 +5,21 @@ typedef void SwitchTheme(bool nightMode);
 
 class ReadingThemeProvider extends InheritedWidget {
   final ReadingTheme theme;
-  final SwitchTheme switchTheme;
+  final SwitchTheme switchThemeApi;
 
-  ReadingThemeProvider({Key key, this.theme, this.switchTheme, Widget child})
+  ReadingThemeProvider({Key key, this.theme, this.switchThemeApi, Widget child})
       : super(key: key, child: child);
 
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) =>
       (oldWidget as ReadingThemeProvider).theme == theme;
 
-  static ReadingThemeProvider of(BuildContext context) =>
-      context.inheritFromWidgetOfExactType(
-          ReadingThemeProvider) as ReadingThemeProvider;
+  static ReadingTheme of(BuildContext context) =>
+      (context.inheritFromWidgetOfExactType(
+          ReadingThemeProvider) as ReadingThemeProvider).theme;
 
-  static ReadingTheme fetchTheme(BuildContext context) =>
-      of(context).theme;
+  static void switchTheme(BuildContext context, bool nightMode) =>
+      (context.inheritFromWidgetOfExactType(
+          ReadingThemeProvider) as ReadingThemeProvider)
+          .switchThemeApi(nightMode);
 }

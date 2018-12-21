@@ -39,8 +39,6 @@ class _ReadingScreenState extends State<ReadingScreen> {
   }
 
   Future<ChapterContent> loadContent(Uri contentUrl) async {
-    print("Open Uri $contentUrl");
-
     currentContent = null;
     currentContent = await BookRepository.fetchChapterContent(contentUrl);
 
@@ -145,7 +143,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
   @override
   Widget build(BuildContext context) =>
       ReadingScaffold(
-          readingTheme: ReadingThemeProvider.fetchTheme(context),
+          readingTheme: ReadingThemeProvider.of(context),
           onDoubleTap: _onDoubleTap,
           content:
           Stack(
@@ -178,6 +176,8 @@ class _ReadingScreenState extends State<ReadingScreen> {
       );
 
   void _onDoubleTap(BuildContext context) {
+    final theme = ReadingThemeProvider.of(context);
+    ReadingThemeProvider.switchTheme(context, !theme.isNightMode);
   }
 
   void _enableReadingMode() {
