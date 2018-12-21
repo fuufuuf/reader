@@ -187,11 +187,12 @@ class PiaotianAdapter extends SiteAdapter {
         document
             .querySelectorAll('.toplink > a')[1]
             .attributes['href'])
-      ..previousChapterUrl = safeUrl(url, () =>
+      ..previousChapterUrl = safeUrlWithPattern(
+          url, chapterContentUrlPattern, () =>
         document
             .querySelectorAll('.toplink > a')[0]
             .attributes['href'])
-      ..nextChapterUrl = safeUrl(url, () =>
+      ..nextChapterUrl = safeUrlWithPattern(url, chapterContentUrlPattern, () =>
         document
             .querySelectorAll('.toplink > a')[2]
             .attributes['href'])

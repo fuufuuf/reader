@@ -18,4 +18,16 @@ Uri safeUrl(Uri base, UnsafeExtract<String> action) => safe(() {
       return base.resolve(urlString).replace(scheme: 'https');
     });
 
+Uri safeUrlWithPattern(Uri base, RegExp pattern,
+    UnsafeExtract<String> action) {
+  final url = safeUrl(base, action);
+
+  if (url != null && pattern.hasMatch(url.toString())) {
+    return url;
+  } else {
+    return null;
+  }
+}
+
+
 Iterable<T> safeList<T>(UnsafeExtract<Iterable<T>> action) => safe(action) ?? <T>[];
