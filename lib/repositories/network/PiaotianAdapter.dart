@@ -81,7 +81,10 @@ class PiaotianAdapter extends SiteAdapter {
 
   Future<BookEntry> _buildBookEntryFromChapterContent(
       ChapterContent content) async {
-    return _buildBookEntryFromChapterList(await content.fetchChapterList());
+    final builder = _buildBookEntryFromChapterList(
+        await content.fetchChapterList()).toBuilder();
+    builder.currentChapterUrl = content.url;
+    return builder.build();
   }
 
   String _extractBookId(Uri bookInfoUrl) {

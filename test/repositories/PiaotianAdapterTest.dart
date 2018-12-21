@@ -142,7 +142,10 @@ void main() {
     test('should parse from chapter content', () async {
       final entry = await adapter.fetchBookEntry(chapterUrl);
 
-      expect(entry, equals(bookEntry));
+      final builder = bookEntry.toBuilder();
+      builder.currentChapterUrl = chapterUrl;
+
+      expect(entry, equals(builder.build()));
     });
   });
 }
