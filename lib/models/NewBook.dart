@@ -22,6 +22,7 @@ abstract class NewBook implements Built<NewBook, NewBookBuilder> {
   BookIndex toBookIndex() => BookIndex((b) => b
     ..bookId = bookId
     ..bookName = bookName
+    ..bookInfoUrl = bookInfoUrl
     ..chapterListUrl = chapterListUrl);
 
   Future<BookIndex> save() async {

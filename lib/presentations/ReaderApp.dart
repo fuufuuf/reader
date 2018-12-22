@@ -10,12 +10,11 @@ class ReaderApp extends StatefulWidget {
 }
 
 class _ReaderAppState extends State<ReaderApp> {
-  final AppRouter _router;
-
   ReadingTheme currentTheme;
+  AppRouter _appRouter;
 
-  _ReaderAppState(this.currentTheme)
-      : _router = AppRouter();
+  _ReaderAppState(this.currentTheme) :
+        _appRouter= AppRouter();
 
   void updateTheme(bool nightMode) {
     this.setState(() {
@@ -39,8 +38,8 @@ class _ReaderAppState extends State<ReaderApp> {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: _router.initialRoute,
-        onGenerateRoute: _router.generateRoute,
-        onUnknownRoute: _router.onUnknownRoute,
+        initialRoute: _appRouter.initialRoute,
+        onGenerateRoute: _appRouter.generateRoute,
+        onUnknownRoute: _appRouter.onUnknownRoute,
       );
 }
