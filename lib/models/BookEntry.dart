@@ -21,9 +21,9 @@ abstract class BookEntry implements Built<BookEntry, BookEntryBuilder> {
   Uri get bookInfoUrl;
 
   @nullable
-  Uri get currentChapterUrl;
+  Uri get currentChapterUrl; // TODO: Clean up
 
-  bool get hasCurrentChapter => currentChapterUrl != null;
+  bool get hasCurrentChapter => currentChapterUrl != null; // TODO: Clean up
 
   static Serializer<BookEntry> get serializer => _$bookEntrySerializer;
 

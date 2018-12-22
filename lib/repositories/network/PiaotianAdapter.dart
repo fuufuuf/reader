@@ -1,9 +1,9 @@
 import 'package:html/dom.dart';
-import 'package:reader/models/BookEntry.dart';
 import 'package:reader/models/BookInfo.dart';
 import 'package:reader/models/ChapterContent.dart';
 import 'package:reader/models/ChapterList.dart';
 import 'package:reader/models/ChapterRef.dart';
+import 'package:reader/models/NewBook.dart';
 import 'package:reader/repositories/network/ReaderHttpClient.dart';
 import 'package:reader/repositories/network/SiteAdapter.dart';
 import 'package:reader/repositories/network/safeExtractors.dart';
@@ -43,7 +43,7 @@ class PiaotianAdapter extends SiteAdapter {
   }
 
   @override
-  Future<BookEntry> fetchBookEntry(Uri url) async {
+  Future<NewBook> fetchBookEntry(Uri url) async {
     final content = await fetchFromUrl(url);
 
     if (content is BookInfo) {
@@ -61,30 +61,30 @@ class PiaotianAdapter extends SiteAdapter {
     throw 'Unkonwn url';
   }
 
-  BookEntry _buildBookEntryFromBookInfo(BookInfo bookInfo) =>
-      BookEntry((builder) =>
+  NewBook _buildBookEntryFromBookInfo(BookInfo bookInfo) =>
+      NewBook((builder) =>
       builder
-        ..id = _extractBookId(bookInfo.url)
+        ..bookId = _extractBookId(bookInfo.url)
         ..bookName = bookInfo.title
         ..bookInfoUrl = bookInfo.url
         ..chapterListUrl = bookInfo.chapterListUrl
       );
 
-  BookEntry _buildBookEntryFromChapterList(ChapterList list) =>
-      BookEntry((builder) =>
+  NewBook _buildBookEntryFromChapterList(ChapterList list) =>
+      NewBook((builder) =>
       builder
-        ..id = _extractBookId(list.bookInfoUrl)
+        ..bookId = _extractBookId(list.bookInfoUrl)
         ..bookName = list.title
         ..bookInfoUrl = list.bookInfoUrl
         ..chapterListUrl = list.url
       );
 
-  Future<BookEntry> _buildBookEntryFromChapterContent(
+  Future<NewBook> _buildBookEntryFromChapterContent(
       ChapterContent content) async {
-    final builder = _buildBookEntryFromChapterList(
-        await content.fetchChapterList()).toBuilder();
-    builder.currentChapterUrl = content.url;
-    return builder.build();
+    return _buildBookEntryFromChapterList(
+        await content.fetchChapterList()
+    )
+        .rebuild((b) => b..currentChapterUrl = content.url);
   }
 
   String _extractBookId(Uri bookInfoUrl) {

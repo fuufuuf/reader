@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reader/models/BookEntry.dart';
+import 'package:reader/models/NewBook.dart';
 import 'package:reader/presentations/components/ScreenScaffold.dart';
 import 'package:reader/repositories/network/BookRepository.dart';
 
@@ -7,7 +7,8 @@ class AddBookDialog extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _AddBookDialogState();
 
-  static Future<BookEntry> show(BuildContext context) => Navigator.push(
+  static Future<NewBook> show(BuildContext context) =>
+      Navigator.push(
       context,
       MaterialPageRoute(
           builder: (_) => AddBookDialog(), fullscreenDialog: true));
@@ -16,23 +17,23 @@ class AddBookDialog extends StatefulWidget {
 class _AddBookDialogState extends State<AddBookDialog> {
   final TextEditingController _urlController = TextEditingController();
 
-  Future<BookEntry> bookEntryFuture;
+  Future<NewBook> future;
 
   VoidCallback submitBookEntry;
 
   void _loadBookEntry() {
     setState(() {
       submitBookEntry = null;
-      bookEntryFuture =
+      future =
           BookRepository
-              .fetchBookEntryByUrlString(_urlController.text)
-              .then((entry) {
+              .createBookByUrlString(_urlController.text)
+              .then((newBook) {
             setState(() {
               submitBookEntry = () {
-                Navigator.pop(context, entry);
+                Navigator.pop(context, newBook);
               };
             });
-            return entry;
+            return newBook;
           });
     });
   }
@@ -66,8 +67,8 @@ class _AddBookDialogState extends State<AddBookDialog> {
             },
           ),
           Expanded(
-            child: FutureBuilder<BookEntry>(
-              future: bookEntryFuture,
+            child: FutureBuilder<NewBook>(
+              future: future,
               builder: _renderBookEntryFuture,
             ),
           ),
@@ -97,7 +98,7 @@ class _AddBookDialogState extends State<AddBookDialog> {
       );
 
   Widget _renderBookEntryFuture(BuildContext context,
-      AsyncSnapshot<BookEntry> snapshot) {
+      AsyncSnapshot<NewBook> snapshot) {
     if (snapshot.connectionState == ConnectionState.waiting) {
       return Align(
         alignment: Alignment.center,
@@ -125,16 +126,16 @@ class _AddBookDialogState extends State<AddBookDialog> {
     return Container();
   }
 
-  Widget _renderBookEntry(BookEntry entry) =>
+  Widget _renderBookEntry(NewBook newBook) =>
       ListView(
           children:
           <Widget>[
-            _renderEntryItem(Icons.vpn_key, entry.id),
-            _renderEntryItem(Icons.title, entry.bookName),
-            _renderEntryItem(Icons.book, entry.bookInfoUrl.toString()),
-            _renderEntryItem(Icons.list, entry.chapterListUrl.toString()),
+            _renderEntryItem(Icons.vpn_key, newBook.bookId),
+            _renderEntryItem(Icons.title, newBook.bookName),
+            _renderEntryItem(Icons.book, newBook.bookInfoUrl.toString()),
+            _renderEntryItem(Icons.list, newBook.chapterListUrl.toString()),
             _renderEntryItem(Icons.bookmark_border,
-                entry.currentChapterUrl?.toString() ?? "")
+                newBook.currentChapterUrl?.toString() ?? "<N/A>")
           ]
       );
 

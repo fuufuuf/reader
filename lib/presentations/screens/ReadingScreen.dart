@@ -1,32 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:reader/models/BookEntry.dart';
+import 'package:reader/models/BookIndex.dart';
 import 'package:reader/models/ChapterContent.dart';
 import 'package:reader/presentations/screens/readingScreen/ChapterContentView.dart';
 import 'package:reader/presentations/screens/readingScreen/ReadingScaffold.dart';
 import 'package:reader/presentations/wrappers/ContentLoader.dart';
 import 'package:reader/presentations/wrappers/ReadingThemeProvider.dart';
 import 'package:reader/repositories/network/BookRepository.dart';
-import 'package:reader/repositories/settings/BookEntryRepository.dart';
 import 'package:screen/screen.dart';
 
 class ReadingScreen extends StatefulWidget {
-  final BookEntry bookEntry;
+  final String bookId;
   final Uri contentUrl;
 
-  const ReadingScreen({Key key, this.bookEntry, this.contentUrl})
+  const ReadingScreen({Key key, this.bookId, this.contentUrl})
       : super(key: key);
 
   @override
   State<StatefulWidget> createState() =>
-      _ReadingScreenState(bookEntry, contentUrl);
+      _ReadingScreenState(BookIndex.load(bookId), contentUrl);
 }
 
 class _ReadingScreenState extends State<ReadingScreen> {
   static const double threshold = 150;
 
-  BookEntry bookEntry;
+  final BookIndex bookIndex;
 
   Future<ChapterContent> future;
   ChapterContent currentContent;
@@ -34,7 +33,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
   double _loadNextResistance = 0;
   Uri _urlToLoadNext;
 
-  _ReadingScreenState(this.bookEntry, Uri contentUrl) {
+  _ReadingScreenState(this.bookIndex, Uri contentUrl) {
     future = loadContent(contentUrl);
   }
 
@@ -42,8 +41,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
     currentContent = null;
     currentContent = await BookRepository.fetchChapterContent(contentUrl);
 
-    bookEntry = bookEntry.updateCurrentChapterUrl(contentUrl);
-    await BookEntryRepository.saveEntry(bookEntry);
+    await bookIndex.setCurrentChapter(contentUrl);
 
     return currentContent;
   }

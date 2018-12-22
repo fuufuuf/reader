@@ -3,6 +3,7 @@ import 'package:reader/models/BookEntry.dart';
 import 'package:reader/models/BookInfo.dart';
 import 'package:reader/models/ChapterContent.dart';
 import 'package:reader/models/ChapterList.dart';
+import 'package:reader/models/NewBook.dart';
 import 'package:reader/repositories/network/ReaderHttpClient.dart';
 
 abstract class SiteAdapter {
@@ -18,7 +19,7 @@ abstract class SiteAdapter {
 
   Future<Type> fetchResourceType(Uri url);
 
-  Future<BookEntry> fetchBookEntry(Uri url) ;
+  Future<NewBook> fetchBookEntry(Uri url) ;
 
   Future<Object> fetchFromUrl(Uri url) async {
     switch (await fetchResourceType(url)) {

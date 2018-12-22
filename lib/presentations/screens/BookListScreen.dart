@@ -1,79 +1,94 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
-import 'package:reader/models/BookEntry.dart';
+import 'package:reader/models/BookIndex.dart';
+import 'package:reader/models/NewBook.dart';
 import 'package:reader/presentations/ReaderApp.AppRouter.dart';
 import 'package:reader/presentations/components/ScreenScaffold.dart';
 import 'package:reader/presentations/screens/AddBookDialog.dart';
-import 'package:reader/viewModels/BookEntryList.dart';
 
 class BookListScreen extends StatefulWidget {
-  final BookEntryList entryList;
-
-  BookListScreen(this.entryList);
+  BookListScreen();
 
   @override
-  State<StatefulWidget> createState() => _BookListScreenState(entryList);
+  State<StatefulWidget> createState() => _BookListScreenState();
 }
 
 class _BookListScreenState extends State<BookListScreen> {
-  final BookEntryList entryList;
 
-  _BookListScreenState(this.entryList);
+  BuiltList<BookIndex> bookIndexes;
+
+  void reload() {
+    bookIndexes = BookIndex.loadAll();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    reload();
+  }
 
   @override
   Widget build(BuildContext context) => ScreenScaffold(
       title: 'Books',
       body: ListView.builder(
           itemBuilder: (context, index) =>
-              _renderBookItem(context, entryList.entries[index]),
-          itemCount: entryList.entries.length),
+              _renderBookItem(context, bookIndexes[index]),
+          itemCount: bookIndexes.length),
       floatingActionButton: _renderFab(context));
 
-  void _addBookEntry(BookEntry newBookEntry) {
-    if (newBookEntry == null) return;
+  void _addBookEntry(NewBook newBook) async {
+    if (newBook == null) return;
+
+    final bookIndex = await newBook.save();
 
     setState(() {
-      entryList.add(newBookEntry);
+      bookIndexes = bookIndexes.rebuild((b) => b.add(bookIndex));
     });
   }
 
-  void _removeBookEntry(BookEntry entry) {
+  void _removeBookEntry(BookIndex bookIndex) async {
+    await bookIndex.remove();
+
     setState(() {
-      entryList.remove(entry);
+      bookIndexes = bookIndexes.rebuild((b) => b.remove(bookIndex));
     });
   }
 
-  Widget _renderBookItem(BuildContext context, BookEntry entry) => Dismissible(
-      key: Key(entry.id),
-      background: Container(
-        color: Colors.redAccent,
-        alignment: Alignment.centerRight,
-        padding: EdgeInsets.only(right: 16),
-        child: Text('Swipe to remove',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-      ),
-      direction: DismissDirection.endToStart,
-      onDismissed: (DismissDirection direction) {
-        _removeBookEntry(entry);
-      },
-      dismissThresholds: const {DismissDirection.endToStart: .9},
-      child: ListTile(
-          leading: Icon(Icons.book),
-          title: Text(entry.bookName),
-          trailing: IconButton(icon: Icon(Icons.info_outline), onPressed: () {
-            AppRouter.openBookInfo(context, entry);
-          }),
-          onTap: () {
-            AppRouter.openBookChapters(context, entry).then((value) {
-              entryList.reload();
-            });
-            if (entry.hasCurrentChapter) {
-              AppRouter.openBookReader(context, entry, entry.currentChapterUrl);
-            }
-          }));
+  Widget _renderBookItem(BuildContext context, BookIndex bookIndex) =>
+      Dismissible(
+          key: Key(bookIndex.bookId),
+          background: Container(
+            color: Colors.redAccent,
+            alignment: Alignment.centerRight,
+            padding: EdgeInsets.only(right: 16),
+            child: Text('Swipe to remove',
+                style: TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold)),
+          ),
+          direction: DismissDirection.endToStart,
+          onDismissed: (DismissDirection direction) {
+            _removeBookEntry(bookIndex);
+          },
+          dismissThresholds: const {DismissDirection.endToStart: .9},
+          child: ListTile(
+              leading: Icon(Icons.book),
+              title: Text(bookIndex.bookName),
+              trailing: IconButton(
+                  icon: Icon(Icons.info_outline), onPressed: () {
+                AppRouter.openBookInfo(context, bookIndex.bookId);
+              }),
+              onTap: () async {
+                await AppRouter.openBookChapters(
+                    context, bookIndex.bookId, openReaderIfPossible: true);
+                reload();
+              }
+          ));
 
   Widget _renderFab(BuildContext context) => FloatingActionButton(
       child: Icon(Icons.add),
       onPressed: () async {
         _addBookEntry(await AddBookDialog.show(context));
       });
+
 }

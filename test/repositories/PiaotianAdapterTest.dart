@@ -5,6 +5,7 @@ import 'package:reader/models/BookEntry.dart';
 import 'package:reader/models/BookInfo.dart';
 import 'package:reader/models/ChapterContent.dart';
 import 'package:reader/models/ChapterList.dart';
+import 'package:reader/models/NewBook.dart';
 import 'package:reader/repositories/network/PiaotianAdapter.dart';
 import 'package:reader/repositories/network/ReaderHttpClient.dart';
 
@@ -119,9 +120,9 @@ void main() {
   });
 
   group('parse book entry', () {
-    final bookEntry = BookEntry((b) =>
+    final newBook = NewBook((b) =>
     b
-      ..id = 'piaotian-9-9054'
+      ..bookId = 'piaotian-9-9054'
       ..bookName = '大道朝天'
       ..bookInfoUrl = Uri.parse('https://www.piaotian.com/bookinfo/9/9054.html')
       ..chapterListUrl = Uri.parse('https://www.piaotian.com/html/9/9054/')
@@ -130,19 +131,19 @@ void main() {
     test('should parse from book info page', () async {
       final entry = await adapter.fetchBookEntry(bookUrl);
 
-      expect(entry, equals(bookEntry));
+      expect(entry, equals(newBook));
     });
 
     test('should parse from chapter list', () async {
       final entry = await adapter.fetchBookEntry(menuUrl);
 
-      expect(entry, equals(bookEntry));
+      expect(entry, equals(newBook));
     });
 
     test('should parse from chapter content', () async {
       final entry = await adapter.fetchBookEntry(chapterUrl);
 
-      final builder = bookEntry.toBuilder();
+      final builder = newBook.toBuilder();
       builder.currentChapterUrl = chapterUrl;
 
       expect(entry, equals(builder.build()));

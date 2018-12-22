@@ -1,7 +1,7 @@
-import 'package:reader/models/BookEntry.dart';
 import 'package:reader/models/BookInfo.dart';
 import 'package:reader/models/ChapterContent.dart';
 import 'package:reader/models/ChapterList.dart';
+import 'package:reader/models/NewBook.dart';
 import 'package:reader/repositories/network/PiaotianAdapter.dart';
 import 'package:reader/repositories/network/ReaderHttpClient.dart';
 import 'package:reader/repositories/network/SiteAdapter.dart';
@@ -13,13 +13,11 @@ class BookRepository {
     'www.piaotian.com': PiaotianAdapter(client)
   };
 
-  static Future<BookEntry> fetchBookEntry(Uri url) =>
+  static Future<NewBook> fetchBookEntry(Uri url) =>
       _findAdapter(url).fetchBookEntry(url);
 
-  static Future<BookEntry> fetchBookEntryByUrlString(String url) async {
-    Uri uri = Uri.parse(url);
-    return _findAdapter(uri).fetchBookEntry(uri);
-  }
+  static Future<NewBook> createBookByUrlString(String url) =>
+      _findAdapter(Uri.parse(url)).fetchBookEntry(Uri.parse(url));
 
   static Future<ChapterContent> fetchChapterContent(Uri url, [String title]) =>
       _findAdapter(url).fetchChapterContent(url);

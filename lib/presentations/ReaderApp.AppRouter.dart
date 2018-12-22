@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:reader/models/BookEntry.dart';
 import 'package:reader/presentations/screens/BookInfoScreen.dart';
 import 'package:reader/presentations/screens/BookListScreen.dart';
 import 'package:reader/presentations/screens/ChapterListScreen.dart';
 import 'package:reader/presentations/screens/NotFoudnScreen.dart';
 import 'package:reader/presentations/screens/ReadingScreen.dart';
-import 'package:reader/presentations/wrappers/ContentLoader.dart';
-import 'package:reader/repositories/settings/BookEntryRepository.dart';
-import 'package:reader/viewModels/BookEntryList.dart';
+import 'package:reader/repositories/settings/BookIndexRepository.dart';
 
 class AppRouter {
   get initialRoute => rootPath;
@@ -36,23 +33,33 @@ class AppRouter {
   static const _bookIdKey = 'bookId';
   static const _contentUrlKey = 'contentUrl';
 
-  static String buildBookPath(String pathName, String bookId) =>
-      Uri(path: pathName, queryParameters: {_bookIdKey: bookId}).toString();
-
-  static Future<Object> openBookInfo(BuildContext context, BookEntry entry) =>
+  static Future<Object> openBookInfo(BuildContext context, String bookId) =>
       Navigator.pushNamed(
-          context, AppRouter.buildBookPath(AppRouter.bookInfoPath, entry.id));
+          context, Uri(path: AppRouter.bookInfoPath,
+          queryParameters: {AppRouter._bookIdKey: bookId}).toString());
 
-  static Future<Object> openBookChapters(BuildContext context, BookEntry entry) =>
-      Navigator.pushNamed(context,
-          AppRouter.buildBookPath(AppRouter.bookChaptersPath, entry.id));
+  static Future<Object> openBookChapters(BuildContext context, String bookId,
+      {bool openReaderIfPossible: false}) {
+    Future<Object> originalResult =
+    Navigator.pushNamed(
+        context, Uri(path: AppRouter.bookChaptersPath,
+        queryParameters: {AppRouter._bookIdKey: bookId}).toString());
 
-  static Future<Object> openBookReader(BuildContext context, BookEntry entry,
+    if (openReaderIfPossible &&
+        BookIndexRepository.hasCurrentChapterUrl(bookId)) {
+      openBookReader(
+          context, bookId, BookIndexRepository.loadCurrentChapter(bookId));
+    }
+
+    return originalResult;
+  }
+
+  static Future<Object> openBookReader(BuildContext context, String bookId,
       Uri chapterContentUrl) =>
       Navigator.pushNamed(
           context, Uri(path: AppRouter.bookReaderPath,
           queryParameters: {
-            _bookIdKey: entry.id,
+            _bookIdKey: bookId,
             _contentUrlKey: chapterContentUrl.toString()
           }).toString());
 
@@ -63,15 +70,12 @@ class AppRouter {
       MaterialPageRoute(builder: builder);
 
   Route buildBookList() =>
-      buildRoute((BuildContext context) => ContentLoader<BookEntryList>(
-          future: BookEntryList.create(),
-          render: (BuildContext context, BookEntryList entryList) =>
-              BookListScreen(entryList)));
+      buildRoute((BuildContext context) => BookListScreen());
 
   Route buildBookInfo(Uri uri) =>
       buildRoute((BuildContext context) =>
           BookInfoScreen(
-              bookEntry: BookEntryRepository.fetchEntry(uri.queryParameters[_bookIdKey])
+              bookId: uri.queryParameters[_bookIdKey]
           )
       );
 
@@ -83,8 +87,7 @@ class AppRouter {
   Route buildReader(Uri uri) =>
       buildRoute((BuildContext context) =>
           ReadingScreen(
-              bookEntry: BookEntryRepository.fetchEntry(
-                  uri.queryParameters[_bookIdKey]),
+              bookId: uri.queryParameters[_bookIdKey],
               contentUrl: Uri.parse(uri.queryParameters[_contentUrlKey])
           )
       );
