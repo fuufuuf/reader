@@ -206,6 +206,7 @@ class PiaotianAdapter extends SiteAdapter {
             .where((node) => node.nodeType == Node.TEXT_NODE)
             .map((node) => node.text.trim())
             .where((text) => text.isNotEmpty)
+                .map((text) => '    ' + text)
       ))
     );
   }
