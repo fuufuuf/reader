@@ -14,9 +14,7 @@ class BookInfoScreen extends StatelessWidget {
       :
         bookIndex = BookIndex.load(bookId),
         controller = ContentController(
-          initialFuture: BookRepository.fetchFromUrl(BookIndex
-              .load(bookId)
-              .bookInfoUrl),
+          initialFuture: BookRepository.fetchBookInfo(BookIndex.load(bookId).bookInfoUrl),
         ),
         super(key: key);
 
