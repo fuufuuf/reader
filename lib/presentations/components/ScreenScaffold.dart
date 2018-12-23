@@ -6,12 +6,14 @@ class ScreenScaffold extends StatelessWidget {
   final Widget floatingActionButton;
   final String title;
   final Widget titleWidget;
+  final Widget appBarBottom;
   final Iterable<Widget> appBarActions;
   final Widget body;
 
   ScreenScaffold({
     this.title,
     this.titleWidget,
+    this.appBarBottom,
     this.appBarActions,
     this.body,
     this.floatingActionButton,
@@ -27,9 +29,9 @@ class ScreenScaffold extends StatelessWidget {
   Widget _renderAppBar(BuildContext context) =>
       AppBar(
           title: _renderTitle(context),
-        actions: _renderAppBarActions(context)
+        actions: _renderAppBarActions(context),
+        bottom: appBarBottom,
     );
-
 
   Widget _renderTitle(BuildContext context) {
     return titleWidget ?? Text(title);

@@ -90,5 +90,4 @@ class _BookListScreenState extends State<BookListScreen> {
       onPressed: () async {
         _addBookEntry(await AddBookDialog.show(context));
       });
-
 }

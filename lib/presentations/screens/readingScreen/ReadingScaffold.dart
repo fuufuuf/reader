@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reader/presentations/components/ThemeRender.dart';
 import 'package:reader/presentations/screens/readingScreen/SimpleStatusBar.dart';
 import 'package:reader/viewModels/ReadingTheme.dart';
 
@@ -52,14 +53,7 @@ class ReadingScaffold extends StatelessWidget {
 
   Widget _renderTheme({Widget child}) {
     if (readingTheme != null) {
-      final textStyle = TextStyle(color: readingTheme.textColor);
-      return DefaultTextStyle.merge(
-          style: textStyle,
-          child: IconTheme.merge(
-            data: IconThemeData(
-                size: textStyle.fontSize, color: readingTheme.textColor),
-            child: child,
-          ));
+      return ThemeRender(theme: readingTheme, child: child);
     } else {
       return child;
     }

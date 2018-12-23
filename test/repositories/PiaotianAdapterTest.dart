@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:reader/models/BookEntry.dart';
 import 'package:reader/models/BookInfo.dart';
 import 'package:reader/models/ChapterContent.dart';
 import 'package:reader/models/ChapterList.dart';

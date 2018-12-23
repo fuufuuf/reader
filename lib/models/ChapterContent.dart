@@ -39,7 +39,4 @@ abstract class ChapterContent
 
   Future<ChapterContent> fetchNextChapter() =>
       BookRepository.fetchChapterContent(nextChapterUrl);
-
-
-
 }
