@@ -23,7 +23,7 @@ class ReadingScreen extends StatefulWidget {
 }
 
 class _ReadingScreenState extends State<ReadingScreen> {
-  static const double threshold = 150;
+  static const double threshold = 100;
 
   final BookIndex bookIndex;
 
