@@ -4,13 +4,16 @@ import 'package:reader/presentations/screens/readingScreen/SimpleStatusBar.dart'
 import 'package:reader/viewModels/ReadingTheme.dart';
 
 typedef void GestureCallback(BuildContext context);
+typedef void GestureCalbackWithPos(BuildContext context, Offset position);
 
 class ReadingScaffold extends StatelessWidget {
   final ReadingTheme readingTheme;
   final Widget content;
   final GestureCallback onDoubleTap;
+  final GestureCalbackWithPos onTapWithPos;
 
-  ReadingScaffold({this.readingTheme, this.content, this.onDoubleTap});
+  ReadingScaffold(
+      {this.readingTheme, this.content, this.onDoubleTap, this.onTapWithPos});
 
   @override
   Widget build(BuildContext context) =>
@@ -43,6 +46,11 @@ class ReadingScaffold extends StatelessWidget {
             ? null
             : () {
           onDoubleTap(context);
+        },
+        onTapUp: onTapWithPos == null
+            ? null
+            : (TapUpDetails tapDetails) {
+          onTapWithPos(context, tapDetails.globalPosition);
         },
         child: child,
       );
