@@ -1,42 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:reader/repositories/settings/ThemeRepository.dart';
 
 class ReadingTheme {
-  static const defaultFontSize = 14.0;
 
   final Color textColor;
-
   final Color backgroundColor;
-
   final double fontSize;
-
-  final Color popUpMenuBackground;
-
-  final Color popUpMenuTextColor;
+  final Color popUpBackgroundColor;
+  final Color popUpTextColor;
 
   final TextStyle readingTextStyle;
   final TextStyle statusBarTextStyle;
   final IconThemeData statusBarIconStyle;
   final TextStyle popUpMenuTextStyle;
+  final IconThemeData popUpMenuIconStyle;
 
-  ReadingTheme(
-      {this.textColor, this.backgroundColor, this.fontSize = defaultFontSize, this.popUpMenuTextColor, this.popUpMenuBackground})
+  ReadingTheme({
+    this.textColor,
+    this.backgroundColor,
+    this.fontSize,
+    this.popUpTextColor,
+    this.popUpBackgroundColor
+  })
       :
         readingTextStyle = TextStyle(color: textColor, fontSize: fontSize),
         statusBarTextStyle = TextStyle(color: textColor),
         statusBarIconStyle = IconThemeData(color: textColor),
-        popUpMenuTextStyle = TextStyle(color: popUpMenuTextColor);
+        popUpMenuTextStyle = TextStyle(color: popUpTextColor),
+        popUpMenuIconStyle = IconThemeData(color: popUpTextColor);
 
-  static final ReadingTheme dayTheme = ReadingTheme(
-      textColor: Colors.black,
-      backgroundColor: const Color.fromARGB(255, 210, 180, 140),
-      popUpMenuBackground: Color.fromARGB(80, 0, 0, 0),
-      popUpMenuTextColor: Colors.white70
-  );
+  static ReadingTheme loadDayTheme() =>
+      ThemeRepository.fetchTheme(
+          ThemeRepository.dayTheme);
 
-  static final ReadingTheme nightTheme = ReadingTheme(
-    textColor: Colors.white24,
-    backgroundColor: Colors.black,
-    popUpMenuBackground: Color.fromARGB(80, 0, 0, 0),
-    popUpMenuTextColor: Colors.white24,
-  );
+  static ReadingTheme nightTheme() =>
+      ThemeRepository.fetchTheme(
+          ThemeRepository.nightTheme);
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reader/presentations/ReaderApp.AppRouter.dart';
 import 'package:reader/presentations/wrappers/ReadingThemeProvider.dart';
+import 'package:reader/repositories/settings/ThemeRepository.dart';
 import 'package:reader/viewModels/ReadingTheme.dart';
 
 class ReaderApp extends StatefulWidget {
@@ -11,25 +12,39 @@ class ReaderApp extends StatefulWidget {
 
 class _ReaderAppState extends State<ReaderApp> {
   bool nightMode;
+  ReadingTheme currentTheme;
+
   AppRouter _appRouter;
 
-  ReadingTheme get currentTheme =>
-      nightMode ? ReadingTheme.nightTheme : ReadingTheme.dayTheme;
-
-  _ReaderAppState(this.nightMode) :
-        _appRouter= AppRouter();
+  _ReaderAppState(this.nightMode) {
+    _appRouter = AppRouter();
+    reloadTheme();
+  }
 
   void toggleNightMode() {
-    this.setState(() {
-      nightMode = !nightMode;
-    });
+    nightMode = !nightMode;
+    reloadTheme();
   }
+
+  void reloadTheme() {
+    final themeId = nightMode ? ThemeRepository.nightTheme : ThemeRepository
+        .dayTheme;
+
+    currentTheme = ThemeRepository.fetchTheme(themeId);
+  }
+
+
+  VoidCallback wrap(VoidCallback callback) =>
+          () {
+        setState(callback);
+      };
 
   @override
   Widget build(BuildContext context) =>
       ReadingThemeProvider(
           theme: currentTheme,
-          toggleNightModeApi: toggleNightMode,
+          toggleNightModeApi: wrap(toggleNightMode),
+          reloadThemeApi: wrap(reloadTheme),
           child: _renderApp()
       );
 

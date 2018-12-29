@@ -1,59 +1,118 @@
 import 'package:flutter/material.dart';
+import 'package:reader/models/ChapterContent.dart';
 import 'package:reader/presentations/screens/ReadingScreen.dart';
 import 'package:reader/presentations/wrappers/ReadingThemeProvider.dart';
+import 'package:reader/repositories/settings/ThemeRepository.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ReadingPopUpMenu extends StatefulWidget {
-  final ReadingScreenState _parentState;
+  final ReadingScreenState parentState;
 
-  ReadingPopUpMenu(this._parentState);
+  ReadingPopUpMenu(this.parentState);
 
   @override
-  State<StatefulWidget> createState() => _ReadingPopUpMenuState(_parentState);
+  State<StatefulWidget> createState() => _ReadingPopUpMenuState();
 }
 
 class _ReadingPopUpMenuState extends State<ReadingPopUpMenu> {
-  final ReadingScreenState _parentState;
+  ChapterContent get chapterContent => widget.parentState.currentContent;
 
-  _ReadingPopUpMenuState(this._parentState);
+  ValueNotifier<int> currentFontSizeIndex;
+
+  static const fontSizeOptions = <String>[
+    "字号 小",
+    "字号 中",
+    "字号 大",
+    "字号 加大",
+    "字号 超大",
+  ];
+
+  static const fontSizes = <double>[
+    8.0,
+    14.0,
+    24.0,
+    32.0,
+    48.0,
+  ];
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    _initFontSize();
+  }
+
+  void _initFontSize() {
+    final theme = ReadingThemeProvider.of(context);
+    final initialIndex = fontSizes.indexOf(theme.fontSize);
+
+    currentFontSizeIndex = ValueNotifier<int>(initialIndex);
+
+    currentFontSizeIndex.addListener(() async {
+      final fontSize = fontSizes[currentFontSizeIndex.value];
+      await ThemeRepository.saveFontSize(fontSize);
+
+      setState(() {
+        ReadingThemeProvider.reloadTheme(context);
+      });
+
+      _dismissPopUp();
+    });
+  }
+
+  void _dismissPopUp() => Navigator.of(context).pop();
 
   @override
   Widget build(BuildContext context) => PopUpMenuContainer(
-          child: GridView.count(crossAxisCount: 2, children: <Widget>[
+      child:
+      GridView.count(
+          crossAxisCount: 2,
+          children: <Widget>[
         PopUpMenuButton(
           text: "章节目录",
-          onTap: () {
-            Navigator.of(context).pop();
-            Navigator.of(context).pop();
-          },
+          onTap: _onBackToChapterList,
         ),
         PopUpMenuButton(
           text: "夜晚模式",
-          onTap: () {
-            ReadingThemeProvider.toggleNightMode(context);
-            Navigator.of(context).pop();
-          },
+          onTap: _onToggleNightMode,
         ),
-        PopUpMenuButton(
-          text: "字号",
+        PopUpSlider(
+          options: fontSizeOptions,
+          selected: currentFontSizeIndex,
         ),
         PopUpMenuButton(
             text: "浏览器中打开",
-            onTap: () async {
-              Navigator.of(context).pop();
+          enabled: chapterContent != null,
+          onTap: _onOpenInExternalBrowser,
+        ),
+          ]
+      )
+  );
 
-              if (_parentState.currentContent == null) {
-                return;
-              }
+  void _onBackToChapterList() {
+    _dismissPopUp();
+    Navigator.of(context).pop();
+  }
 
-              final urlString = _parentState.currentContent.url.toString();
+  void _onToggleNightMode() {
+    _dismissPopUp();
+    ReadingThemeProvider.toggleNightMode(context);
+  }
 
-              if (await canLaunch(urlString)) {
-                await launch(urlString,
-                    forceSafariVC: false, forceWebView: false);
-              }
-            }),
-      ]));
+  void _onOpenInExternalBrowser() async {
+    _dismissPopUp();
+
+    if (chapterContent == null) {
+      return;
+    }
+
+    final urlString = chapterContent.url.toString();
+
+    if (await canLaunch(urlString)) {
+      await launch(urlString,
+          forceSafariVC: false, forceWebView: false);
+    }
+  }
 }
 
 class PopUpMenuContainer extends StatelessWidget {
@@ -75,7 +134,7 @@ class PopUpMenuContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final edgeInsets = MediaQuery
         .of(context)
-        .viewInsets + EdgeInsets.all(100);
+        .viewInsets + EdgeInsets.all(150);
     final theme = ReadingThemeProvider.of(context);
     return Center(
       child: ConstrainedBox(
@@ -83,39 +142,106 @@ class PopUpMenuContainer extends StatelessWidget {
             width: edgeInsets.horizontal, height: edgeInsets.vertical),
         child: Material(
           elevation: 24.0,
-          color: theme.popUpMenuBackground,
+            color: theme.popUpBackgroundColor,
           type: MaterialType.card,
           shape: shape,
           child: DefaultTextStyle(
               style: theme.popUpMenuTextStyle,
-              child: child
-          ),
+              child: IconTheme.merge(
+                  data: theme.popUpMenuIconStyle,
+                  child: child
+              )
+          )
         ),
       ),
     );
   }
 }
 
-//final theme = ReadingThemeProvider.of(context);
-//ReadingThemeProvider.switchTheme(context, !theme.isNightMode);
-
 class PopUpMenuButton extends StatelessWidget {
   final String text;
-
+  final bool enabled;
   final GestureTapCallback onTap;
 
-  const PopUpMenuButton({Key key, this.text, this.onTap}) : super(key: key);
+  const PopUpMenuButton({Key key, this.text, this.enabled = true, this.onTap})
+      : super(key: key);
+
+  Decoration _renderDecoration(BuildContext context) =>
+      BoxDecoration(
+          border: Border.all(
+              color: ReadingThemeProvider
+                  .of(context)
+                  .popUpTextColor,
+              width: 1
+          )
+      );
 
   @override
   Widget build(BuildContext context) => InkWell(
-        onTap: onTap,
-        child: Container(
-          alignment: Alignment.center,
-          decoration:
-          BoxDecoration(border: Border.all(color: ReadingThemeProvider
-              .of(context)
-              .popUpMenuTextColor, width: 1)),
-          child: Text(text),
-        ),
+    onTap: enabled ? onTap : null,
+    child: Container(
+      alignment: Alignment.center,
+      decoration: _renderDecoration(context),
+      child: Text(text),
+    ),
+  );
+}
+
+class PopUpSlider extends StatelessWidget {
+  final List<String> options;
+  final ValueNotifier<int> selected;
+
+  const PopUpSlider({Key key, this.options, this.selected})
+      : super(key: key);
+
+  Decoration _renderDecoration(BuildContext context) =>
+      BoxDecoration(
+          border: Border.all(
+              color: ReadingThemeProvider
+                  .of(context)
+                  .popUpTextColor,
+              width: 1
+          )
       );
+
+  @override
+  Widget build(BuildContext context) =>
+      Container(
+          alignment: Alignment.center,
+          decoration: _renderDecoration(context),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                InkWell(
+                  onTap: _renderOnIncrease(),
+                  child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Icon(Icons.add)
+                  ),
+                ),
+                Text(options[selected.value]),
+                InkWell(
+                  onTap: _renderOnDecrease(),
+                  child: Container(
+                      padding: EdgeInsets.all(16),
+                      child: Icon(Icons.remove)
+                  ),
+                ),
+              ]
+
+          )
+
+      );
+
+  GestureTapCallback _renderOnIncrease() =>
+      selected.value < options.length - 1 ? () {
+        selected.value = selected.value + 1;
+      }
+          : null;
+
+  GestureTapCallback _renderOnDecrease() =>
+      selected.value > 0 ? () {
+        selected.value = selected.value - 1;
+      }
+          : null;
 }

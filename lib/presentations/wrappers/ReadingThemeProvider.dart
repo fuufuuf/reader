@@ -1,26 +1,35 @@
 import 'package:flutter/widgets.dart';
 import 'package:reader/viewModels/ReadingTheme.dart';
 
-typedef void ToggleNightModeCallback();
+typedef void ThemeCallback();
 
 class ReadingThemeProvider extends InheritedWidget {
   final ReadingTheme theme;
-  final ToggleNightModeCallback toggleNightModeApi;
+  final ThemeCallback toggleNightModeApi;
+  final ThemeCallback reloadThemeApi;
 
-  ReadingThemeProvider(
-      {Key key, this.theme, this.toggleNightModeApi, Widget child})
-      : super(key: key, child: child);
+  ReadingThemeProvider({
+    Key key,
+    this.theme,
+    this.toggleNightModeApi,
+    this.reloadThemeApi,
+    Widget child
+  }) : super(key: key, child: child);
 
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) =>
       (oldWidget as ReadingThemeProvider).theme == theme;
 
-  static ReadingTheme of(BuildContext context) =>
+  static ReadingThemeProvider _provider(BuildContext context) =>
       (context.inheritFromWidgetOfExactType(
-          ReadingThemeProvider) as ReadingThemeProvider).theme;
+          ReadingThemeProvider) as ReadingThemeProvider);
+
+  static ReadingTheme of(BuildContext context) =>
+      _provider(context).theme;
 
   static void toggleNightMode(BuildContext context) =>
-      (context.inheritFromWidgetOfExactType(
-          ReadingThemeProvider) as ReadingThemeProvider)
-          .toggleNightModeApi();
+      _provider(context).toggleNightModeApi();
+
+  static void reloadTheme(BuildContext context) =>
+      _provider(context).reloadThemeApi();
 }
