@@ -40,7 +40,7 @@ class _AddBookDialogState extends State<AddBookDialog> {
 
   @override
   Widget build(BuildContext context) => ScreenScaffold(
-      title: 'Add new book',
+      title: '添加新书',
       body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           child: Form(child: _renderForm(context))
@@ -53,7 +53,7 @@ class _AddBookDialogState extends State<AddBookDialog> {
         children: <Widget>[
           TextFormField(
             decoration: InputDecoration(
-                labelText: "Book Url",
+                labelText: "新书 Url",
                 suffixIcon: IconButton(
                   icon: Icon(Icons.clear),
                   onPressed: () {
@@ -80,14 +80,14 @@ class _AddBookDialogState extends State<AddBookDialog> {
                     FlatButton(
                       padding: EdgeInsets.symmetric(
                           vertical: 8, horizontal: 16),
-                      child: Text('refresh'),
+                      child: Text('加载'),
                       onPressed: _loadBookEntry,
                     ),
                     RaisedButton(
                         padding: EdgeInsets.symmetric(
                             vertical: 8, horizontal: 16),
                         textTheme: ButtonTextTheme.primary,
-                        child: Text('Submit'),
+                        child: Text('添加'),
                         onPressed: submitBookEntry
                     )
                   ],
@@ -135,7 +135,7 @@ class _AddBookDialogState extends State<AddBookDialog> {
             _renderEntryItem(Icons.book, newBook.bookInfoUrl.toString()),
             _renderEntryItem(Icons.list, newBook.chapterListUrl.toString()),
             _renderEntryItem(Icons.bookmark_border,
-                newBook.currentChapterUrl?.toString() ?? "<N/A>")
+                newBook.currentChapterUrl?.toString() ?? "<未知>")
           ]
       );
 

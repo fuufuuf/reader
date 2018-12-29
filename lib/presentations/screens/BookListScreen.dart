@@ -30,7 +30,7 @@ class _BookListScreenState extends State<BookListScreen> {
 
   @override
   Widget build(BuildContext context) => ScreenScaffold(
-      title: 'Books',
+      title: '书架',
       body: ListView.builder(
           itemBuilder: (context, index) =>
               _renderBookItem(context, bookIndexes[index]),
@@ -62,7 +62,7 @@ class _BookListScreenState extends State<BookListScreen> {
             color: Colors.redAccent,
             alignment: Alignment.centerRight,
             padding: EdgeInsets.only(right: 16),
-            child: Text('Swipe to remove',
+            child: Text('滑动删除',
                 style: TextStyle(
                     color: Colors.white, fontWeight: FontWeight.bold)),
           ),
