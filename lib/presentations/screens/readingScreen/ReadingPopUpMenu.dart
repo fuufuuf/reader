@@ -44,7 +44,11 @@ class _ReadingPopUpMenuState extends State<ReadingPopUpMenu> {
 
   void _initFontSize() {
     final theme = ReadingThemeProvider.of(context);
-    final initialIndex = fontSizes.indexOf(theme.fontSize);
+    var initialIndex = fontSizes.indexOf(theme.fontSize);
+
+    if (initialIndex == -1) {
+      initialIndex = 1;
+    }
 
     currentFontSizeIndex = ValueNotifier<int>(initialIndex);
 
