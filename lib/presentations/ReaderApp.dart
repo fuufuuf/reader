@@ -6,21 +6,22 @@ import 'package:reader/viewModels/ReadingTheme.dart';
 class ReaderApp extends StatefulWidget {
   @override
   State<StatefulWidget> createState() =>
-      _ReaderAppState(ReadingTheme.defaultTheme);
+      _ReaderAppState(false);
 }
 
 class _ReaderAppState extends State<ReaderApp> {
-  ReadingTheme currentTheme;
+  bool nightMode;
   AppRouter _appRouter;
 
-  _ReaderAppState(this.currentTheme) :
+  ReadingTheme get currentTheme =>
+      nightMode ? ReadingTheme.nightTheme : ReadingTheme.dayTheme;
+
+  _ReaderAppState(this.nightMode) :
         _appRouter= AppRouter();
 
-  void updateTheme(bool nightMode) {
+  void toggleNightMode() {
     this.setState(() {
-      this.currentTheme = nightMode ?
-      ReadingTheme.darkTheme :
-      ReadingTheme.defaultTheme;
+      nightMode = !nightMode;
     });
   }
 
@@ -28,7 +29,7 @@ class _ReaderAppState extends State<ReaderApp> {
   Widget build(BuildContext context) =>
       ReadingThemeProvider(
           theme: currentTheme,
-          switchThemeApi: updateTheme,
+          toggleNightModeApi: toggleNightMode,
           child: _renderApp()
       );
 

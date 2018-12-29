@@ -30,9 +30,7 @@ class _ReadingPopUpMenuState extends State<ReadingPopUpMenu> {
         PopUpMenuButton(
           text: "夜晚模式",
           onTap: () {
-            final theme = ReadingThemeProvider.of(context);
-
-            ReadingThemeProvider.switchTheme(context, !theme.isNightMode);
+            ReadingThemeProvider.toggleNightMode(context);
             Navigator.of(context).pop();
           },
         ),
@@ -63,35 +61,33 @@ class PopUpMenuContainer extends StatelessWidget {
   final Curve insetAnimationCurve;
   final Widget child;
   final ShapeBorder shape;
-  final Color backgroundColor;
-  final TextStyle textStyle;
 
   PopUpMenuContainer({
     Key key,
     this.insetAnimationDuration = const Duration(milliseconds: 100),
     this.insetAnimationCurve = Curves.decelerate,
-    this.backgroundColor = const Color.fromARGB(80, 0, 0, 0),
     this.shape = const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(2.0))),
-    this.textStyle = const TextStyle(
-      color: Colors.white,
-    ),
     this.child,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var edgeInsets = MediaQuery.of(context).viewInsets + EdgeInsets.all(100);
+    final edgeInsets = MediaQuery
+        .of(context)
+        .viewInsets + EdgeInsets.all(100);
+    final theme = ReadingThemeProvider.of(context);
     return Center(
       child: ConstrainedBox(
         constraints: BoxConstraints.expand(
             width: edgeInsets.horizontal, height: edgeInsets.vertical),
         child: Material(
           elevation: 24.0,
-          color: backgroundColor,
+          color: theme.popUpMenuBackground,
           type: MaterialType.card,
           shape: shape,
-          child: DefaultTextStyle(style: textStyle, child: child),
+          child: DefaultTextStyle(
+              style: TextStyle(color: theme.popUpMenuTextColor), child: child),
         ),
       ),
     );
@@ -114,7 +110,9 @@ class PopUpMenuButton extends StatelessWidget {
         child: Container(
           alignment: Alignment.center,
           decoration:
-              BoxDecoration(border: Border.all(color: Colors.white, width: 1)),
+          BoxDecoration(border: Border.all(color: ReadingThemeProvider
+              .of(context)
+              .popUpMenuTextColor, width: 1)),
           child: Text(text),
         ),
       );
