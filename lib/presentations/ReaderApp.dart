@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:reader/presentations/ReaderApp.AppRouter.dart';
 import 'package:reader/presentations/wrappers/ReadingThemeProvider.dart';
 import 'package:reader/repositories/settings/ThemeRepository.dart';
-import 'package:reader/viewModels/ReadingTheme.dart';
+import 'package:reader/models/ReadingTheme.dart';
 
 class ReaderApp extends StatefulWidget {
   @override

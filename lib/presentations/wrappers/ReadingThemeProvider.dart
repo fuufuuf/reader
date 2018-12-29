@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:reader/viewModels/ReadingTheme.dart';
+import 'package:reader/models/ReadingTheme.dart';
 
 typedef void ThemeCallback();
 

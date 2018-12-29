@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:reader/viewModels/ReadingTheme.dart';
+import 'package:reader/models/ReadingTheme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeRepository {
