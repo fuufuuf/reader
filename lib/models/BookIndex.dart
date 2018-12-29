@@ -1,6 +1,11 @@
+import 'dart:core';
+
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
+import 'package:reader/models/BookInfo.dart';
+import 'package:reader/models/ChapterList.dart';
+import 'package:reader/repositories/network/BookRepository.dart';
 import 'package:reader/repositories/settings/BookIndexRepository.dart';
 
 part 'BookIndex.g.dart';
@@ -48,5 +53,9 @@ abstract class BookIndex implements Built<BookIndex, BookIndexBuilder> {
 
   static BuiltList<BookIndex> loadAll() => BookIndexRepository.loadAll();
 
+  Future<BookInfo> fetchBookInfo() =>
+      BookRepository.fetchBookInfo(bookInfoUrl);
 
+  Future<ChapterList> fetchChapterList() =>
+      BookRepository.fetchChapterList(chapterListUrl);
 }

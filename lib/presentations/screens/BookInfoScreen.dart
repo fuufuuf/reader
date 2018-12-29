@@ -3,27 +3,22 @@ import 'package:flutter/widgets.dart';
 import 'package:reader/models/BookIndex.dart';
 import 'package:reader/models/BookInfo.dart';
 import 'package:reader/presentations/components/ScreenScaffold.dart';
-import 'package:reader/presentations/wrappers/ContentOwner.dart';
-import 'package:reader/repositories/network/BookRepository.dart';
+import 'package:reader/presentations/wrappers/ContentLoader.dart';
 
 class BookInfoScreen extends StatelessWidget {
   final BookIndex bookIndex;
-  final ContentController<BookInfo> controller;
 
   BookInfoScreen({Key key, String bookId})
       :
         bookIndex = BookIndex.load(bookId),
-        controller = ContentController(
-          initialFuture: BookRepository.fetchBookInfo(BookIndex.load(bookId).bookInfoUrl),
-        ),
         super(key: key);
 
   @override
   Widget build(BuildContext context) =>
       ScreenScaffold(
         title: bookIndex.bookName,
-        body: ContentOwner<BookInfo>(
-            controller: controller,
+        body: ContentLoader<BookInfo>(
+            future: bookIndex.fetchBookInfo(),
             render: (BuildContext context, BookInfo bookInfo) =>
                 BookInfoView(bookInfo: bookInfo)
         ),

@@ -5,8 +5,7 @@ import 'package:reader/models/ChapterList.dart';
 import 'package:reader/models/ChapterRef.dart';
 import 'package:reader/presentations/ReaderApp.AppRouter.dart';
 import 'package:reader/presentations/components/ScreenScaffold.dart';
-import 'package:reader/presentations/wrappers/ContentOwner.dart';
-import 'package:reader/repositories/network/BookRepository.dart';
+import 'package:reader/presentations/wrappers/ContentLoader.dart';
 
 class ChapterListScreen extends StatelessWidget {
   final String bookId;
@@ -24,12 +23,9 @@ class ChapterListScreen extends StatelessWidget {
             AppRouter.openBookInfo(context, bookIndex.bookId);
           })
         ],
-        body: ContentOwner<ChapterList>(
-            controller: ContentController<ChapterList>(
-                initialFuture: BookRepository.fetchChapterList(
-                    bookIndex.chapterListUrl)
-            ),
-            render: (BuildContext context, ChapterList chapterList) =>
+      body: ContentLoader<ChapterList>(
+          future: bookIndex.fetchChapterList(),
+          render: (BuildContext context, ChapterList chapterList) =>
                 ChapterListView(bookIndex: bookIndex, chapterList: chapterList)
         ),
       );
