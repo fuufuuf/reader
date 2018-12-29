@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:reader/models/BookIndex.dart';
-import 'package:reader/models/ChapterList.dart';
-import 'package:reader/models/ChapterRef.dart';
-import 'package:reader/presentations/ReaderApp.AppRouter.dart';
-import 'package:reader/presentations/components/ScreenScaffold.dart';
-import 'package:reader/presentations/wrappers/ContentLoader.dart';
+import 'package:timnew_reader/models/BookIndex.dart';
+import 'package:timnew_reader/models/ChapterList.dart';
+import 'package:timnew_reader/models/ChapterRef.dart';
+import 'package:timnew_reader/presentations/ReaderApp.AppRouter.dart';
+import 'package:timnew_reader/presentations/components/ScreenScaffold.dart';
+import 'package:timnew_reader/presentations/wrappers/ContentLoader.dart';
 
 class ChapterListScreen extends StatelessWidget {
   final String bookId;

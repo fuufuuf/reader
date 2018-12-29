@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:reader/presentations/screens/BookInfoScreen.dart';
-import 'package:reader/presentations/screens/BookListScreen.dart';
-import 'package:reader/presentations/screens/ChapterListScreen.dart';
-import 'package:reader/presentations/screens/NotFoudnScreen.dart';
-import 'package:reader/presentations/screens/ReadingScreen.dart';
-import 'package:reader/repositories/settings/BookIndexRepository.dart';
+import 'package:timnew_reader/presentations/screens/BookInfoScreen.dart';
+import 'package:timnew_reader/presentations/screens/BookListScreen.dart';
+import 'package:timnew_reader/presentations/screens/ChapterListScreen.dart';
+import 'package:timnew_reader/presentations/screens/NotFoudnScreen.dart';
+import 'package:timnew_reader/presentations/screens/ReadingScreen.dart';
+import 'package:timnew_reader/repositories/settings/BookIndexRepository.dart';
 
 class AppRouter {
   get initialRoute => rootPath;

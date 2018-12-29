@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:reader/models/NewBook.dart';
-import 'package:reader/presentations/components/ScreenScaffold.dart';
-import 'package:reader/repositories/network/BookRepository.dart';
+import 'package:timnew_reader/models/NewBook.dart';
+import 'package:timnew_reader/presentations/components/ScreenScaffold.dart';
+import 'package:timnew_reader/repositories/network/BookRepository.dart';
 
 class AddBookDialog extends StatefulWidget {
   @override

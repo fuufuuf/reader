@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reader/repositories/settings/ThemeRepository.dart';
+import 'package:timnew_reader/repositories/settings/ThemeRepository.dart';
 
 class ReadingTheme {
 

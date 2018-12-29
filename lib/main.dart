@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:reader/presentations/ReaderApp.dart';
-import 'package:reader/repositories/settings/ThemeRepository.dart';
-import 'package:reader/repositories/settings/BookIndexRepository.dart';
+import 'package:timnew_reader/presentations/ReaderApp.dart';
+import 'package:timnew_reader/repositories/settings/ThemeRepository.dart';
+import 'package:timnew_reader/repositories/settings/BookIndexRepository.dart';
 
 void main() async {
   await ThemeRepository.init();

@@ -1,12 +1,12 @@
 import 'package:html/dom.dart';
-import 'package:reader/models/BookInfo.dart';
-import 'package:reader/models/ChapterContent.dart';
-import 'package:reader/models/ChapterList.dart';
-import 'package:reader/models/ChapterRef.dart';
-import 'package:reader/models/NewBook.dart';
-import 'package:reader/repositories/network/ReaderHttpClient.dart';
-import 'package:reader/repositories/network/SiteAdapter.dart';
-import 'package:reader/repositories/network/safeExtractors.dart';
+import 'package:timnew_reader/models/BookInfo.dart';
+import 'package:timnew_reader/models/ChapterContent.dart';
+import 'package:timnew_reader/models/ChapterList.dart';
+import 'package:timnew_reader/models/ChapterRef.dart';
+import 'package:timnew_reader/models/NewBook.dart';
+import 'package:timnew_reader/repositories/network/ReaderHttpClient.dart';
+import 'package:timnew_reader/repositories/network/SiteAdapter.dart';
+import 'package:timnew_reader/repositories/network/safeExtractors.dart';
 
 class PiaotianAdapter extends SiteAdapter {
   PiaotianAdapter(ReaderHttpClient client) :super(client);

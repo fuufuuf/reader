@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:reader/models/BookIndex.dart';
-import 'package:reader/models/BookInfo.dart';
-import 'package:reader/presentations/components/ScreenScaffold.dart';
-import 'package:reader/presentations/wrappers/ContentLoader.dart';
+import 'package:timnew_reader/models/BookIndex.dart';
+import 'package:timnew_reader/models/BookInfo.dart';
+import 'package:timnew_reader/presentations/components/ScreenScaffold.dart';
+import 'package:timnew_reader/presentations/wrappers/ContentLoader.dart';
 
 class BookInfoScreen extends StatelessWidget {
   final BookIndex bookIndex;

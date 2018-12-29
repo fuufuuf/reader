@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:built_collection/built_collection.dart';
-import 'package:reader/models/BookIndex.dart';
-import 'package:reader/models/serializers.dart';
+import 'package:timnew_reader/models/BookIndex.dart';
+import 'package:timnew_reader/models/serializers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BookIndexRepository {

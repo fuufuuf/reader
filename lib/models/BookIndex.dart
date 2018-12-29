@@ -3,10 +3,10 @@ import 'dart:core';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-import 'package:reader/models/BookInfo.dart';
-import 'package:reader/models/ChapterList.dart';
-import 'package:reader/repositories/network/BookRepository.dart';
-import 'package:reader/repositories/settings/BookIndexRepository.dart';
+import 'package:timnew_reader/models/BookInfo.dart';
+import 'package:timnew_reader/models/ChapterList.dart';
+import 'package:timnew_reader/repositories/network/BookRepository.dart';
+import 'package:timnew_reader/repositories/settings/BookIndexRepository.dart';
 
 part 'BookIndex.g.dart';
 

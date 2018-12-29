@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:reader/models/BookIndex.dart';
-import 'package:reader/models/ChapterContent.dart';
-import 'package:reader/presentations/components/readingScreen/ChapterContentView.dart';
-import 'package:reader/presentations/components/readingScreen/ReadingPopUpMenu.dart';
-import 'package:reader/presentations/components/readingScreen/ReadingScaffold.dart';
-import 'package:reader/presentations/wrappers/ContentLoader.dart';
-import 'package:reader/repositories/network/BookRepository.dart';
+import 'package:timnew_reader/models/BookIndex.dart';
+import 'package:timnew_reader/models/ChapterContent.dart';
+import 'package:timnew_reader/presentations/components/readingScreen/ChapterContentView.dart';
+import 'package:timnew_reader/presentations/components/readingScreen/ReadingPopUpMenu.dart';
+import 'package:timnew_reader/presentations/components/readingScreen/ReadingScaffold.dart';
+import 'package:timnew_reader/presentations/wrappers/ContentLoader.dart';
+import 'package:timnew_reader/repositories/network/BookRepository.dart';
 import 'package:screen/screen.dart';
 
 class ReadingScreen extends StatefulWidget {

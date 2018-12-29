@@ -1,5 +1,5 @@
 import 'package:built_value/built_value.dart';
-import 'package:reader/models/BookIndex.dart';
+import 'package:timnew_reader/models/BookIndex.dart';
 
 part 'NewBook.g.dart';
 

@@ -1,10 +1,10 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
-import 'package:reader/models/BookIndex.dart';
-import 'package:reader/models/NewBook.dart';
-import 'package:reader/presentations/ReaderApp.AppRouter.dart';
-import 'package:reader/presentations/components/ScreenScaffold.dart';
-import 'package:reader/presentations/screens/AddBookDialog.dart';
+import 'package:timnew_reader/models/BookIndex.dart';
+import 'package:timnew_reader/models/NewBook.dart';
+import 'package:timnew_reader/presentations/ReaderApp.AppRouter.dart';
+import 'package:timnew_reader/presentations/components/ScreenScaffold.dart';
+import 'package:timnew_reader/presentations/screens/AddBookDialog.dart';
 
 class BookListScreen extends StatefulWidget {
   BookListScreen();

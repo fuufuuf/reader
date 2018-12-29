@@ -4,7 +4,7 @@ import 'package:battery/battery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:reader/presentations/wrappers/ReadingThemeProvider.dart';
+import 'package:timnew_reader/presentations/wrappers/ReadingThemeProvider.dart';
 
 class SimpleStatusBar extends StatefulWidget {
   @override

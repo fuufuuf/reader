@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:reader/models/ChapterContent.dart';
+import 'package:timnew_reader/models/ChapterContent.dart';
 
 class ChapterContentView extends StatelessWidget {
   final ChapterContent chapter;

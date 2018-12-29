@@ -1,7 +1,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
-import 'package:reader/models/ChapterList.dart';
-import 'package:reader/repositories/network/BookRepository.dart';
+import 'package:timnew_reader/models/ChapterList.dart';
+import 'package:timnew_reader/repositories/network/BookRepository.dart';
 
 part 'ChapterContent.g.dart';
 

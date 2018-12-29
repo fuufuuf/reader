@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:reader/models/ChapterContent.dart';
-import 'package:reader/presentations/screens/ReadingScreen.dart';
-import 'package:reader/presentations/wrappers/ReadingThemeProvider.dart';
-import 'package:reader/repositories/settings/ThemeRepository.dart';
+import 'package:timnew_reader/models/ChapterContent.dart';
+import 'package:timnew_reader/presentations/screens/ReadingScreen.dart';
+import 'package:timnew_reader/presentations/wrappers/ReadingThemeProvider.dart';
+import 'package:timnew_reader/repositories/settings/ThemeRepository.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ReadingPopUpMenu extends StatefulWidget {
