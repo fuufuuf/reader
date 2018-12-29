@@ -18,7 +18,7 @@ abstract class SiteAdapter {
 
   Future<Type> fetchResourceType(Uri url);
 
-  Future<NewBook> fetchBookEntry(Uri url) ;
+  Future<NewBook> createBook(Uri url) ;
 
   Future<Object> fetchFromUrl(Uri url) async {
     switch (await fetchResourceType(url)) {

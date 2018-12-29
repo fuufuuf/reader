@@ -13,11 +13,11 @@ class BookRepository {
     'www.piaotian.com': PiaotianAdapter(client)
   };
 
-  static Future<NewBook> fetchBookEntry(Uri url) =>
-      _findAdapter(url).fetchBookEntry(url);
+  static Future<NewBook> createBook(Uri url) =>
+      _findAdapter(url).createBook(url);
 
   static Future<NewBook> createBookByUrlString(String url) =>
-      _findAdapter(Uri.parse(url)).fetchBookEntry(Uri.parse(url));
+      _findAdapter(Uri.parse(url)).createBook(Uri.parse(url));
 
   static Future<ChapterContent> fetchChapterContent(Uri url, [String title]) =>
       _findAdapter(url).fetchChapterContent(url);

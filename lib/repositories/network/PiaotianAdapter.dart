@@ -43,7 +43,7 @@ class PiaotianAdapter extends SiteAdapter {
   }
 
   @override
-  Future<NewBook> fetchBookEntry(Uri url) async {
+  Future<NewBook> createBook(Uri url) async {
     final content = await fetchFromUrl(url);
 
     if (content is BookInfo) {

@@ -128,19 +128,19 @@ void main() {
     );
 
     test('should parse from book info page', () async {
-      final entry = await adapter.fetchBookEntry(bookUrl);
+      final entry = await adapter.createBook(bookUrl);
 
       expect(entry, equals(newBook));
     });
 
     test('should parse from chapter list', () async {
-      final entry = await adapter.fetchBookEntry(menuUrl);
+      final entry = await adapter.createBook(menuUrl);
 
       expect(entry, equals(newBook));
     });
 
     test('should parse from chapter content', () async {
-      final entry = await adapter.fetchBookEntry(chapterUrl);
+      final entry = await adapter.createBook(chapterUrl);
 
       final builder = newBook.toBuilder();
       builder.currentChapterUrl = chapterUrl;
