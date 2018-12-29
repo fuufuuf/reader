@@ -175,7 +175,7 @@ class ReadingScreenState extends State<ReadingScreen> {
   void _onDoubleTap(BuildContext context) {
     showDialog(
         context: context,
-        barrierDismissible: false,
+        barrierDismissible: true,
         builder: (BuildContext dialogContext) =>
             ReadingPopUpMenu(this)
     );

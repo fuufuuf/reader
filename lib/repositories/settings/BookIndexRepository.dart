@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:built_collection/built_collection.dart';
 import 'package:reader/models/BookIndex.dart';
 import 'package:reader/models/serializers.dart';
-import 'package:reader/repositories/settings/BookEntryRepository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BookIndexRepository {
@@ -13,8 +12,6 @@ class BookIndexRepository {
   static Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
     _bookIds = _loadBookIds();
-
-    await BookEntryRepository.initAndMigrate(_prefs);
   }
 
   static const String _bookIdsKey = 'bookIds';
