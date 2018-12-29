@@ -89,6 +89,16 @@ class _ReadingPopUpMenuState extends State<ReadingPopUpMenu> {
           enabled: chapterContent != null,
           onTap: _onOpenInExternalBrowser,
         ),
+        PopUpMenuButton(
+          text: "前一章节",
+          enabled: chapterContent.hasPrevious,
+          onTap: _gotoPreviousChapter,
+        ),
+        PopUpMenuButton(
+          text: "后一章节",
+          enabled: chapterContent.hasNext,
+          onTap: _gotoNextChapter,
+        ),
           ]
       )
   );
@@ -117,6 +127,24 @@ class _ReadingPopUpMenuState extends State<ReadingPopUpMenu> {
           forceSafariVC: false, forceWebView: false);
     }
   }
+
+  void _gotoPreviousChapter() {
+    _dismissPopUp();
+
+    widget.parentState.setState(() {
+      widget.parentState.future =
+          widget.parentState.loadContent(chapterContent.previousChapterUrl);
+    });
+  }
+
+  void _gotoNextChapter() {
+    _dismissPopUp();
+
+    widget.parentState.setState(() {
+      widget.parentState.future =
+          widget.parentState.loadContent(chapterContent.nextChapterUrl);
+    });
+  }
 }
 
 class PopUpMenuContainer extends StatelessWidget {
@@ -138,7 +166,7 @@ class PopUpMenuContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final edgeInsets = MediaQuery
         .of(context)
-        .viewInsets + EdgeInsets.all(150);
+        .viewInsets + EdgeInsets.symmetric(horizontal: 140, vertical: 210);
     final theme = ReadingThemeProvider.of(context);
     return Center(
       child: ConstrainedBox(
