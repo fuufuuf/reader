@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:reader/models/BookIndex.dart';
 import 'package:reader/models/ChapterContent.dart';
 import 'package:reader/presentations/screens/readingScreen/ChapterContentView.dart';
+import 'package:reader/presentations/screens/readingScreen/ReadingPopUpMenu.dart';
 import 'package:reader/presentations/screens/readingScreen/ReadingScaffold.dart';
 import 'package:reader/presentations/wrappers/ContentLoader.dart';
 import 'package:reader/presentations/wrappers/ReadingThemeProvider.dart';
@@ -19,10 +20,10 @@ class ReadingScreen extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() =>
-      _ReadingScreenState(BookIndex.load(bookId), contentUrl);
+      ReadingScreenState(BookIndex.load(bookId), contentUrl);
 }
 
-class _ReadingScreenState extends State<ReadingScreen> {
+class ReadingScreenState extends State<ReadingScreen> {
   static const double threshold = 100;
 
   final BookIndex bookIndex;
@@ -33,7 +34,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
   double _loadNextResistance = 0;
   Uri _urlToLoadNext;
 
-  _ReadingScreenState(this.bookIndex, Uri contentUrl) {
+  ReadingScreenState(this.bookIndex, Uri contentUrl) {
     future = loadContent(contentUrl);
   }
 
@@ -174,8 +175,12 @@ class _ReadingScreenState extends State<ReadingScreen> {
       );
 
   void _onDoubleTap(BuildContext context) {
-    final theme = ReadingThemeProvider.of(context);
-    ReadingThemeProvider.switchTheme(context, !theme.isNightMode);
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext dialogContext) =>
+            ReadingPopUpMenu(this)
+    );
   }
 
   void _enableReadingMode() {
