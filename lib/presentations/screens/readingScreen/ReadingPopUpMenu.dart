@@ -87,7 +87,9 @@ class PopUpMenuContainer extends StatelessWidget {
           type: MaterialType.card,
           shape: shape,
           child: DefaultTextStyle(
-              style: TextStyle(color: theme.popUpMenuTextColor), child: child),
+              style: theme.popUpMenuTextStyle,
+              child: child
+          ),
         ),
       ),
     );

@@ -4,6 +4,7 @@ import 'package:battery/battery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:reader/presentations/wrappers/ReadingThemeProvider.dart';
 
 class SimpleStatusBar extends StatefulWidget {
   @override
@@ -38,13 +39,16 @@ class _SimpleStatusBarState extends State<SimpleStatusBar> {
   }
 
   @override
-  Widget build(BuildContext context) => Row(
-      key: Key('ReadingStatusBar'),
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        _Clock(now),
-        _Battery(batteryState, batteryLevel),
-      ]);
+  Widget build(BuildContext context) =>
+      _ThemeRender(
+          child: Row(
+              key: Key('ReadingStatusBar'),
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                _Clock(now),
+                _Battery(batteryState, batteryLevel),
+              ])
+      );
 
   void _onBatteryStateChanged(BatteryState newState) {
     setState(() {
@@ -62,6 +66,23 @@ class _SimpleStatusBarState extends State<SimpleStatusBar> {
     } on PlatformException catch (e) {
       print(e);
     }
+  }
+}
+
+class _ThemeRender extends StatelessWidget {
+  final Widget child;
+
+  _ThemeRender({Key key, this.child}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = ReadingThemeProvider.of(context);
+    return DefaultTextStyle.merge(
+        style: theme.statusBarTextStyle,
+        child: IconTheme.merge(
+          data: theme.statusBarIconStyle,
+          child: child,
+        ));
   }
 }
 

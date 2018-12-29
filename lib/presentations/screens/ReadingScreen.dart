@@ -7,7 +7,6 @@ import 'package:reader/presentations/screens/readingScreen/ChapterContentView.da
 import 'package:reader/presentations/screens/readingScreen/ReadingPopUpMenu.dart';
 import 'package:reader/presentations/screens/readingScreen/ReadingScaffold.dart';
 import 'package:reader/presentations/wrappers/ContentLoader.dart';
-import 'package:reader/presentations/wrappers/ReadingThemeProvider.dart';
 import 'package:reader/repositories/network/BookRepository.dart';
 import 'package:screen/screen.dart';
 
@@ -142,7 +141,6 @@ class ReadingScreenState extends State<ReadingScreen> {
   @override
   Widget build(BuildContext context) =>
       ReadingScaffold(
-          readingTheme: ReadingThemeProvider.of(context),
           onDoubleTap: _onDoubleTap,
           content:
           Stack(

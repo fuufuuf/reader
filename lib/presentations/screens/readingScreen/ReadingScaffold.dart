@@ -1,41 +1,52 @@
 import 'package:flutter/material.dart';
-import 'package:reader/presentations/components/ThemeRender.dart';
 import 'package:reader/presentations/screens/readingScreen/SimpleStatusBar.dart';
-import 'package:reader/viewModels/ReadingTheme.dart';
+import 'package:reader/presentations/wrappers/ReadingThemeProvider.dart';
 
 typedef void GestureCallback(BuildContext context);
-typedef void GestureCalbackWithPos(BuildContext context, Offset position);
+typedef void GestureCallbackWithPos(BuildContext context, Offset position);
 
 class ReadingScaffold extends StatelessWidget {
-  final ReadingTheme readingTheme;
   final Widget content;
   final GestureCallback onDoubleTap;
-  final GestureCalbackWithPos onTapWithPos;
+  final GestureCallbackWithPos onTapWithPos;
 
-  ReadingScaffold(
-      {this.readingTheme, this.content, this.onDoubleTap, this.onTapWithPos});
+  ReadingScaffold({this.content, this.onDoubleTap, this.onTapWithPos});
 
   @override
   Widget build(BuildContext context) =>
       Scaffold(
           key: Key('ReaderScaffold'),
-          backgroundColor: _renderBackground(),
+          backgroundColor: _renderBackground(context),
           body: _renderGestureDetector(context,
-              child: _renderTheme(
-                  child: Padding(
+              child: Padding(
                       padding: const EdgeInsets.all(8),
                       child: Column(
                           children: <Widget>[
                           SimpleStatusBar(),
-                          Expanded(child: content)
+                          Expanded(child:
+                          _renderTheme(context,
+                              child: content
+                          )
+                          )
                         ],
                       )
                   )
-              )
           )
       );
 
-  Color _renderBackground() => readingTheme?.backgroundColor;
+  Color _renderBackground(BuildContext context) =>
+      ReadingThemeProvider
+          .of(context)
+          .backgroundColor;
+
+  Widget _renderTheme(BuildContext context, { Widget child }) =>
+      DefaultTextStyle(
+        style: ReadingThemeProvider
+            .of(context)
+            .readingTextStyle,
+        child: child,
+      );
+
 
   bool get hasGestureDetectorCallback => onDoubleTap != null;
 
@@ -59,11 +70,5 @@ class ReadingScaffold extends StatelessWidget {
     }
   }
 
-  Widget _renderTheme({Widget child}) {
-    if (readingTheme != null) {
-      return ThemeRender(theme: readingTheme, child: child);
-    } else {
-      return child;
-    }
-  }
+
 }
