@@ -1,4 +1,4 @@
-package com.example.reader;
+package me.timnew.reader;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
