@@ -10,6 +10,7 @@ class ReadingTheme {
   final Color popUpTextColor;
 
   final TextStyle readingTextStyle;
+  final IconThemeData readingIconStyle;
   final TextStyle statusBarTextStyle;
   final IconThemeData statusBarIconStyle;
   final TextStyle popUpMenuTextStyle;
@@ -24,6 +25,7 @@ class ReadingTheme {
   })
       :
         readingTextStyle = TextStyle(color: textColor, fontSize: fontSize),
+        readingIconStyle = IconThemeData(color: textColor),
         statusBarTextStyle = TextStyle(color: textColor),
         statusBarIconStyle = IconThemeData(color: textColor),
         popUpMenuTextStyle = TextStyle(color: popUpTextColor),

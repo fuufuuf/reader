@@ -39,13 +39,13 @@ class ReadingScaffold extends StatelessWidget {
           .of(context)
           .backgroundColor;
 
-  Widget _renderTheme(BuildContext context, { Widget child }) =>
-      DefaultTextStyle(
-        style: ReadingThemeProvider
-            .of(context)
-            .readingTextStyle,
-        child: child,
+  Widget _renderTheme(BuildContext context, { Widget child }) {
+    final theme = ReadingThemeProvider.of(context);
+    return DefaultTextStyle(
+      style: theme.readingTextStyle,
+      child: IconTheme.merge(data: theme.readingIconStyle, child: child),
       );
+  }
 
 
   bool get hasGestureDetectorCallback => onDoubleTap != null;
