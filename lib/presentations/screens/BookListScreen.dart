@@ -30,7 +30,7 @@ class _BookListScreenState extends State<BookListScreen> {
 
   @override
   Widget build(BuildContext context) => ScreenScaffold(
-      title: '书架',
+      title: '米良追书',
       body: ListView.builder(
           itemBuilder: (context, index) =>
               _renderBookItem(context, bookIndexes[index]),
