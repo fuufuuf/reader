@@ -8,15 +8,16 @@ import 'package:timnew_reader/presentations/components/ScreenScaffold.dart';
 import 'package:timnew_reader/presentations/wrappers/ContentLoader.dart';
 
 class ChapterListScreen extends StatelessWidget {
-  final String bookId;
+  final BookIndex bookIndex;
 
-  ChapterListScreen({Key key, this.bookId}) :super(key: key);
+  ChapterListScreen({Key key, String bookId})
+      :
+        bookIndex = BookIndex.load(bookId),
+        super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final BookIndex bookIndex = BookIndex.load(bookId);
-
-    return ScreenScaffold(
+  Widget build(BuildContext context) =>
+      ScreenScaffold(
       title: bookIndex.bookName,
         appBarActions: <Widget>[
           IconButton(icon: Icon(Icons.info_outline), onPressed: () {
@@ -29,7 +30,6 @@ class ChapterListScreen extends StatelessWidget {
                 ChapterListView(bookIndex: bookIndex, chapterList: chapterList)
         ),
       );
-  }
 }
 
 class ChapterListView extends StatelessWidget {

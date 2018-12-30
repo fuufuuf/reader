@@ -12,15 +12,17 @@ import 'package:timnew_reader/presentations/wrappers/ContentLoader.dart';
 import 'package:timnew_reader/repositories/network/BookRepository.dart';
 
 class ReadingScreen extends StatefulWidget {
-  final String bookId;
+  final BookIndex bookIndex;
   final Uri contentUrl;
 
-  const ReadingScreen({Key key, this.bookId, this.contentUrl})
-      : super(key: key);
+  ReadingScreen({Key key, String bookId, this.contentUrl})
+      :
+        bookIndex = BookIndex.load(bookId),
+        super(key: key);
 
   @override
   State<StatefulWidget> createState() =>
-      ReadingScreenState(BookIndex.load(bookId), contentUrl);
+      ReadingScreenState(bookIndex, contentUrl);
 }
 
 class ReadingScreenState extends State<ReadingScreen> {

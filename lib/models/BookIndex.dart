@@ -25,7 +25,7 @@ abstract class BookIndex implements Built<BookIndex, BookIndexBuilder> {
 
   static Serializer<BookIndex> get serializer => _$bookIndexSerializer;
 
-  static load(String bookId) => BookIndexRepository.load(bookId);
+  static BookIndex load(String bookId) => BookIndexRepository.load(bookId);
 
   Future<void> save() => BookIndexRepository.save(this);
 
