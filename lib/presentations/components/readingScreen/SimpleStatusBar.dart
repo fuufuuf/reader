@@ -4,6 +4,7 @@ import 'package:battery/battery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:timnew_reader/presentations/icons/BatteryIcons.dart';
 import 'package:timnew_reader/presentations/wrappers/ReadingThemeProvider.dart';
 
 class SimpleStatusBar extends StatefulWidget {
@@ -101,9 +102,16 @@ class _Clock extends StatelessWidget {
           now.second)}";
 
   @override
-  Widget build(BuildContext context) => Padding(
-      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 2),
-      child: Text(timeString));
+  Widget build(BuildContext context) =>
+      Row(
+        children: <Widget>[
+          const Icon(Icons.schedule, size: 22),
+          Padding(
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 2),
+              child: Text(timeString)),
+        ],
+      );
+
 }
 
 class _Battery extends StatelessWidget {
@@ -114,28 +122,56 @@ class _Battery extends StatelessWidget {
 
   IconData _batteryIcon() {
     if (batteryLevel == null) {
-      return Icons.battery_unknown;
+      return BatteryIcons.battery_0;
     }
 
-    if (batteryState == BatteryState.charging) {
-      return Icons.battery_charging_full;
+//    0     25    50     75         100
+//    0-10 11-36 37-62 63- 89 90 - 100
+//    10    25   25     26      10
+    if (batteryLevel >= 90) {
+      return BatteryIcons.battery_full;
     }
 
-    return Icons.battery_std;
+    if (batteryLevel >= 63) {
+      return BatteryIcons.battery_75;
+    }
+
+    if (batteryLevel >= 37) {
+      return BatteryIcons.battery_50;
+    }
+
+    if (batteryLevel >= 11) {
+      return BatteryIcons.battery_25;
+    }
+
+    return BatteryIcons.battery_0;
   }
 
   String _batteryLevelText() {
     if (batteryLevel == null) {
-      return '';
+      return '?';
     }
 
     return '$batteryLevel%';
   }
 
+  Iterable<Widget> _renderContent() sync* {
+    yield Text(_batteryLevelText());
+
+    yield Padding(
+        padding: EdgeInsets.symmetric(horizontal: 4),
+        child: Icon(_batteryIcon(), size: 16)
+    );
+
+    if (batteryState == BatteryState.charging) {
+      yield Padding(
+          padding: EdgeInsets.symmetric(horizontal: 4),
+          child: const Icon(BatteryIcons.charging, size: 14)
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) =>
-      Row(children: <Widget>[
-        Icon(_batteryIcon()),
-        Text(_batteryLevelText())
-      ]);
+      Row(children: _renderContent().toList(growable: false));
 }
