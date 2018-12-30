@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:timnew_reader/models/ChapterContent.dart';
+import 'package:timnew_reader/presentations/components/readingScreen/PopUp.dart';
 import 'package:timnew_reader/presentations/screens/ReadingScreen.dart';
 import 'package:timnew_reader/presentations/wrappers/ReadingThemeProvider.dart';
 import 'package:timnew_reader/repositories/settings/ThemeRepository.dart';
@@ -17,23 +18,7 @@ class ReadingPopUpMenu extends StatefulWidget {
 class _ReadingPopUpMenuState extends State<ReadingPopUpMenu> {
   ChapterContent get chapterContent => widget.parentState.currentContent;
 
-  ValueNotifier<int> currentFontSizeIndex;
-
-  static const fontSizeOptions = <String>[
-    "字号 小",
-    "字号 中",
-    "字号 大",
-    "字号 加大",
-    "字号 超大",
-  ];
-
-  static const fontSizes = <double>[
-    8.0,
-    14.0,
-    24.0,
-    32.0,
-    48.0,
-  ];
+  ValueNotifier<double> currentFontSize;
 
   @override
   void didChangeDependencies() {
@@ -44,17 +29,10 @@ class _ReadingPopUpMenuState extends State<ReadingPopUpMenu> {
 
   void _initFontSize() {
     final theme = ReadingThemeProvider.of(context);
-    var initialIndex = fontSizes.indexOf(theme.fontSize);
+    currentFontSize = ValueNotifier<double>(theme.fontSize);
 
-    if (initialIndex == -1) {
-      initialIndex = 1;
-    }
-
-    currentFontSizeIndex = ValueNotifier<int>(initialIndex);
-
-    currentFontSizeIndex.addListener(() async {
-      final fontSize = fontSizes[currentFontSizeIndex.value];
-      await ThemeRepository.saveFontSize(fontSize);
+    currentFontSize.addListener(() async {
+      await ThemeRepository.saveFontSize(currentFontSize.value);
 
       setState(() {
         ReadingThemeProvider.reloadTheme(context);
@@ -67,35 +45,50 @@ class _ReadingPopUpMenuState extends State<ReadingPopUpMenu> {
   void _dismissPopUp() => Navigator.of(context).pop();
 
   @override
-  Widget build(BuildContext context) => PopUpMenuContainer(
+  Widget build(BuildContext context) =>
+      PopUpContainer(
       child:
       GridView.count(
           physics: const NeverScrollableScrollPhysics(),
           crossAxisCount: 2,
           children: <Widget>[
-            PopUpMenuButton(
+            PopUpButton(
               text: "章节目录",
               onTap: _onBackToChapterList,
             ),
-            PopUpMenuButton(
+            PopUpButton(
               text: "夜晚模式",
               onTap: _onToggleNightMode,
             ),
-            PopUpSlider(
-              options: fontSizeOptions,
-              selected: currentFontSizeIndex,
+            PopUpPicker<double>.fromValue(
+              options: const <String>[
+                "字号 小",
+                "字号 中",
+                "字号 大",
+                "字号 加大",
+                "字号 超大",
+              ],
+              values: const <double>[
+                8.0,
+                14.0,
+                24.0,
+                32.0,
+                48.0,
+              ],
+              selectedValue: currentFontSize,
+              defaultIndex: 1,
             ),
-            PopUpMenuButton(
+            PopUpButton(
               text: "浏览器中打开",
               enabled: chapterContent != null,
               onTap: _onOpenInExternalBrowser,
             ),
-            PopUpMenuButton(
+            PopUpButton(
               text: "前一章节",
               enabled: chapterContent.hasPrevious,
               onTap: _gotoPreviousChapter,
             ),
-            PopUpMenuButton(
+            PopUpButton(
               text: "后一章节",
               enabled: chapterContent.hasNext,
               onTap: _gotoNextChapter,
@@ -144,135 +137,4 @@ class _ReadingPopUpMenuState extends State<ReadingPopUpMenu> {
       widget.parentState.loadContent(chapterContent.nextChapterUrl);
     });
   }
-}
-
-class PopUpMenuContainer extends StatelessWidget {
-  final Duration insetAnimationDuration;
-  final Curve insetAnimationCurve;
-  final Widget child;
-  final ShapeBorder shape;
-
-  PopUpMenuContainer({
-    Key key,
-    this.insetAnimationDuration = const Duration(milliseconds: 100),
-    this.insetAnimationCurve = Curves.decelerate,
-    this.shape = const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(2.0))),
-    this.child,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final edgeInsets = MediaQuery
-        .of(context)
-        .viewInsets + EdgeInsets.symmetric(horizontal: 140, vertical: 210);
-    final theme = ReadingThemeProvider.of(context);
-    return Center(
-      child: ConstrainedBox(
-        constraints: BoxConstraints.expand(
-            width: edgeInsets.horizontal, height: edgeInsets.vertical),
-        child: Material(
-          elevation: 24.0,
-            color: theme.popUpBackgroundColor,
-          type: MaterialType.card,
-          shape: shape,
-          child: DefaultTextStyle(
-              style: theme.popUpMenuTextStyle,
-              child: IconTheme.merge(
-                  data: theme.popUpMenuIconStyle,
-                  child: child
-              )
-          )
-        ),
-      ),
-    );
-  }
-}
-
-class PopUpMenuButton extends StatelessWidget {
-  final String text;
-  final bool enabled;
-  final GestureTapCallback onTap;
-
-  const PopUpMenuButton({Key key, this.text, this.enabled = true, this.onTap})
-      : super(key: key);
-
-  Decoration _renderDecoration(BuildContext context) =>
-      BoxDecoration(
-          border: Border.all(
-              color: ReadingThemeProvider
-                  .of(context)
-                  .popUpTextColor,
-              width: 1
-          )
-      );
-
-  @override
-  Widget build(BuildContext context) => InkWell(
-    onTap: enabled ? onTap : null,
-    child: Container(
-      alignment: Alignment.center,
-      decoration: _renderDecoration(context),
-      child: Text(text),
-    ),
-  );
-}
-
-class PopUpSlider extends StatelessWidget {
-  final List<String> options;
-  final ValueNotifier<int> selected;
-
-  const PopUpSlider({Key key, this.options, this.selected})
-      : super(key: key);
-
-  Decoration _renderDecoration(BuildContext context) =>
-      BoxDecoration(
-          border: Border.all(
-              color: ReadingThemeProvider
-                  .of(context)
-                  .popUpTextColor,
-              width: 1
-          )
-      );
-
-  @override
-  Widget build(BuildContext context) =>
-      Container(
-          alignment: Alignment.center,
-          decoration: _renderDecoration(context),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                InkWell(
-                  onTap: _renderOnIncrease(),
-                  child: Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Icon(Icons.add)
-                  ),
-                ),
-                Text(options[selected.value]),
-                InkWell(
-                  onTap: _renderOnDecrease(),
-                  child: Container(
-                      padding: EdgeInsets.all(16),
-                      child: Icon(Icons.remove)
-                  ),
-                ),
-              ]
-
-          )
-
-      );
-
-  GestureTapCallback _renderOnIncrease() =>
-      selected.value < options.length - 1 ? () {
-        selected.value = selected.value + 1;
-      }
-          : null;
-
-  GestureTapCallback _renderOnDecrease() =>
-      selected.value > 0 ? () {
-        selected.value = selected.value - 1;
-      }
-          : null;
 }
