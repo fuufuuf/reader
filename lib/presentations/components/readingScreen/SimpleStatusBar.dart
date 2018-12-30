@@ -103,15 +103,10 @@ class _Clock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      Row(
-        children: <Widget>[
-          const Icon(Icons.schedule, size: 22),
-          Padding(
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 4),
-              child: Text(timeString)),
-        ],
+      Padding(
+          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
+          child: Text(timeString)
       );
-
 }
 
 class _Battery extends StatelessWidget {
