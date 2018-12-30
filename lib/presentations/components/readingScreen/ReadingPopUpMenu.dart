@@ -132,8 +132,7 @@ class _ReadingPopUpMenuState extends State<ReadingPopUpMenu> {
     _dismissPopUp();
 
     widget.parentState.setState(() {
-      widget.parentState.future =
-          widget.parentState.loadContent(chapterContent.previousChapterUrl);
+      widget.parentState.loadContent(chapterContent.previousChapterUrl);
     });
   }
 
@@ -141,8 +140,7 @@ class _ReadingPopUpMenuState extends State<ReadingPopUpMenu> {
     _dismissPopUp();
 
     widget.parentState.setState(() {
-      widget.parentState.future =
-          widget.parentState.loadContent(chapterContent.nextChapterUrl);
+      widget.parentState.loadContent(chapterContent.nextChapterUrl);
     });
   }
 }

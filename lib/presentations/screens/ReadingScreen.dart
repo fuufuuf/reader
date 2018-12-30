@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:screen/screen.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/models/ChapterContent.dart';
 import 'package:timnew_reader/presentations/components/readingScreen/ChapterContentView.dart';
+import 'package:timnew_reader/presentations/components/readingScreen/OverScrollNavigator.dart';
 import 'package:timnew_reader/presentations/components/readingScreen/ReadingPopUpMenu.dart';
 import 'package:timnew_reader/presentations/components/readingScreen/ReadingScaffold.dart';
 import 'package:timnew_reader/presentations/wrappers/ContentLoader.dart';
 import 'package:timnew_reader/repositories/network/BookRepository.dart';
-import 'package:screen/screen.dart';
 
 class ReadingScreen extends StatefulWidget {
   final String bookId;
@@ -23,27 +24,31 @@ class ReadingScreen extends StatefulWidget {
 }
 
 class ReadingScreenState extends State<ReadingScreen> {
-  static const double threshold = 100;
 
   final BookIndex bookIndex;
 
   Future<ChapterContent> future;
   ChapterContent currentContent;
-  double _loadPreviousResistance = 0;
-  double _loadNextResistance = 0;
-  Uri _urlToLoadNext;
+  Uri _urlToLoad;
 
   ReadingScreenState(this.bookIndex, Uri contentUrl) {
-    future = loadContent(contentUrl);
+    loadContent(contentUrl);
   }
 
-  Future<ChapterContent> loadContent(Uri contentUrl) async {
-    currentContent = null;
-    currentContent = await BookRepository.fetchChapterContent(contentUrl);
+  void loadContent(Uri contentUrl) {
+    future = () async {
+      currentContent = null;
 
-    await bookIndex.setCurrentChapter(contentUrl);
+      currentContent = await BookRepository.fetchChapterContent(contentUrl);
 
-    return currentContent;
+      await bookIndex.setCurrentChapter(contentUrl);
+
+      setState(() {
+        currentContent = currentContent; // Refresh data;
+      });
+
+      return currentContent;
+    }();
   }
 
   @override
@@ -52,123 +57,51 @@ class ReadingScreenState extends State<ReadingScreen> {
     _enableReadingMode();
   }
 
-  bool _onScrollNotification(ScrollNotification notification) {
-    if (currentContent == null) {
-      _resetTriggerResistance();
-      return true;
-    }
-
-    final metrics = notification.metrics;
-
-    if (currentContent.hasNext &&
-        metrics.pixels > metrics.maxScrollExtent) {
-      setState(() {
-        _loadNextResistance =
-            _normalizeResistance(
-                metrics.pixels - metrics.maxScrollExtent, threshold);
-
-        if (_loadNextResistance >= 1.0) {
-          _loadNextResistance = 0;
-          _urlToLoadNext = currentContent.nextChapterUrl;
-        }
-      });
-    } else if (currentContent.hasPrevious &&
-        metrics.pixels < metrics.minScrollExtent) {
-      setState(() {
-        _loadPreviousResistance =
-            _normalizeResistance(
-                metrics.minScrollExtent - metrics.pixels, threshold);
-
-        if (_loadPreviousResistance >= 1.0) {
-          _loadPreviousResistance = 0;
-          _urlToLoadNext = currentContent.previousChapterUrl;
-        }
-      });
-    } else {
-      _resetTriggerResistance();
-    }
-
-    if (notification is ScrollUpdateNotification &&
-        notification.dragDetails == null) {
-      _tryLoadContent();
-      return true;
-    }
-
-    if (notification is ScrollEndNotification) {
-      _tryLoadContent();
-      return true;
-    }
-
-    return true;
-  }
-
-  void _tryLoadContent() {
-    if (_urlToLoadNext != null) {
-      setState(() {
-        future = loadContent(_urlToLoadNext);
-        _urlToLoadNext = null;
-      });
-    }
-  }
-
-  double _normalizeResistance(double value, double threshold) {
-    if (value < 0) {
-      return 0;
-    }
-
-    if (value > threshold) {
-      return 1;
-    }
-
-    return value / threshold;
-  }
-
-  void _resetTriggerResistance() {
-    if (_loadPreviousResistance > 0 || _loadNextResistance > 0) {
-      setState(() {
-        _loadPreviousResistance = 0;
-        _loadNextResistance = 0;
-      });
-    }
-  }
-
   @override
   void dispose() {
     _disableReadingMode();
     super.dispose();
   }
 
+  void _onStateChanged(OverScrollNavigatorMode mode) {
+    switch (mode) {
+      case OverScrollNavigatorMode.Loading:
+        setState(() {
+          if (_urlToLoad != null) {
+            loadContent(_urlToLoad);
+            _urlToLoad = null;
+          }
+        });
+        break;
+      case OverScrollNavigatorMode.UpArmed:
+        _urlToLoad = currentContent.previousChapterUrl;
+        break;
+      case OverScrollNavigatorMode.DownArmed:
+        _urlToLoad = currentContent.nextChapterUrl;
+        break;
+      default:
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) =>
       ReadingScaffold(
           onDoubleTap: _onDoubleTap,
-          content:
-          Stack(
-            children: <Widget>[
-              Align(
-                  alignment: Alignment.topCenter,
-                  child: Opacity(opacity: _loadPreviousResistance,
-                      child: const Icon(Icons.arrow_upward))
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Opacity(
-                  opacity: _loadNextResistance,
-                  child: const Icon(Icons.arrow_downward),),
-              ),
-              NotificationListener<ScrollNotification>(
-                  onNotification: _onScrollNotification,
-                  child: ContentLoader(
-                      future: future,
-                      respondToReloading: true,
-                      render: (BuildContext context,
-                          ChapterContent chapterContent) =>
-                          ChapterContentView(
-                              chapter: chapterContent)
-                  )
-              )
-
-            ],
+          content: OverScrollNavigator(
+            isLoading: currentContent == null,
+            isUpEnabled: currentContent?.hasPrevious ?? false,
+            isDownEnabled: currentContent?.hasNext ?? false,
+            displacementThreshold: 100,
+            onStateChanged: _onStateChanged,
+            child: ContentLoader(
+                future: future,
+                respondToReloading: true,
+                render: (BuildContext context, ChapterContent chapterContent) =>
+                    ChapterContentView(
+                        chapter: chapterContent
+                    )
+            ),
           )
       );
 
