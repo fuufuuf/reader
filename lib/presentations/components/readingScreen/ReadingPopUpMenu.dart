@@ -70,35 +70,36 @@ class _ReadingPopUpMenuState extends State<ReadingPopUpMenu> {
   Widget build(BuildContext context) => PopUpMenuContainer(
       child:
       GridView.count(
+          physics: const NeverScrollableScrollPhysics(),
           crossAxisCount: 2,
           children: <Widget>[
-        PopUpMenuButton(
-          text: "章节目录",
-          onTap: _onBackToChapterList,
-        ),
-        PopUpMenuButton(
-          text: "夜晚模式",
-          onTap: _onToggleNightMode,
-        ),
-        PopUpSlider(
-          options: fontSizeOptions,
-          selected: currentFontSizeIndex,
-        ),
-        PopUpMenuButton(
-            text: "浏览器中打开",
-          enabled: chapterContent != null,
-          onTap: _onOpenInExternalBrowser,
-        ),
-        PopUpMenuButton(
-          text: "前一章节",
-          enabled: chapterContent.hasPrevious,
-          onTap: _gotoPreviousChapter,
-        ),
-        PopUpMenuButton(
-          text: "后一章节",
-          enabled: chapterContent.hasNext,
-          onTap: _gotoNextChapter,
-        ),
+            PopUpMenuButton(
+              text: "章节目录",
+              onTap: _onBackToChapterList,
+            ),
+            PopUpMenuButton(
+              text: "夜晚模式",
+              onTap: _onToggleNightMode,
+            ),
+            PopUpSlider(
+              options: fontSizeOptions,
+              selected: currentFontSizeIndex,
+            ),
+            PopUpMenuButton(
+              text: "浏览器中打开",
+              enabled: chapterContent != null,
+              onTap: _onOpenInExternalBrowser,
+            ),
+            PopUpMenuButton(
+              text: "前一章节",
+              enabled: chapterContent.hasPrevious,
+              onTap: _gotoPreviousChapter,
+            ),
+            PopUpMenuButton(
+              text: "后一章节",
+              enabled: chapterContent.hasNext,
+              onTap: _gotoNextChapter,
+            ),
           ]
       )
   );
