@@ -10,6 +10,7 @@ class ChapterContentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+        physics: const AlwaysScrollableScrollPhysics(),
         itemBuilder: _renderParagraph,
         itemCount: chapter.paragraphs.length + 1);
   }
