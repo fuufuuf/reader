@@ -107,7 +107,7 @@ class _Clock extends StatelessWidget {
         children: <Widget>[
           const Icon(Icons.schedule, size: 22),
           Padding(
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 2),
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 4),
               child: Text(timeString)),
         ],
       );
