@@ -16,6 +16,8 @@ class _$ChapterContent extends ChapterContent {
   @override
   final Uri chapterListUrl;
   @override
+  final bool isLocked;
+  @override
   final Uri previousChapterUrl;
   @override
   final Uri nextChapterUrl;
@@ -28,6 +30,7 @@ class _$ChapterContent extends ChapterContent {
       this.title,
       this.paragraphs,
       this.chapterListUrl,
+      this.isLocked,
       this.previousChapterUrl,
       this.nextChapterUrl})
       : super._() {
@@ -42,6 +45,9 @@ class _$ChapterContent extends ChapterContent {
     }
     if (chapterListUrl == null) {
       throw new BuiltValueNullFieldError('ChapterContent', 'chapterListUrl');
+    }
+    if (isLocked == null) {
+      throw new BuiltValueNullFieldError('ChapterContent', 'isLocked');
     }
   }
 
@@ -61,6 +67,7 @@ class _$ChapterContent extends ChapterContent {
         title == other.title &&
         paragraphs == other.paragraphs &&
         chapterListUrl == other.chapterListUrl &&
+        isLocked == other.isLocked &&
         previousChapterUrl == other.previousChapterUrl &&
         nextChapterUrl == other.nextChapterUrl;
   }
@@ -70,9 +77,11 @@ class _$ChapterContent extends ChapterContent {
     return $jf($jc(
         $jc(
             $jc(
-                $jc($jc($jc(0, url.hashCode), title.hashCode),
-                    paragraphs.hashCode),
-                chapterListUrl.hashCode),
+                $jc(
+                    $jc($jc($jc(0, url.hashCode), title.hashCode),
+                        paragraphs.hashCode),
+                    chapterListUrl.hashCode),
+                isLocked.hashCode),
             previousChapterUrl.hashCode),
         nextChapterUrl.hashCode));
   }
@@ -84,6 +93,7 @@ class _$ChapterContent extends ChapterContent {
           ..add('title', title)
           ..add('paragraphs', paragraphs)
           ..add('chapterListUrl', chapterListUrl)
+          ..add('isLocked', isLocked)
           ..add('previousChapterUrl', previousChapterUrl)
           ..add('nextChapterUrl', nextChapterUrl))
         .toString();
@@ -113,6 +123,10 @@ class ChapterContentBuilder
   set chapterListUrl(Uri chapterListUrl) =>
       _$this._chapterListUrl = chapterListUrl;
 
+  bool _isLocked;
+  bool get isLocked => _$this._isLocked;
+  set isLocked(bool isLocked) => _$this._isLocked = isLocked;
+
   Uri _previousChapterUrl;
   Uri get previousChapterUrl => _$this._previousChapterUrl;
   set previousChapterUrl(Uri previousChapterUrl) =>
@@ -131,6 +145,7 @@ class ChapterContentBuilder
       _title = _$v.title;
       _paragraphs = _$v.paragraphs?.toBuilder();
       _chapterListUrl = _$v.chapterListUrl;
+      _isLocked = _$v.isLocked;
       _previousChapterUrl = _$v.previousChapterUrl;
       _nextChapterUrl = _$v.nextChapterUrl;
       _$v = null;
@@ -161,6 +176,7 @@ class ChapterContentBuilder
               title: title,
               paragraphs: paragraphs.build(),
               chapterListUrl: chapterListUrl,
+              isLocked: isLocked,
               previousChapterUrl: previousChapterUrl,
               nextChapterUrl: nextChapterUrl);
     } catch (_) {

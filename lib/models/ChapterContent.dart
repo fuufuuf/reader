@@ -21,6 +21,8 @@ abstract class ChapterContent
 
   Uri get chapterListUrl;
 
+  bool get isLocked;
+
   Future<ChapterList> fetchChapterList() =>
       BookRepository.fetchChapterList(chapterListUrl);
 

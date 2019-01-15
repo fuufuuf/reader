@@ -208,6 +208,7 @@ class PiaotianAdapter extends SiteAdapter {
             .where((text) => text.isNotEmpty)
                 .map((text) => '    ' + text)
       ))
+      ..isLocked = false
     );
   }
 
