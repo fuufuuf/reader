@@ -10,7 +10,7 @@ class BookRepository {
   static ReaderHttpClient client = ReaderHttpClient();
 
   static Map<String, SiteAdapter> adapters = {
-    'www.piaotian.com': PiaotianAdapter(client)
+    'www.ptwxz.com': PiaotianAdapter(client)
   };
 
   static Future<NewBook> createBook(Uri url) =>

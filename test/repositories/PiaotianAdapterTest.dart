@@ -33,10 +33,10 @@ void main() {
   final FakeClient client = FakeClient();
   final PiaotianAdapter adapter = PiaotianAdapter(client);
 
-  final bookUrl = Uri.parse('https://www.piaotian.com/bookinfo/9/9054.html');
-  final menuUrl = Uri.parse('https://www.piaotian.com/html/9/9054/');
+  final bookUrl = Uri.parse('https://www.ptwxz.com/bookinfo/9/9054.html');
+  final menuUrl = Uri.parse('https://www.ptwxz.com/html/9/9054/');
   final chapterUrl =
-      Uri.parse('https://www.piaotian.com/html/9/9054/5941036.html');
+      Uri.parse('https://www.ptwxz.com/html/9/9054/5941036.html');
   final testUrl = Uri.parse('/test');
 
   setUp(() {
@@ -74,7 +74,7 @@ void main() {
     expect(book.url, bookUrl);
     expect(book.bookId, equals('piaotian-9-9054'));
     expect(book.chapterListUrl,
-        equals(Uri.parse('https://www.piaotian.com/html/9/9054/')));
+        equals(Uri.parse('https://www.ptwxz.com/html/9/9054/')));
     expect(book.title, equals('大道朝天'));
     expect(book.author, equals('猫腻'));
     expect(book.genre, equals('玄幻魔法'));
@@ -93,12 +93,12 @@ void main() {
     final firstChapter = menu.chapters.first;
     expect(firstChapter.title, equals('说在前面'));
     expect(firstChapter.url,
-        equals(Uri.parse('https://www.piaotian.com/html/9/9054/5941033.html')));
+        equals(Uri.parse('https://www.ptwxz.com/html/9/9054/5941033.html')));
 
     final lastChapter = menu.chapters.last;
     expect(lastChapter.title, equals('第一章剑峰生于天地间'));
     expect(lastChapter.url,
-        equals(Uri.parse('https://www.piaotian.com/html/9/9054/6868941.html')));
+        equals(Uri.parse('https://www.ptwxz.com/html/9/9054/6868941.html')));
 
     expect(menu.bookInfoUrl, equals(bookUrl));
   });
@@ -109,9 +109,9 @@ void main() {
     expect(chapter.url, equals(chapterUrl));
     expect(chapter.chapterListUrl, equals(menuUrl));
     expect(chapter.previousChapterUrl,
-        equals(Uri.parse('https://www.piaotian.com/html/9/9054/5941035.html')));
+        equals(Uri.parse('https://www.ptwxz.com/html/9/9054/5941035.html')));
     expect(chapter.nextChapterUrl,
-        equals(Uri.parse('https://www.piaotian.com/html/9/9054/5941116.html')));
+        equals(Uri.parse('https://www.ptwxz.com/html/9/9054/5941116.html')));
     
     expect(chapter.paragraphs.length, equals(86));
     expect(chapter.paragraphs.first, equals('“稍后看着何等样的天地异变，都莫要惊慌。”'));
@@ -123,8 +123,8 @@ void main() {
     b
       ..bookId = 'piaotian-9-9054'
       ..bookName = '大道朝天'
-      ..bookInfoUrl = Uri.parse('https://www.piaotian.com/bookinfo/9/9054.html')
-      ..chapterListUrl = Uri.parse('https://www.piaotian.com/html/9/9054/')
+      ..bookInfoUrl = Uri.parse('https://www.ptwxz.com/bookinfo/9/9054.html')
+      ..chapterListUrl = Uri.parse('https://www.ptwxz.com/html/9/9054/')
     );
 
     test('should parse from book info page', () async {
