@@ -15,7 +15,7 @@ class _$BookIndexSerializer implements StructuredSerializer<BookIndex> {
   final String wireName = 'BookIndex';
 
   @override
-  Iterable serialize(Serializers serializers, BookIndex object,
+  Iterable<Object> serialize(Serializers serializers, BookIndex object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'bookId',
@@ -36,7 +36,7 @@ class _$BookIndexSerializer implements StructuredSerializer<BookIndex> {
   }
 
   @override
-  BookIndex deserialize(Serializers serializers, Iterable serialized,
+  BookIndex deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new BookIndexBuilder();
 
@@ -79,7 +79,7 @@ class _$BookIndex extends BookIndex {
   @override
   final Uri bookInfoUrl;
 
-  factory _$BookIndex([void updates(BookIndexBuilder b)]) =>
+  factory _$BookIndex([void Function(BookIndexBuilder) updates]) =>
       (new BookIndexBuilder()..update(updates)).build();
 
   _$BookIndex._(
@@ -100,7 +100,7 @@ class _$BookIndex extends BookIndex {
   }
 
   @override
-  BookIndex rebuild(void updates(BookIndexBuilder b)) =>
+  BookIndex rebuild(void Function(BookIndexBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -177,7 +177,7 @@ class BookIndexBuilder implements Builder<BookIndex, BookIndexBuilder> {
   }
 
   @override
-  void update(void updates(BookIndexBuilder b)) {
+  void update(void Function(BookIndexBuilder) updates) {
     if (updates != null) updates(this);
   }
 
@@ -194,4 +194,4 @@ class BookIndexBuilder implements Builder<BookIndex, BookIndexBuilder> {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
