@@ -54,6 +54,10 @@ abstract class ChapterRef implements Built<ChapterRef, ChapterRefBuilder> {
   ChapterRef._();
 
   factory ChapterRef([updates(ChapterRefBuilder b)]) = _$ChapterRef;
+
+  Uri get url;
+
+  String get title;
 }
 
 abstract class ChapterContent
@@ -61,10 +65,6 @@ abstract class ChapterContent
   ChapterContent._();
 
   factory ChapterContent([updates(ChapterContentBuilder b)]) = _$ChapterContent;
-
-  Uri get url;
-
-  String get title;
 
   BuiltList<String> get paragraphs;
 

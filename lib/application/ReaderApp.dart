@@ -23,6 +23,6 @@ class AppInteractor extends RootInteractor<ReaderApp> {
   Widget buildChild(BuildContext context) => MaterialApp(
         initialRoute: _appRouter.initialRoute,
         routes: _appRouter.routes,
-        onUnknownRoute: _appRouter.onUnknownRoute,
+        onUnknownRoute: _appRouter.onUnknownRoute
       );
 }

@@ -274,10 +274,22 @@ class BookInfoBuilder implements Builder<BookInfo, BookInfoBuilder> {
 }
 
 class _$ChapterRef extends ChapterRef {
+  @override
+  final Uri url;
+  @override
+  final String title;
+
   factory _$ChapterRef([void Function(ChapterRefBuilder) updates]) =>
       (new ChapterRefBuilder()..update(updates)).build();
 
-  _$ChapterRef._() : super._();
+  _$ChapterRef._({this.url, this.title}) : super._() {
+    if (url == null) {
+      throw new BuiltValueNullFieldError('ChapterRef', 'url');
+    }
+    if (title == null) {
+      throw new BuiltValueNullFieldError('ChapterRef', 'title');
+    }
+  }
 
   @override
   ChapterRef rebuild(void Function(ChapterRefBuilder) updates) =>
@@ -289,24 +301,44 @@ class _$ChapterRef extends ChapterRef {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is ChapterRef;
+    return other is ChapterRef && url == other.url && title == other.title;
   }
 
   @override
   int get hashCode {
-    return 903482317;
+    return $jf($jc($jc(0, url.hashCode), title.hashCode));
   }
 
   @override
   String toString() {
-    return newBuiltValueToStringHelper('ChapterRef').toString();
+    return (newBuiltValueToStringHelper('ChapterRef')
+          ..add('url', url)
+          ..add('title', title))
+        .toString();
   }
 }
 
 class ChapterRefBuilder implements Builder<ChapterRef, ChapterRefBuilder> {
   _$ChapterRef _$v;
 
+  Uri _url;
+  Uri get url => _$this._url;
+  set url(Uri url) => _$this._url = url;
+
+  String _title;
+  String get title => _$this._title;
+  set title(String title) => _$this._title = title;
+
   ChapterRefBuilder();
+
+  ChapterRefBuilder get _$this {
+    if (_$v != null) {
+      _url = _$v.url;
+      _title = _$v.title;
+      _$v = null;
+    }
+    return this;
+  }
 
   @override
   void replace(ChapterRef other) {
@@ -323,17 +355,13 @@ class ChapterRefBuilder implements Builder<ChapterRef, ChapterRefBuilder> {
 
   @override
   _$ChapterRef build() {
-    final _$result = _$v ?? new _$ChapterRef._();
+    final _$result = _$v ?? new _$ChapterRef._(url: url, title: title);
     replace(_$result);
     return _$result;
   }
 }
 
 class _$ChapterContent extends ChapterContent {
-  @override
-  final Uri url;
-  @override
-  final String title;
   @override
   final BuiltList<String> paragraphs;
   @override
@@ -345,18 +373,8 @@ class _$ChapterContent extends ChapterContent {
       (new ChapterContentBuilder()..update(updates)).build();
 
   _$ChapterContent._(
-      {this.url,
-      this.title,
-      this.paragraphs,
-      this.previousChapterUrl,
-      this.nextChapterUrl})
+      {this.paragraphs, this.previousChapterUrl, this.nextChapterUrl})
       : super._() {
-    if (url == null) {
-      throw new BuiltValueNullFieldError('ChapterContent', 'url');
-    }
-    if (title == null) {
-      throw new BuiltValueNullFieldError('ChapterContent', 'title');
-    }
     if (paragraphs == null) {
       throw new BuiltValueNullFieldError('ChapterContent', 'paragraphs');
     }
@@ -374,8 +392,6 @@ class _$ChapterContent extends ChapterContent {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is ChapterContent &&
-        url == other.url &&
-        title == other.title &&
         paragraphs == other.paragraphs &&
         previousChapterUrl == other.previousChapterUrl &&
         nextChapterUrl == other.nextChapterUrl;
@@ -384,16 +400,13 @@ class _$ChapterContent extends ChapterContent {
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc($jc(0, url.hashCode), title.hashCode), paragraphs.hashCode),
-            previousChapterUrl.hashCode),
+        $jc($jc(0, paragraphs.hashCode), previousChapterUrl.hashCode),
         nextChapterUrl.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('ChapterContent')
-          ..add('url', url)
-          ..add('title', title)
           ..add('paragraphs', paragraphs)
           ..add('previousChapterUrl', previousChapterUrl)
           ..add('nextChapterUrl', nextChapterUrl))
@@ -404,14 +417,6 @@ class _$ChapterContent extends ChapterContent {
 class ChapterContentBuilder
     implements Builder<ChapterContent, ChapterContentBuilder> {
   _$ChapterContent _$v;
-
-  Uri _url;
-  Uri get url => _$this._url;
-  set url(Uri url) => _$this._url = url;
-
-  String _title;
-  String get title => _$this._title;
-  set title(String title) => _$this._title = title;
 
   ListBuilder<String> _paragraphs;
   ListBuilder<String> get paragraphs =>
@@ -433,8 +438,6 @@ class ChapterContentBuilder
 
   ChapterContentBuilder get _$this {
     if (_$v != null) {
-      _url = _$v.url;
-      _title = _$v.title;
       _paragraphs = _$v.paragraphs?.toBuilder();
       _previousChapterUrl = _$v.previousChapterUrl;
       _nextChapterUrl = _$v.nextChapterUrl;
@@ -462,8 +465,6 @@ class ChapterContentBuilder
     try {
       _$result = _$v ??
           new _$ChapterContent._(
-              url: url,
-              title: title,
               paragraphs: paragraphs.build(),
               previousChapterUrl: previousChapterUrl,
               nextChapterUrl: nextChapterUrl);
