@@ -8,7 +8,7 @@ class _AddBookForm extends StatefulWidget {
 class _AddBookFormInteractor extends Interactor<_AddBookForm> {
   final TextEditingController _urlController = TextEditingController();
 
-  Future<NewBook> _parseNewBookFuture;
+  Future<CurrentBook> _parseNewBookFuture;
 
   @override
   void initState() {
@@ -21,7 +21,7 @@ class _AddBookFormInteractor extends Interactor<_AddBookForm> {
       Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
         _UrlField(_urlController),
         _FutureBookInfoBox(
-          parseNewBook: _parseNewBookFuture,
+          currentBook: _parseNewBookFuture,
         ),
         _FormButtonBar(
           allowSubmit: false,

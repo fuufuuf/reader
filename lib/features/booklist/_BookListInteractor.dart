@@ -37,12 +37,13 @@ class _BookListInteractor extends ProxyInteractor {
       return;
     }
 
-    final updated = books.rebuild((b) => b.add(newBook.book));
+    final updated = books.rebuild((b) => b.add(newBook.bookIndex));
 
-    await BookIndexRepository.addBook(updated, newBook.book);
+    await BookIndexRepository.addBook(updated, newBook.bookIndex);
 
-    if (newBook.currentChapter != null) {
-      await BookIndexRepository.updateProgress(newBook.book, newBook.currentChapter);
+    if (newBook.chapter != null) {
+      await BookIndexRepository.updateProgress(
+          newBook.bookIndex, newBook.chapter);
     }
 
     setState(() {

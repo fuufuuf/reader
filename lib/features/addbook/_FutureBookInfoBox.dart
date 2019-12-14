@@ -1,9 +1,9 @@
 part of 'AddBookDialog.dart';
 
 class _FutureBookInfoBox extends StatelessWidget {
-  final Future<NewBook> parseNewBook;
+  final Future<CurrentBook> currentBook;
 
-  const _FutureBookInfoBox({Key key, this.parseNewBook}) : super(key: key);
+  const _FutureBookInfoBox({Key key, this.currentBook}) : super(key: key);
 
   @override
   Widget build(BuildContext context) =>
@@ -18,11 +18,12 @@ class _FutureBookInfoBox extends StatelessWidget {
               )
           ),
           constraints: BoxConstraints.expand(height: 200),
-          child: FutureBuilder(future: parseNewBook, builder: _buildFuture),
+          child: FutureBuilder(future: currentBook, builder: _buildFuture),
         ),
       );
 
-  Widget _buildFuture(BuildContext context, AsyncSnapshot<NewBook> snapshot) {
+  Widget _buildFuture(BuildContext context,
+      AsyncSnapshot<CurrentBook> snapshot) {
     if (snapshot.hasError) {
       return _NewBookParsingFailure(errorMessage: snapshot.error.toString());
     }
@@ -32,7 +33,7 @@ class _FutureBookInfoBox extends StatelessWidget {
     }
 
     if (snapshot.hasData) {
-      return _NewBookInfo(newBook: snapshot.data);
+      return _NewBookInfo(currentBook: snapshot.data);
     }
 
     return _Hint();
@@ -73,18 +74,18 @@ class _NewBookParsingFailure extends StatelessWidget {
 }
 
 class _NewBookInfo extends StatelessWidget {
-  final NewBook newBook;
+  final CurrentBook currentBook;
 
-  const _NewBookInfo({Key key, this.newBook}) : super(key: key);
+  const _NewBookInfo({Key key, this.currentBook}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => ListView(children: <Widget>[
-        _buildRow(Icons.vpn_key, newBook.book.id),
-        _buildRow(Icons.title, newBook.book.title),
-        _buildRow(Icons.book, newBook.book.bookInfoUrl.toString()),
-        _buildRow(Icons.list, newBook.book.chapterListUrl.toString()),
+    _buildRow(Icons.vpn_key, currentBook.bookIndex.id),
+    _buildRow(Icons.title, currentBook.bookIndex.title),
+    _buildRow(Icons.book, currentBook.bookIndex.bookInfoUrl.toString()),
+    _buildRow(Icons.list, currentBook.bookIndex.chapterListUrl.toString()),
         _buildRow(Icons.bookmark_border,
-            newBook.currentChapter?.title ?? "<未知>")
+            currentBook.chapter?.title ?? "<未知>")
       ]);
 
   ListTile _buildRow(IconData icon, String value) =>
