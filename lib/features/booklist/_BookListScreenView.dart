@@ -1,23 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_event_bus/flutter_event_bus.dart';
-import 'package:timnew_reader/models/book_models.dart';
-import 'package:timnew_reader/stores/BookListStore.dart';
+part of 'BookListScreen.dart';
 
-import 'events.dart';
-
-class BookListScreenView extends StatelessWidget {
+class _BookListScreenView extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       Scaffold(
         appBar: AppBar(
           title: Text("米良读书"),
         ),
-        body: BookList(),
-        floatingActionButton: AddBookButton(),
+        body: _BookList(),
+        floatingActionButton: _AddBookButton(),
       );
 }
 
-class AddBookButton extends StatelessWidget {
+class _AddBookButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       FloatingActionButton(
@@ -28,7 +23,7 @@ class AddBookButton extends StatelessWidget {
       );
 }
 
-class BookList extends StatelessWidget {
+class _BookList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final books = BookListStore
@@ -38,16 +33,16 @@ class BookList extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.all(8),
         child: ListView.builder(
-            itemBuilder: (context, index) => BookIndexItem(books[index]),
+            itemBuilder: (context, index) => _BookIndexItem(books[index]),
             itemCount: books.length)
     );
   }
 }
 
-class BookIndexItem extends StatelessWidget {
+class _BookIndexItem extends StatelessWidget {
   final BookIndex book;
 
-  BookIndexItem(this.book);
+  _BookIndexItem(this.book);
 
   @override
   Widget build(BuildContext context) =>
