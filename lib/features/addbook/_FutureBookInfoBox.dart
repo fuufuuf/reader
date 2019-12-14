@@ -6,8 +6,20 @@ class _FutureBookInfoBox extends StatelessWidget {
   const _FutureBookInfoBox({Key key, this.parseNewBook}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Container(
-        child: FutureBuilder(future: parseNewBook, builder: _buildFuture),
+  Widget build(BuildContext context) =>
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        child: Container(
+          decoration: BoxDecoration(
+              border: Border.all(
+                  color: Theme
+                      .of(context)
+                      .primaryColor
+              )
+          ),
+          constraints: BoxConstraints.expand(height: 200),
+          child: FutureBuilder(future: parseNewBook, builder: _buildFuture),
+        ),
       );
 
   Widget _buildFuture(BuildContext context, AsyncSnapshot<NewBook> snapshot) {
