@@ -18,7 +18,7 @@ class _AddBookButton extends StatelessWidget {
       FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
-            EventBus.publishTo(context, AddBookEvent());
+            EventBus.publishTo(context, _AddBookEvent());
           }
       );
 }
@@ -57,7 +57,7 @@ class _BookIndexItem extends StatelessWidget {
           ),
           direction: DismissDirection.endToStart,
           onDismissed: (DismissDirection direction) {
-            EventBus.publishTo(context, RemoveBookEvent(book));
+            EventBus.publishTo(context, _RemoveBookEvent(book));
           },
           dismissThresholds: const {DismissDirection.endToStart: .9},
           child: ListTile(
@@ -66,10 +66,10 @@ class _BookIndexItem extends StatelessWidget {
               trailing: IconButton(
                   icon: Icon(Icons.info_outline),
                   onPressed: () {
-                    EventBus.publishTo(context, ShowBookInfoEvent(book));
+                    EventBus.publishTo(context, _ShowBookInfoEvent(book));
                   }),
               onTap: () {
-                EventBus.publishTo(context, ShowChapterListEvent(book));
+                EventBus.publishTo(context, _OpenBookEvent(book));
               }
           ));
 

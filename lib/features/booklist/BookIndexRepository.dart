@@ -36,6 +36,13 @@ class BookIndexRepository {
         await _saveBookIdList(prefs, bookList);
   }
 
+  static Future<bool> updateProgress(BookIndex book,
+      ChapterRef currentChapter) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    return await _updateProgress(prefs, book.id, currentChapter.url.toString());
+  }
+
   static const String _bookIdsKey = 'bookIds';
 
   static String _bookIndexKey(String bookId) => "$bookId.bookIndex";
@@ -71,8 +78,11 @@ class BookIndexRepository {
     return prefs.setString(key, json);
   }
 
-  static Future<bool> _remove(SharedPreferences prefs, String bookId) async {
-    return await prefs.remove(_bookIndexKey(bookId)) ||
+  static Future<bool> _remove(SharedPreferences prefs, String bookId) async =>
+      await prefs.remove(_bookIndexKey(bookId)) ||
         await prefs.remove(_currentChapterKey(bookId));
-  }
+
+  static Future<bool> _updateProgress(SharedPreferences prefs, String bookId,
+      String currentChapterUrl) =>
+      prefs.setString(_currentChapterKey(bookId), currentChapterUrl);
 }

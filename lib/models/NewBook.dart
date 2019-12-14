@@ -10,7 +10,7 @@ abstract class NewBook implements Built<NewBook, NewBookBuilder> {
   BookIndex get book;
 
   @nullable
-  Uri get currentChapterUrl;
+  ChapterRef get currentChapter;
 
   factory NewBook([updates(NewBookBuilder b)]) = _$NewBook;
 }

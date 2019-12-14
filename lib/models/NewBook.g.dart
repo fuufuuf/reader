@@ -10,12 +10,12 @@ class _$NewBook extends NewBook {
   @override
   final BookIndex book;
   @override
-  final Uri currentChapterUrl;
+  final ChapterRef currentChapter;
 
   factory _$NewBook([void Function(NewBookBuilder) updates]) =>
       (new NewBookBuilder()..update(updates)).build();
 
-  _$NewBook._({this.book, this.currentChapterUrl}) : super._() {
+  _$NewBook._({this.book, this.currentChapter}) : super._() {
     if (book == null) {
       throw new BuiltValueNullFieldError('NewBook', 'book');
     }
@@ -33,19 +33,19 @@ class _$NewBook extends NewBook {
     if (identical(other, this)) return true;
     return other is NewBook &&
         book == other.book &&
-        currentChapterUrl == other.currentChapterUrl;
+        currentChapter == other.currentChapter;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, book.hashCode), currentChapterUrl.hashCode));
+    return $jf($jc($jc(0, book.hashCode), currentChapter.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('NewBook')
           ..add('book', book)
-          ..add('currentChapterUrl', currentChapterUrl))
+          ..add('currentChapter', currentChapter))
         .toString();
   }
 }
@@ -57,17 +57,18 @@ class NewBookBuilder implements Builder<NewBook, NewBookBuilder> {
   BookIndexBuilder get book => _$this._book ??= new BookIndexBuilder();
   set book(BookIndexBuilder book) => _$this._book = book;
 
-  Uri _currentChapterUrl;
-  Uri get currentChapterUrl => _$this._currentChapterUrl;
-  set currentChapterUrl(Uri currentChapterUrl) =>
-      _$this._currentChapterUrl = currentChapterUrl;
+  ChapterRefBuilder _currentChapter;
+  ChapterRefBuilder get currentChapter =>
+      _$this._currentChapter ??= new ChapterRefBuilder();
+  set currentChapter(ChapterRefBuilder currentChapter) =>
+      _$this._currentChapter = currentChapter;
 
   NewBookBuilder();
 
   NewBookBuilder get _$this {
     if (_$v != null) {
       _book = _$v.book?.toBuilder();
-      _currentChapterUrl = _$v.currentChapterUrl;
+      _currentChapter = _$v.currentChapter?.toBuilder();
       _$v = null;
     }
     return this;
@@ -92,12 +93,14 @@ class NewBookBuilder implements Builder<NewBook, NewBookBuilder> {
     try {
       _$result = _$v ??
           new _$NewBook._(
-              book: book.build(), currentChapterUrl: currentChapterUrl);
+              book: book.build(), currentChapter: _currentChapter?.build());
     } catch (_) {
       String _$failedField;
       try {
         _$failedField = 'book';
         book.build();
+        _$failedField = 'currentChapter';
+        _currentChapter?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'NewBook', _$failedField, e.toString());

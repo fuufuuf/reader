@@ -72,7 +72,7 @@ class _NewBookInfo extends StatelessWidget {
         _buildRow(Icons.book, newBook.book.bookInfoUrl.toString()),
         _buildRow(Icons.list, newBook.book.chapterListUrl.toString()),
         _buildRow(Icons.bookmark_border,
-            newBook.currentChapterUrl?.toString() ?? "<未知>")
+            newBook.currentChapter?.title ?? "<未知>")
       ]);
 
   ListTile _buildRow(IconData icon, String value) =>
