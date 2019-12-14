@@ -12,6 +12,13 @@ class _FormButtonBar extends StatelessWidget {
         children: <Widget>[
           FlatButton(
             padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            child: Text('加载剪切板'),
+            onPressed: () {
+              EventBus.publishTo(context, _PasteUrlEvent());
+            },
+          ),
+          FlatButton(
+            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             child: Text('加载'),
             onPressed: () {
               EventBus.publishTo(context, _ParseNewBookUrlEvent());
