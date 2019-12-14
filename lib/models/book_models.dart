@@ -25,8 +25,6 @@ abstract class BookInfo implements Built<BookInfo, BookInfoBuilder> {
 
   factory BookInfo([updates(BookInfoBuilder b)]) = _$BookInfo;
 
-  String get title;
-
   @nullable
   String get author;
 
@@ -51,6 +49,12 @@ abstract class BookInfo implements Built<BookInfo, BookInfoBuilder> {
   bool get hasLastUpdated => lastUpdated != null;
 
   bool get hasLength => length != null;
+
+  BookIndex toBookIndex() =>
+      BookIndex((b) =>
+      b
+        ..title
+      );
 }
 
 abstract class ChapterRef implements Built<ChapterRef, ChapterRefBuilder> {
@@ -80,4 +84,6 @@ abstract class ChapterContent
   Uri get nextChapterUrl;
 
   bool get hasNext => nextChapterUrl != null;
+
+  bool get isLocked;
 }

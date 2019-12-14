@@ -193,8 +193,6 @@ class BookIndexBuilder implements Builder<BookIndex, BookIndexBuilder> {
 
 class _$BookInfo extends BookInfo {
   @override
-  final String title;
-  @override
   final String author;
   @override
   final String genre;
@@ -209,17 +207,12 @@ class _$BookInfo extends BookInfo {
       (new BookInfoBuilder()..update(updates)).build();
 
   _$BookInfo._(
-      {this.title,
-      this.author,
+      {this.author,
       this.genre,
       this.completeness,
       this.lastUpdated,
       this.length})
-      : super._() {
-    if (title == null) {
-      throw new BuiltValueNullFieldError('BookInfo', 'title');
-    }
-  }
+      : super._();
 
   @override
   BookInfo rebuild(void Function(BookInfoBuilder) updates) =>
@@ -232,7 +225,6 @@ class _$BookInfo extends BookInfo {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is BookInfo &&
-        title == other.title &&
         author == other.author &&
         genre == other.genre &&
         completeness == other.completeness &&
@@ -244,9 +236,7 @@ class _$BookInfo extends BookInfo {
   int get hashCode {
     return $jf($jc(
         $jc(
-            $jc(
-                $jc($jc($jc(0, title.hashCode), author.hashCode),
-                    genre.hashCode),
+            $jc($jc($jc(0, author.hashCode), genre.hashCode),
                 completeness.hashCode),
             lastUpdated.hashCode),
         length.hashCode));
@@ -255,7 +245,6 @@ class _$BookInfo extends BookInfo {
   @override
   String toString() {
     return (newBuiltValueToStringHelper('BookInfo')
-          ..add('title', title)
           ..add('author', author)
           ..add('genre', genre)
           ..add('completeness', completeness)
@@ -267,10 +256,6 @@ class _$BookInfo extends BookInfo {
 
 class BookInfoBuilder implements Builder<BookInfo, BookInfoBuilder> {
   _$BookInfo _$v;
-
-  String _title;
-  String get title => _$this._title;
-  set title(String title) => _$this._title = title;
 
   String _author;
   String get author => _$this._author;
@@ -296,7 +281,6 @@ class BookInfoBuilder implements Builder<BookInfo, BookInfoBuilder> {
 
   BookInfoBuilder get _$this {
     if (_$v != null) {
-      _title = _$v.title;
       _author = _$v.author;
       _genre = _$v.genre;
       _completeness = _$v.completeness;
@@ -324,7 +308,6 @@ class BookInfoBuilder implements Builder<BookInfo, BookInfoBuilder> {
   _$BookInfo build() {
     final _$result = _$v ??
         new _$BookInfo._(
-            title: title,
             author: author,
             genre: genre,
             completeness: completeness,
@@ -430,15 +413,23 @@ class _$ChapterContent extends ChapterContent {
   final Uri previousChapterUrl;
   @override
   final Uri nextChapterUrl;
+  @override
+  final bool isLocked;
 
   factory _$ChapterContent([void Function(ChapterContentBuilder) updates]) =>
       (new ChapterContentBuilder()..update(updates)).build();
 
   _$ChapterContent._(
-      {this.paragraphs, this.previousChapterUrl, this.nextChapterUrl})
+      {this.paragraphs,
+      this.previousChapterUrl,
+      this.nextChapterUrl,
+      this.isLocked})
       : super._() {
     if (paragraphs == null) {
       throw new BuiltValueNullFieldError('ChapterContent', 'paragraphs');
+    }
+    if (isLocked == null) {
+      throw new BuiltValueNullFieldError('ChapterContent', 'isLocked');
     }
   }
 
@@ -456,14 +447,16 @@ class _$ChapterContent extends ChapterContent {
     return other is ChapterContent &&
         paragraphs == other.paragraphs &&
         previousChapterUrl == other.previousChapterUrl &&
-        nextChapterUrl == other.nextChapterUrl;
+        nextChapterUrl == other.nextChapterUrl &&
+        isLocked == other.isLocked;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc(0, paragraphs.hashCode), previousChapterUrl.hashCode),
-        nextChapterUrl.hashCode));
+        $jc($jc($jc(0, paragraphs.hashCode), previousChapterUrl.hashCode),
+            nextChapterUrl.hashCode),
+        isLocked.hashCode));
   }
 
   @override
@@ -471,7 +464,8 @@ class _$ChapterContent extends ChapterContent {
     return (newBuiltValueToStringHelper('ChapterContent')
           ..add('paragraphs', paragraphs)
           ..add('previousChapterUrl', previousChapterUrl)
-          ..add('nextChapterUrl', nextChapterUrl))
+          ..add('nextChapterUrl', nextChapterUrl)
+          ..add('isLocked', isLocked))
         .toString();
   }
 }
@@ -496,6 +490,10 @@ class ChapterContentBuilder
   set nextChapterUrl(Uri nextChapterUrl) =>
       _$this._nextChapterUrl = nextChapterUrl;
 
+  bool _isLocked;
+  bool get isLocked => _$this._isLocked;
+  set isLocked(bool isLocked) => _$this._isLocked = isLocked;
+
   ChapterContentBuilder();
 
   ChapterContentBuilder get _$this {
@@ -503,6 +501,7 @@ class ChapterContentBuilder
       _paragraphs = _$v.paragraphs?.toBuilder();
       _previousChapterUrl = _$v.previousChapterUrl;
       _nextChapterUrl = _$v.nextChapterUrl;
+      _isLocked = _$v.isLocked;
       _$v = null;
     }
     return this;
@@ -529,7 +528,8 @@ class ChapterContentBuilder
           new _$ChapterContent._(
               paragraphs: paragraphs.build(),
               previousChapterUrl: previousChapterUrl,
-              nextChapterUrl: nextChapterUrl);
+              nextChapterUrl: nextChapterUrl,
+              isLocked: isLocked);
     } catch (_) {
       String _$failedField;
       try {

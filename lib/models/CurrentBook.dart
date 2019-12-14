@@ -20,17 +20,27 @@ abstract class CurrentBook implements Built<CurrentBook, CurrentBookBuilder> {
   @nullable
   BookIndex get bookIndex;
 
+  bool get hasBookIndex=> bookIndex != null;
+
   @nullable
   BookInfo get bookInfo;
+
+  bool get hasBookInfo => bookInfo != null;
 
   @nullable
   BuiltList<ChapterRef> get chapterList;
 
+  bool get hasChapterList => chapterList != null;
+
   @nullable
   ChapterRef get chapter;
 
+  bool get hasChapter => chapter != null;
+
   @nullable
   ChapterContent get chapterContent;
+
+  bool get hasChapterContent => chapterContent != null;
 
   dynamic selectBy(CurrentBookAspect aspect) {
     switch (aspect) {
