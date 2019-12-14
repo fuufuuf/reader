@@ -17,7 +17,7 @@ class _FutureBookInfoBox extends StatelessWidget {
                       .primaryColor
               )
           ),
-          constraints: BoxConstraints.expand(height: 200),
+          constraints: BoxConstraints.expand(height: 270),
           child: FutureBuilder(future: currentBook, builder: _buildFuture),
         ),
       );

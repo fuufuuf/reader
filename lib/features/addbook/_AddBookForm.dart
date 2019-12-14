@@ -8,7 +8,10 @@ class _AddBookForm extends StatefulWidget {
 class _AddBookFormInteractor extends Interactor<_AddBookForm> {
   final TextEditingController _urlController = TextEditingController();
 
-  Future<CurrentBook> _parseNewBookFuture;
+  Future<CurrentBook> _parseBookInfoFuture;
+  CurrentBook _parsedBook;
+
+  bool get _isBookParsed => _parsedBook != null;
 
   @override
   void initState() {
@@ -21,10 +24,10 @@ class _AddBookFormInteractor extends Interactor<_AddBookForm> {
       Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
         _UrlField(_urlController),
         _FutureBookInfoBox(
-          currentBook: _parseNewBookFuture,
+          currentBook: _parseBookInfoFuture,
         ),
         _FormButtonBar(
-          allowSubmit: false,
+          allowSubmit: _isBookParsed,
         )
       ]);
 
@@ -42,10 +45,21 @@ class _AddBookFormInteractor extends Interactor<_AddBookForm> {
     }
   }
 
-  void _parseUrl(_ParseNewBookUrlEvent event) {
+  void _parseUrl(_ParseNewBookUrlEvent event) async {
+    final url = Uri.parse(_urlController.text);
 
+    setState(() {
+      _parseBookInfoFuture = BookRepository.fetchFromUrl(url, CurrentBook());
+    });
+
+    _parseBookInfoFuture.then((data) {
+      setState(() {
+        _parsedBook = data;
+      });
+    });
   }
 
   void _submitForm(_SubmitFormEvent event) {
+    Navigator.of(context).pop(_parsedBook);
   }
 }
