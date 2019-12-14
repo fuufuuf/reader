@@ -6,6 +6,68 @@ part of 'book_models.dart';
 // BuiltValueGenerator
 // **************************************************************************
 
+Serializer<BookIndex> _$bookIndexSerializer = new _$BookIndexSerializer();
+
+class _$BookIndexSerializer implements StructuredSerializer<BookIndex> {
+  @override
+  final Iterable<Type> types = const [BookIndex, _$BookIndex];
+  @override
+  final String wireName = 'BookIndex';
+
+  @override
+  Iterable<Object> serialize(Serializers serializers, BookIndex object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[
+      'id',
+      serializers.serialize(object.id, specifiedType: const FullType(String)),
+      'title',
+      serializers.serialize(object.title,
+          specifiedType: const FullType(String)),
+      'chapterListUrl',
+      serializers.serialize(object.chapterListUrl,
+          specifiedType: const FullType(Uri)),
+      'bookInfoUrl',
+      serializers.serialize(object.bookInfoUrl,
+          specifiedType: const FullType(Uri)),
+    ];
+
+    return result;
+  }
+
+  @override
+  BookIndex deserialize(Serializers serializers, Iterable<Object> serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new BookIndexBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'title':
+          result.title = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'chapterListUrl':
+          result.chapterListUrl = serializers.deserialize(value,
+              specifiedType: const FullType(Uri)) as Uri;
+          break;
+        case 'bookInfoUrl':
+          result.bookInfoUrl = serializers.deserialize(value,
+              specifiedType: const FullType(Uri)) as Uri;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
 class _$BookIndex extends BookIndex {
   @override
   final String id;
