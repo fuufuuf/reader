@@ -27,11 +27,7 @@ class _$CurrentBook extends CurrentBook {
       this.chapterList,
       this.chapter,
       this.chapterContent})
-      : super._() {
-    if (bookIndex == null) {
-      throw new BuiltValueNullFieldError('CurrentBook', 'bookIndex');
-    }
-  }
+      : super._();
 
   @override
   CurrentBook rebuild(void Function(CurrentBookBuilder) updates) =>
@@ -134,7 +130,7 @@ class CurrentBookBuilder implements Builder<CurrentBook, CurrentBookBuilder> {
     try {
       _$result = _$v ??
           new _$CurrentBook._(
-              bookIndex: bookIndex.build(),
+              bookIndex: _bookIndex?.build(),
               bookInfo: _bookInfo?.build(),
               chapterList: _chapterList?.build(),
               chapter: _chapter?.build(),
@@ -143,7 +139,7 @@ class CurrentBookBuilder implements Builder<CurrentBook, CurrentBookBuilder> {
       String _$failedField;
       try {
         _$failedField = 'bookIndex';
-        bookIndex.build();
+        _bookIndex?.build();
         _$failedField = 'bookInfo';
         _bookInfo?.build();
         _$failedField = 'chapterList';

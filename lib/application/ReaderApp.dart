@@ -1,28 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_event_bus/flutter_event_bus/EventBus.dart';
-import 'package:flutter_event_bus/flutter_event_bus/Subscription.dart';
-import 'package:timnew_reader/application/AppRouter.dart';
-import 'package:timnew_reader/fluttter_event_bus/EmptySubscription.dart';
-import 'package:timnew_reader/fluttter_event_bus/RootInteractor.dart';
+import 'package:flutter_event_bus/flutter_event_bus.dart';
+import 'package:timnew_reader/features/booklist/BookListScreen.dart';
 
-class ReaderApp extends StatefulWidget {
+class ReaderApp extends StatelessWidget {
   @override
-  State<StatefulWidget> createState() => AppInteractor();
-}
-
-class AppInteractor extends RootInteractor<ReaderApp> {
-  AppRouter _appRouter = AppRouter();
-
-  @override
-  Subscription subscribeEvents(EventBus eventBus) => EmptySubscription();
-
-  @override
-  Widget buildStores(BuildContext context, {Widget child}) => null;
-
-  @override
-  Widget buildChild(BuildContext context) => MaterialApp(
-        initialRoute: _appRouter.initialRoute,
-        routes: _appRouter.routes,
-        onUnknownRoute: _appRouter.onUnknownRoute
+  Widget build(BuildContext context) =>
+      EventBusWidget(
+          child: MaterialApp(
+            title: '米良追书',
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+            ),
+            initialRoute: "/",
+            routes: buildRoutes(),
+          )
       );
+
+  Map<String, WidgetBuilder> buildRoutes() =>
+      <String, WidgetBuilder>{
+        "/": (_) => BookListScreen(),
+      };
 }

@@ -17,6 +17,7 @@ abstract class CurrentBook implements Built<CurrentBook, CurrentBookBuilder> {
 
   factory CurrentBook([updates(CurrentBookBuilder b)]) = _$CurrentBook;
 
+  @nullable
   BookIndex get bookIndex;
 
   @nullable
