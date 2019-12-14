@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_event_bus/EventBus.dart';
 import 'package:flutter_event_bus/ProxyInteractor.dart';
 import 'package:flutter_event_bus/Subscription.dart';
-import 'package:timnew_reader/legacy/models/BookIndex.dart';
+import 'package:timnew_reader/models/book_models.dart';
 import 'package:timnew_reader/stores/BookListStore.dart';
 
 class BookListInteractorWidget extends ProxyInteractorWidget {

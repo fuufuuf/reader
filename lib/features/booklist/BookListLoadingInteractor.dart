@@ -1,8 +1,9 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/widgets.dart';
+import 'package:timnew_reader/features/booklist/BookIndexRepository.dart';
 import 'package:timnew_reader/features/booklist/BookListInteractor.dart';
 import 'package:timnew_reader/features/splash/SplashScreen.dart';
-import 'package:timnew_reader/legacy/models/BookIndex.dart';
+import 'package:timnew_reader/models/book_models.dart';
 
 class BookListLoadingInteractorWidget extends StatelessWidget {
   final WidgetBuilder childBuilder;
@@ -10,7 +11,7 @@ class BookListLoadingInteractorWidget extends StatelessWidget {
   BookListLoadingInteractorWidget({@required this.childBuilder});
 
   Future<BuiltList<BookIndex>> get futureBookList =>
-      Future.delayed(Duration(seconds: 1)).then((_) => BuiltList.of([]));
+      BookIndexRepository.loadAllBooks();
 
   @override
   Widget build(BuildContext context) => FutureBuilder(
