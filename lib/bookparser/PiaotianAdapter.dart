@@ -142,6 +142,12 @@ class PiaotianAdapter extends SiteAdapter {
             '<script language="javascript">GetFont();</script>',
             '<div id="content">'));
 
+    final titleParts = safeText(() =>
+    document
+        .querySelector('h1')
+        .text
+    ).split(" ");
+
     return currentBook.rebuild((b) {
       if (!currentBook.hasBookIndex) {
         final bookInfoUrl = safeUrl(url, () =>
@@ -151,10 +157,7 @@ class PiaotianAdapter extends SiteAdapter {
 
         b.bookIndex
           ..id = _extractBookId(bookInfoUrl)
-          ..title = safeText(() =>
-          document
-              .querySelector('h1')
-              .text)
+          ..title = titleParts.first
           ..bookInfoUrl = bookInfoUrl
           ..chapterListUrl = safeUrl(url, () =>
           document
@@ -163,10 +166,9 @@ class PiaotianAdapter extends SiteAdapter {
       }
 
       b.chapter
-        ..title = safeText(() =>
-        document
-            .querySelector('h1')
-            .text)
+        ..title = titleParts
+            .getRange(titleParts.length - 2, titleParts.length )
+            .join(" ")
         ..url = url;
 
       b.chapterContent
