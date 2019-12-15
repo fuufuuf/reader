@@ -12,18 +12,43 @@ class BookRepository {
   };
 
   static Future<CurrentBook> fetchChapterContent(Uri url,
-      CurrentBook currentBook) =>
-      _findAdapter(url).fetchChapterContent(url, currentBook);
+      CurrentBook currentBook) async {
+    final adapter = _findAdapter(url);
 
-  static Future<CurrentBook> fetchBookInfo(Uri url, CurrentBook currentBook) =>
-      _findAdapter(url).fetchBookInfo(url, currentBook);
+    return await adapter.fetchChapterContent(url, currentBook);
+  }
+
+  static Future<CurrentBook> fetchBookInfo(Uri url,
+      CurrentBook currentBook) async {
+    final adapter = _findAdapter(url);
+
+    return await adapter.fetchBookInfo(url, currentBook);
+  }
 
   static Future<CurrentBook> fetchChapterList(Uri url,
-      CurrentBook currentBook) =>
-      _findAdapter(url).fetchChapterList(url, currentBook);
+      CurrentBook currentBook) async {
+    final adapter = _findAdapter(url);
 
-  static Future<CurrentBook> fetchFromUrl(Uri url, CurrentBook currentBook) =>
-      _findAdapter(url).fetchFromUrl(url, currentBook);
+    return await adapter.fetchChapterList(url, currentBook);
+  }
 
-  static SiteAdapter _findAdapter(Uri url) => adapters[url.host];
+  static Future<CurrentBook> fetchFromUrl(Uri url,
+      CurrentBook currentBook) async {
+    final adapter = _findAdapter(url);
+    return await adapter.fetchFromUrl(url, currentBook);
+  }
+
+  static SiteAdapter _findAdapter(Uri url) {
+    if (!url.hasScheme || !url.scheme.startsWith("http") || !url.isAbsolute) {
+      throw Exception("Invalid Url");
+    }
+
+    final result = adapters[url.host];
+
+    if (result == null) {
+      throw Exception("Unknown Site found");
+    }
+
+    return result;
+  }
 }
