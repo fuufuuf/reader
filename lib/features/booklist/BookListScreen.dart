@@ -8,7 +8,7 @@ import 'package:timnew_reader/features/addbook/AddBookDialog.dart';
 import 'package:timnew_reader/models/book_models.dart';
 import 'package:timnew_reader/stores/BookListStore.dart';
 
-import 'BookIndexRepository.dart';
+import '../../models/BookIndexRepository.dart';
 
 part '_BookListInteractor.dart';
 
