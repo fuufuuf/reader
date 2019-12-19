@@ -4,32 +4,34 @@ import 'package:timnew_reader/models/CurrentBook.dart';
 import 'package:timnew_reader/models/book_models.dart';
 
 class CurrentBookStore extends InheritedModel<CurrentBookAspect> {
-  final CurrentBook state;
+  final CurrentBook currentBook;
 
-  BookIndex get bookIndex => state.bookIndex;
+  BookIndex get bookIndex => currentBook.bookIndex;
 
-  BookInfo get bookInfo => state.bookInfo;
+  BookInfo get bookInfo => currentBook.bookInfo;
 
-  BuiltList<ChapterRef> get chapterList => state.chapterList;
+  BuiltList<ChapterRef> get chapterList => currentBook.chapterList;
 
-  ChapterRef get chapter => state.chapter;
+  ChapterRef get chapter => currentBook.chapter;
 
-  ChapterContent get chapterContent => state.chapterContent;
+  ChapterContent get chapterContent => currentBook.chapterContent;
 
-  CurrentBookStore(this.state, Widget child)
-      :super(key: ObjectKey(CurrentBookStore), child: child);
+  CurrentBookStore(
+      {Key key, @required this.currentBook, @required Widget child})
+      :super(key: key, child: child);
 
   @override
   bool updateShouldNotify(CurrentBookStore oldWidget) =>
-      oldWidget.state != state;
+      oldWidget.currentBook != currentBook;
 
   @override
   bool updateShouldNotifyDependent(CurrentBookStore oldWidget,
       Set<CurrentBookAspect> dependencies) =>
       dependencies.any((aspect) =>
-      state.selectBy(aspect) !=
-          oldWidget.state.selectBy(aspect));
+      currentBook.selectBy(aspect) !=
+          oldWidget.currentBook.selectBy(aspect));
 
-  static CurrentBookStore of(BuildContext context, CurrentBookAspect aspect) =>
+  static CurrentBookStore of(BuildContext context,
+      CurrentBookAspect aspect) =>
       InheritedModel.inheritFrom<CurrentBookStore>(context, aspect: aspect);
 }
