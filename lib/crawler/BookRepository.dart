@@ -4,7 +4,7 @@ import 'PiaotianAdapter.dart';
 import 'ReaderHttpClient.dart';
 import 'SiteAdapter.dart';
 
-class BookRepository {
+class BookCrawler {
   static ReaderHttpClient client = ReaderHttpClient();
 
   static Map<String, SiteAdapter> adapters = {

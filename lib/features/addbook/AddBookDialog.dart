@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_event_bus/flutter_event_bus.dart';
-import 'package:timnew_reader/bookparser/BookRepository.dart';
+import 'package:timnew_reader/crawler/BookRepository.dart';
 import 'package:timnew_reader/models/CurrentBook.dart';
 
 part '_AddBookForm.dart';

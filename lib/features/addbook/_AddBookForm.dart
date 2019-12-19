@@ -49,7 +49,7 @@ class _AddBookFormInteractor extends Interactor<_AddBookForm> {
     final url = Uri.parse(_urlController.text);
 
     setState(() {
-      _parseBookInfoFuture = BookRepository.fetchFromUrl(url, CurrentBook());
+      _parseBookInfoFuture = BookCrawler.fetchFromUrl(url, CurrentBook());
     });
 
     _parseBookInfoFuture.then((data) {
