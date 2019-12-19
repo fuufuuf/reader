@@ -3,19 +3,19 @@ part of 'BookListScreen.dart';
 class _AddBookEvent {}
 
 class _RemoveBookEvent {
-  final BookIndex book;
+  final BookIndex bookIndex;
 
-  _RemoveBookEvent(this.book);
+  _RemoveBookEvent(this.bookIndex);
 }
 
-class _ShowBookInfoEvent {
-  final BookIndex book;
+class _ShowChapterListEvent {
+  final BookIndex bookIndex;
 
-  _ShowBookInfoEvent(this.book);
+  _ShowChapterListEvent(this.bookIndex);
 }
 
 class _OpenBookEvent {
-  final BookIndex book;
+  final BookIndex bookIndex;
 
-  _OpenBookEvent(this.book);
+  _OpenBookEvent(this.bookIndex);
 }

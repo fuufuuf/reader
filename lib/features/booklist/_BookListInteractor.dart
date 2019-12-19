@@ -27,7 +27,7 @@ class _BookListInteractor extends ProxyInteractor {
       eventBus
           .respond<_AddBookEvent>(_respondToAddBook)
           .respond<_RemoveBookEvent>(_respondToRemoveBook)
-          .respond<_ShowBookInfoEvent>(_respondToShowBookInfo)
+          .respond<_ShowChapterListEvent>(_respondToOpenChapterList)
           .respond<_OpenBookEvent>(_respondToOpenBook);
 
   void _respondToAddBook(_AddBookEvent event) async {
@@ -52,17 +52,17 @@ class _BookListInteractor extends ProxyInteractor {
   }
 
   void _respondToRemoveBook(_RemoveBookEvent event) async {
-    final updated = books.rebuild((b) => b.remove(event.book));
+    final updated = books.rebuild((b) => b.remove(event.bookIndex));
 
-    await BookIndexRepository.removeBook(updated, event.book.id);
+    await BookIndexRepository.removeBook(updated, event.bookIndex.id);
 
     setState(() {
       books = updated;
     });
   }
 
-  void _respondToShowBookInfo(_ShowBookInfoEvent event) {
-    print("Show book info");
+  void _respondToOpenChapterList(_ShowChapterListEvent event) {
+    Navigator.push(context, ChapterListScreen.route(event.bookIndex));
   }
 
   void _respondToOpenBook(_OpenBookEvent event) {

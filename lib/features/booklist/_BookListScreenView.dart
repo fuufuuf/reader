@@ -66,7 +66,7 @@ class _BookIndexItem extends StatelessWidget {
               trailing: IconButton(
                   icon: Icon(Icons.info_outline),
                   onPressed: () {
-                    EventBus.publishTo(context, _ShowBookInfoEvent(book));
+                    EventBus.publishTo(context, _ShowChapterListEvent(book));
                   }),
               onTap: () {
                 EventBus.publishTo(context, _OpenBookEvent(book));
