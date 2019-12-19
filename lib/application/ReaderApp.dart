@@ -7,17 +7,9 @@ class ReaderApp extends StatelessWidget {
   Widget build(BuildContext context) =>
       EventBusWidget(
           child: MaterialApp(
-            title: '米良追书',
-            theme: ThemeData(
-              primarySwatch: Colors.blue,
-            ),
-            initialRoute: "/",
-            routes: buildRoutes(),
+              title: '米良追书',
+              theme: ThemeData(primarySwatch: Colors.blue),
+              home: BookListScreen()
           )
       );
-
-  Map<String, WidgetBuilder> buildRoutes() =>
-      <String, WidgetBuilder>{
-        "/": (_) => BookListScreen(),
-      };
 }
