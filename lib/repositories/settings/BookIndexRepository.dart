@@ -71,6 +71,10 @@ class BookIndexRepository {
     return BuiltList.of(bookIds.map((bookId) => load(bookId)));
   }
 
+  static BuiltList<String> exportAllBookUrls() => _loadBookIds()
+      .map((id) => hasCurrentChapterUrl(id) ? loadCurrentChapter(id) : load(id).chapterListUrl)
+      .map((it) => it.toString());
+
   static BuiltSet<String> _loadBookIds() {
     final ids = _prefs.getStringList(_bookIdsKey) ?? [];
     return BuiltSet.of(ids);
