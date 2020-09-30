@@ -14,7 +14,6 @@ class BookListScreen extends StatefulWidget {
 }
 
 class _BookListScreenState extends State<BookListScreen> {
-
   BuiltList<BookIndex> bookIndexes;
 
   void reload() {
@@ -32,9 +31,7 @@ class _BookListScreenState extends State<BookListScreen> {
   Widget build(BuildContext context) => ScreenScaffold(
       title: '米良追书',
       body: ListView.builder(
-          itemBuilder: (context, index) =>
-              _renderBookItem(context, bookIndexes[index]),
-          itemCount: bookIndexes.length),
+          itemBuilder: (context, index) => _renderBookItem(context, bookIndexes[index]), itemCount: bookIndexes.length),
       floatingActionButton: _renderFab(context));
 
   void _addBookEntry(NewBook newBook) async {
@@ -55,35 +52,31 @@ class _BookListScreenState extends State<BookListScreen> {
     });
   }
 
-  Widget _renderBookItem(BuildContext context, BookIndex bookIndex) =>
-      Dismissible(
-          key: Key(bookIndex.bookId),
-          background: Container(
-            color: Colors.redAccent,
-            alignment: Alignment.centerRight,
-            padding: EdgeInsets.only(right: 16),
-            child: Text('滑动删除',
-                style: TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.bold)),
-          ),
-          direction: DismissDirection.endToStart,
-          onDismissed: (DismissDirection direction) {
-            _removeBookEntry(bookIndex);
-          },
-          dismissThresholds: const {DismissDirection.endToStart: .9},
-          child: ListTile(
-              leading: Icon(Icons.book),
-              title: Text(bookIndex.bookName),
-              trailing: IconButton(
-                  icon: Icon(Icons.info_outline), onPressed: () {
+  Widget _renderBookItem(BuildContext context, BookIndex bookIndex) => Dismissible(
+      key: Key(bookIndex.bookId),
+      background: Container(
+        color: Colors.redAccent,
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.only(right: 16),
+        child: Text('滑动删除', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+      ),
+      direction: DismissDirection.endToStart,
+      onDismissed: (DismissDirection direction) {
+        _removeBookEntry(bookIndex);
+      },
+      dismissThresholds: const {DismissDirection.endToStart: .9},
+      child: ListTile(
+          leading: Icon(Icons.book),
+          title: Text(bookIndex.bookName),
+          trailing: IconButton(
+              icon: Icon(Icons.info_outline),
+              onPressed: () {
                 AppRouter.openBookInfo(context, bookIndex.bookId);
               }),
-              onTap: () async {
-                await AppRouter.openBookChapters(
-                    context, bookIndex.bookId, openReaderIfPossible: true);
-                reload();
-              }
-          ));
+          onTap: () async {
+            await AppRouter.openBookChapters(context, bookIndex.bookId, openReaderIfPossible: true);
+            reload();
+          }));
 
   Widget _renderFab(BuildContext context) => FloatingActionButton(
       child: Icon(Icons.add),

@@ -58,19 +58,16 @@ class ThemeRepository {
     await _saveColor(themeId, _backgroundColorKey, theme.backgroundColor);
     await saveFontSize(theme.fontSize);
     await _saveColor(themeId, _popUpTextColorKey, theme.popUpTextColor);
-    await _saveColor(
-        themeId, _popUpBackgroundColorKey, theme.popUpBackgroundColor);
+    await _saveColor(themeId, _popUpBackgroundColorKey, theme.popUpBackgroundColor);
   }
 
   static Future<void> saveFontSize(double fontSize) async {
     await _preferences.setDouble(_fontSizeKey, fontSize);
   }
 
-  static String _themeKey(String themeId, String field) =>
-      "theme.$themeId.$field";
+  static String _themeKey(String themeId, String field) => "theme.$themeId.$field";
 
-  static Color _loadColor(String themeId, String field) =>
-      Color(_preferences.getInt(_themeKey(themeId, field)));
+  static Color _loadColor(String themeId, String field) => Color(_preferences.getInt(_themeKey(themeId, field)));
 
   static Future<bool> _saveColor(String themeId, String field, Color color) =>
       _preferences.setInt(_themeKey(themeId, field), color.value);

@@ -4,8 +4,7 @@ import 'package:html/parser.dart' as htmlParser;
 import 'package:http/http.dart' as http;
 
 class ReaderHttpClient {
-  Future<Document> fetchDom(Uri url,
-          {bool enforceGbk: false, String patchHtml(String html)}) =>
+  Future<Document> fetchDom(Uri url, {bool enforceGbk: false, String patchHtml(String html)}) =>
       fetchHtml(url, enforceGbk: enforceGbk)
           .then((html) => (patchHtml == null) ? html : patchHtml(html))
           .then((html) => htmlParser.parse(html, encoding: 'utf8'));

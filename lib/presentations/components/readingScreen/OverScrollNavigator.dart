@@ -26,14 +26,7 @@ class OverScrollNavigator extends StatefulWidget {
   State<StatefulWidget> createState() => _OverScrollNavigatorState();
 }
 
-enum OverScrollNavigatorMode {
-  Loading,
-  NoOverScroll,
-  UpOverScroll,
-  UpArmed,
-  DownOverScroll,
-  DownArmed
-}
+enum OverScrollNavigatorMode { Loading, NoOverScroll, UpOverScroll, UpArmed, DownOverScroll, DownArmed }
 
 class _OverScrollNavigatorState extends State<OverScrollNavigator> {
   double _upDisplacement = 0;
@@ -66,20 +59,16 @@ class _OverScrollNavigatorState extends State<OverScrollNavigator> {
             alignment: Alignment.bottomCenter,
             child: _renderDownIndicator(),
           ),
-          NotificationListener<ScrollNotification>(
-              onNotification: _onScrollNotification, child: widget.child)
+          NotificationListener<ScrollNotification>(onNotification: _onScrollNotification, child: widget.child)
         ],
       );
 
   Widget _renderUpIndicator() {
     switch (_mode) {
       case OverScrollNavigatorMode.UpOverScroll:
-        return Opacity(
-            opacity: _upDisplacement, child: const Icon(Icons.arrow_upward));
+        return Opacity(opacity: _upDisplacement, child: const Icon(Icons.arrow_upward));
       case OverScrollNavigatorMode.UpArmed:
-        return Opacity(
-            opacity: _upDisplacement,
-            child: const Icon(Icons.arrow_upward, size: 30));
+        return Opacity(opacity: _upDisplacement, child: const Icon(Icons.arrow_upward, size: 30));
       default:
         return null;
     }
@@ -116,9 +105,8 @@ class _OverScrollNavigatorState extends State<OverScrollNavigator> {
 
     if (widget.isDownEnabled && metrics.pixels > metrics.maxScrollExtent) {
       setState(() {
-        _downDisplacement = _normalizeDisplacement(
-            metrics.pixels - metrics.maxScrollExtent,
-            widget.displacementThreshold);
+        _downDisplacement =
+            _normalizeDisplacement(metrics.pixels - metrics.maxScrollExtent, widget.displacementThreshold);
 
         if (_mode != OverScrollNavigatorMode.DownArmed) {
           mode = OverScrollNavigatorMode.DownOverScroll;
@@ -130,9 +118,8 @@ class _OverScrollNavigatorState extends State<OverScrollNavigator> {
       });
     } else if (widget.isUpEnabled && metrics.pixels < metrics.minScrollExtent) {
       setState(() {
-        _upDisplacement = _normalizeDisplacement(
-            metrics.minScrollExtent - metrics.pixels,
-            widget.displacementThreshold);
+        _upDisplacement =
+            _normalizeDisplacement(metrics.minScrollExtent - metrics.pixels, widget.displacementThreshold);
 
         if (_mode != OverScrollNavigatorMode.UpArmed) {
           mode = OverScrollNavigatorMode.UpOverScroll;
@@ -147,16 +134,14 @@ class _OverScrollNavigatorState extends State<OverScrollNavigator> {
         setState(() {
           _upDisplacement = 0;
           _downDisplacement = 0;
-          if (_mode != OverScrollNavigatorMode.UpArmed ||
-              _mode != OverScrollNavigatorMode.DownArmed) {
+          if (_mode != OverScrollNavigatorMode.UpArmed || _mode != OverScrollNavigatorMode.DownArmed) {
             mode = OverScrollNavigatorMode.NoOverScroll;
           }
         });
       }
     }
 
-    if (notification is ScrollUpdateNotification &&
-        notification.dragDetails == null) {
+    if (notification is ScrollUpdateNotification && notification.dragDetails == null) {
       _tryFire();
       return true;
     }

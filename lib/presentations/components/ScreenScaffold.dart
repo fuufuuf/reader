@@ -26,12 +26,11 @@ class ScreenScaffold extends StatelessWidget {
       floatingActionButton: floatingActionButton,
       body: _renderBody(context));
 
-  Widget _renderAppBar(BuildContext context) =>
-      AppBar(
-          title: _renderTitle(context),
+  Widget _renderAppBar(BuildContext context) => AppBar(
+        title: _renderTitle(context),
         actions: _renderAppBarActions(context),
         bottom: appBarBottom,
-    );
+      );
 
   Widget _renderTitle(BuildContext context) {
     return titleWidget ?? Text(title);
@@ -45,9 +44,5 @@ class ScreenScaffold extends StatelessWidget {
     }
   }
 
-  Widget _renderBody(BuildContext context) =>
-      Padding(
-          padding: const EdgeInsets.all(8),
-          child: body
-      );
+  Widget _renderBody(BuildContext context) => Padding(padding: const EdgeInsets.all(8), child: body);
 }

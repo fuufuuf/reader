@@ -16,17 +16,14 @@ class ReadingScreen extends StatefulWidget {
   final Uri contentUrl;
 
   ReadingScreen({Key key, String bookId, this.contentUrl})
-      :
-        bookIndex = BookIndex.load(bookId),
+      : bookIndex = BookIndex.load(bookId),
         super(key: key);
 
   @override
-  State<StatefulWidget> createState() =>
-      ReadingScreenState(bookIndex, contentUrl);
+  State<StatefulWidget> createState() => ReadingScreenState(bookIndex, contentUrl);
 }
 
 class ReadingScreenState extends State<ReadingScreen> {
-
   final BookIndex bookIndex;
 
   Future<ChapterContent> future;
@@ -87,33 +84,24 @@ class ReadingScreenState extends State<ReadingScreen> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      ReadingScaffold(
-          onDoubleTap: _onDoubleTap,
-          content: OverScrollNavigator(
-            isLoading: currentContent == null,
-            isUpEnabled: currentContent?.hasPrevious ?? false,
-            isDownEnabled: currentContent?.hasNext ?? false,
-            displacementThreshold: 100,
-            onStateChanged: _onStateChanged,
-            child: ContentLoader(
-                future: future,
-                respondToReloading: true,
-                render: (BuildContext context, ChapterContent chapterContent) =>
-                    ChapterContentView(
-                        chapter: chapterContent
-                    )
-            ),
-          )
-      );
+  Widget build(BuildContext context) => ReadingScaffold(
+      onDoubleTap: _onDoubleTap,
+      content: OverScrollNavigator(
+        isLoading: currentContent == null,
+        isUpEnabled: currentContent?.hasPrevious ?? false,
+        isDownEnabled: currentContent?.hasNext ?? false,
+        displacementThreshold: 100,
+        onStateChanged: _onStateChanged,
+        child: ContentLoader(
+            future: future,
+            respondToReloading: true,
+            render: (BuildContext context, ChapterContent chapterContent) =>
+                ChapterContentView(chapter: chapterContent)),
+      ));
 
   void _onDoubleTap(BuildContext context) {
     showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (BuildContext dialogContext) =>
-            ReadingPopUpMenu(this)
-    );
+        context: context, barrierDismissible: true, builder: (BuildContext dialogContext) => ReadingPopUpMenu(this));
   }
 
   void _enableReadingMode() {

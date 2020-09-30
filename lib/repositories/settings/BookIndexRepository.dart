@@ -20,8 +20,7 @@ class BookIndexRepository {
 
   static String _currentChapterKey(String bookId) => "$bookId.currentChapter";
 
-  static String _currentChapterProgress(String bookId) =>
-      "${_currentChapterKey(bookId)}.progress";
+  static String _currentChapterProgress(String bookId) => "${_currentChapterKey(bookId)}.progress";
 
   static BookIndex load(String bookId) {
     final key = _bookIndexKey(bookId);
@@ -59,14 +58,11 @@ class BookIndexRepository {
     await saveCurrentChapterProgress(bookId, 0);
   }
 
-  static bool hasCurrentChapterUrl(String bookId) =>
-      _prefs.getString(_currentChapterKey(bookId)) != null;
+  static bool hasCurrentChapterUrl(String bookId) => _prefs.getString(_currentChapterKey(bookId)) != null;
 
-  static double loadCurrentChapterProgress(String bookId) =>
-      _prefs.getDouble(_currentChapterProgress(bookId)) ?? 0;
+  static double loadCurrentChapterProgress(String bookId) => _prefs.getDouble(_currentChapterProgress(bookId)) ?? 0;
 
-  static Future<bool> saveCurrentChapterProgress(
-          String bookId, double progress) =>
+  static Future<bool> saveCurrentChapterProgress(String bookId, double progress) =>
       _prefs.setDouble(_currentChapterProgress(bookId), progress);
 
   static BuiltList<BookIndex> loadAll() {

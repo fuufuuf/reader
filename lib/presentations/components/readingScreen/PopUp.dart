@@ -11,29 +11,24 @@ class PopUpContainer extends StatelessWidget {
     Key key,
     this.insetAnimationDuration = const Duration(milliseconds: 100),
     this.insetAnimationCurve = Curves.decelerate,
-    this.shape = const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(2.0))),
+    this.shape = const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(2.0))),
     this.child,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final edgeInsets = MediaQuery.of(context).viewInsets +
-        EdgeInsets.symmetric(horizontal: 140, vertical: 210);
+    final edgeInsets = MediaQuery.of(context).viewInsets + EdgeInsets.symmetric(horizontal: 140, vertical: 210);
     final theme = ReadingThemeProvider.of(context);
     return Center(
       child: ConstrainedBox(
-        constraints: BoxConstraints.expand(
-            width: edgeInsets.horizontal, height: edgeInsets.vertical),
+        constraints: BoxConstraints.expand(width: edgeInsets.horizontal, height: edgeInsets.vertical),
         child: Material(
             elevation: 24.0,
             color: theme.popUpBackgroundColor,
             type: MaterialType.card,
             shape: shape,
             child: DefaultTextStyle(
-                style: theme.popUpMenuTextStyle,
-                child: IconTheme.merge(
-                    data: theme.popUpMenuIconStyle, child: child))),
+                style: theme.popUpMenuTextStyle, child: IconTheme.merge(data: theme.popUpMenuIconStyle, child: child))),
       ),
     );
   }
@@ -44,12 +39,10 @@ class PopUpButton extends StatelessWidget {
   final bool enabled;
   final GestureTapCallback onTap;
 
-  const PopUpButton({Key key, this.text, this.enabled = true, this.onTap})
-      : super(key: key);
+  const PopUpButton({Key key, this.text, this.enabled = true, this.onTap}) : super(key: key);
 
-  Decoration _renderDecoration(BuildContext context) => BoxDecoration(
-      border: Border.all(
-          color: ReadingThemeProvider.of(context).popUpTextColor, width: 1));
+  Decoration _renderDecoration(BuildContext context) =>
+      BoxDecoration(border: Border.all(color: ReadingThemeProvider.of(context).popUpTextColor, width: 1));
 
   @override
   Widget build(BuildContext context) => InkWell(
@@ -81,18 +74,13 @@ class PopUpPicker<T> extends StatelessWidget {
         super(key: key);
 
   PopUpPicker.fromValue(
-      {Key key,
-      List<String> options,
-      List<T> values,
-      ValueNotifier<T> selectedValue,
-      int defaultIndex})
+      {Key key, List<String> options, List<T> values, ValueNotifier<T> selectedValue, int defaultIndex})
       : this(
             key: key,
             options: options,
             values: values,
             selectedValue: selectedValue,
-            selectedIndex: ValueNotifier<int>(
-                _findValueIndex(values, selectedValue.value, defaultIndex)));
+            selectedIndex: ValueNotifier<int>(_findValueIndex(values, selectedValue.value, defaultIndex)));
 
   static int _findValueIndex<T>(List<T> values, T value, int defaultIndex) {
     var index = values.indexOf(value);
@@ -103,37 +91,31 @@ class PopUpPicker<T> extends StatelessWidget {
 
   T get _currentValue => values[selectedIndex.value];
 
-  Decoration _renderDecoration(BuildContext context) => BoxDecoration(
-      border: Border.all(
-          color: ReadingThemeProvider.of(context).popUpTextColor, width: 1));
+  Decoration _renderDecoration(BuildContext context) =>
+      BoxDecoration(border: Border.all(color: ReadingThemeProvider.of(context).popUpTextColor, width: 1));
 
   @override
   Widget build(BuildContext context) => Container(
       alignment: Alignment.center,
       decoration: _renderDecoration(context),
-      child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            InkWell(
-              onTap: _renderOnIncrease(),
-              child:
-                  Padding(padding: EdgeInsets.all(16), child: Icon(Icons.add)),
-            ),
-            Text(_currentOption),
-            InkWell(
-              onTap: _renderOnDecrease(),
-              child: Container(
-                  padding: EdgeInsets.all(16), child: Icon(Icons.remove)),
-            ),
-          ]));
+      child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
+        InkWell(
+          onTap: _renderOnIncrease(),
+          child: Padding(padding: EdgeInsets.all(16), child: Icon(Icons.add)),
+        ),
+        Text(_currentOption),
+        InkWell(
+          onTap: _renderOnDecrease(),
+          child: Container(padding: EdgeInsets.all(16), child: Icon(Icons.remove)),
+        ),
+      ]));
 
-  GestureTapCallback _renderOnIncrease() =>
-      selectedIndex.value < options.length - 1
-          ? () {
-              selectedIndex.value = selectedIndex.value + 1;
-              selectedValue.value = _currentValue;
-            }
-          : null;
+  GestureTapCallback _renderOnIncrease() => selectedIndex.value < options.length - 1
+      ? () {
+          selectedIndex.value = selectedIndex.value + 1;
+          selectedValue.value = _currentValue;
+        }
+      : null;
 
   GestureTapCallback _renderOnDecrease() => selectedIndex.value > 0
       ? () {

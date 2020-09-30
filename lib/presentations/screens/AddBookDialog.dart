@@ -7,10 +7,8 @@ class AddBookDialog extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _AddBookDialogState();
 
-  static Future<NewBook> show(BuildContext context) => Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (_) => AddBookDialog(), fullscreenDialog: true));
+  static Future<NewBook> show(BuildContext context) =>
+      Navigator.push(context, MaterialPageRoute(builder: (_) => AddBookDialog(), fullscreenDialog: true));
 }
 
 class _AddBookDialogState extends State<AddBookDialog> {
@@ -23,8 +21,7 @@ class _AddBookDialogState extends State<AddBookDialog> {
   void _loadBookEntry() {
     setState(() {
       submitBookEntry = null;
-      future = BookRepository.createBookByUrlString(_urlController.text)
-          .then((newBook) {
+      future = BookRepository.createBookByUrlString(_urlController.text).then((newBook) {
         setState(() {
           submitBookEntry = () {
             Navigator.pop(context, newBook);
@@ -38,9 +35,8 @@ class _AddBookDialogState extends State<AddBookDialog> {
   @override
   Widget build(BuildContext context) => ScreenScaffold(
       title: '添加新书',
-      body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          child: Form(child: _renderForm(context))));
+      body:
+          Padding(padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4), child: Form(child: _renderForm(context))));
 
   Widget _renderForm(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -75,8 +71,7 @@ class _AddBookDialogState extends State<AddBookDialog> {
                     onPressed: _loadBookEntry,
                   ),
                   RaisedButton(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                       textTheme: ButtonTextTheme.primary,
                       child: Text('添加'),
                       onPressed: submitBookEntry)
@@ -85,8 +80,7 @@ class _AddBookDialogState extends State<AddBookDialog> {
         ],
       );
 
-  Widget _renderBookEntryFuture(
-      BuildContext context, AsyncSnapshot<NewBook> snapshot) {
+  Widget _renderBookEntryFuture(BuildContext context, AsyncSnapshot<NewBook> snapshot) {
     if (snapshot.connectionState == ConnectionState.waiting) {
       return Align(
         alignment: Alignment.center,
@@ -97,8 +91,7 @@ class _AddBookDialogState extends State<AddBookDialog> {
     if (snapshot.hasError) {
       return Align(
           alignment: Alignment.center,
-          child: Text(snapshot.error.toString(),
-              style: TextStyle(color: Theme.of(context).errorColor)));
+          child: Text(snapshot.error.toString(), style: TextStyle(color: Theme.of(context).errorColor)));
     }
 
     if (snapshot.hasData) {
@@ -113,10 +106,8 @@ class _AddBookDialogState extends State<AddBookDialog> {
         _renderEntryItem(Icons.title, newBook.bookName),
         _renderEntryItem(Icons.book, newBook.bookInfoUrl.toString()),
         _renderEntryItem(Icons.list, newBook.chapterListUrl.toString()),
-        _renderEntryItem(Icons.bookmark_border,
-            newBook.currentChapterUrl?.toString() ?? "<未知>")
+        _renderEntryItem(Icons.bookmark_border, newBook.currentChapterUrl?.toString() ?? "<未知>")
       ]);
 
-  ListTile _renderEntryItem(IconData icon, String value) =>
-      ListTile(leading: Icon(icon), title: Text(value));
+  ListTile _renderEntryItem(IconData icon, String value) => ListTile(leading: Icon(icon), title: Text(value));
 }

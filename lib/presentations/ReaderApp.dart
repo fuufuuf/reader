@@ -6,8 +6,7 @@ import 'package:timnew_reader/models/ReadingTheme.dart';
 
 class ReaderApp extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() =>
-      _ReaderAppState(false);
+  State<StatefulWidget> createState() => _ReaderAppState(false);
 }
 
 class _ReaderAppState extends State<ReaderApp> {
@@ -27,29 +26,23 @@ class _ReaderAppState extends State<ReaderApp> {
   }
 
   void reloadTheme() {
-    final themeId = nightMode ? ThemeRepository.nightTheme : ThemeRepository
-        .dayTheme;
+    final themeId = nightMode ? ThemeRepository.nightTheme : ThemeRepository.dayTheme;
 
     currentTheme = ThemeRepository.fetchTheme(themeId);
   }
 
-
-  VoidCallback wrap(VoidCallback callback) =>
-          () {
+  VoidCallback wrap(VoidCallback callback) => () {
         setState(callback);
       };
 
   @override
-  Widget build(BuildContext context) =>
-      ReadingThemeProvider(
-          theme: currentTheme,
-          toggleNightModeApi: wrap(toggleNightMode),
-          reloadThemeApi: wrap(reloadTheme),
-          child: _renderApp()
-      );
+  Widget build(BuildContext context) => ReadingThemeProvider(
+      theme: currentTheme,
+      toggleNightModeApi: wrap(toggleNightMode),
+      reloadThemeApi: wrap(reloadTheme),
+      child: _renderApp());
 
-  Widget _renderApp() =>
-      MaterialApp(
+  Widget _renderApp() => MaterialApp(
         title: 'Reader',
         theme: ThemeData(
           primarySwatch: Colors.blue,

@@ -8,25 +8,17 @@ class ContentLoader<T> extends StatelessWidget {
   final ContentRender<T> render;
   final bool respondToReloading;
 
-  ContentLoader({
-    Key key,
-    this.future,
-    this.initialData,
-    @required this.render,
-    this.respondToReloading = false
-  }) : super(key: key);
+  ContentLoader({Key key, this.future, this.initialData, @required this.render, this.respondToReloading = false}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) =>
-      FutureBuilder<T>(
+  Widget build(BuildContext context) => FutureBuilder<T>(
         future: future,
         initialData: initialData,
         builder: renderChild,
       );
 
   Widget renderChild(BuildContext context, AsyncSnapshot<T> snapshot) {
-    if (respondToReloading &&
-        snapshot.connectionState == ConnectionState.waiting) {
+    if (respondToReloading && snapshot.connectionState == ConnectionState.waiting) {
       return LoadingView();
     }
 

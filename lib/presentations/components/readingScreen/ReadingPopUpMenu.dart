@@ -45,57 +45,50 @@ class _ReadingPopUpMenuState extends State<ReadingPopUpMenu> {
   void _dismissPopUp() => Navigator.of(context).pop();
 
   @override
-  Widget build(BuildContext context) =>
-      PopUpContainer(
-      child:
-      GridView.count(
-          physics: const NeverScrollableScrollPhysics(),
-          crossAxisCount: 2,
-          children: <Widget>[
-            PopUpButton(
-              text: "章节目录",
-              onTap: _onBackToChapterList,
-            ),
-            PopUpButton(
-              text: "夜晚模式",
-              onTap: _onToggleNightMode,
-            ),
-            PopUpPicker<double>.fromValue(
-              options: const <String>[
-                "字号 小",
-                "字号 中",
-                "字号 大",
-                "字号 加大",
-                "字号 超大",
-              ],
-              values: const <double>[
-                8.0,
-                14.0,
-                24.0,
-                32.0,
-                48.0,
-              ],
-              selectedValue: currentFontSize,
-              defaultIndex: 1,
-            ),
-            PopUpButton(
-              text: "浏览器中打开",
-              enabled: chapterContent != null,
-              onTap: _onOpenInExternalBrowser,
-            ),
-            PopUpButton(
-              text: "前一章节",
-              enabled: chapterContent.hasPrevious,
-              onTap: _gotoPreviousChapter,
-            ),
-            PopUpButton(
-              text: "后一章节",
-              enabled: chapterContent.hasNext,
-              onTap: _gotoNextChapter,
-            ),
-          ]
-      )
-  );
+  Widget build(BuildContext context) => PopUpContainer(
+          child: GridView.count(physics: const NeverScrollableScrollPhysics(), crossAxisCount: 2, children: <Widget>[
+        PopUpButton(
+          text: "章节目录",
+          onTap: _onBackToChapterList,
+        ),
+        PopUpButton(
+          text: "夜晚模式",
+          onTap: _onToggleNightMode,
+        ),
+        PopUpPicker<double>.fromValue(
+          options: const <String>[
+            "字号 小",
+            "字号 中",
+            "字号 大",
+            "字号 加大",
+            "字号 超大",
+          ],
+          values: const <double>[
+            8.0,
+            14.0,
+            24.0,
+            32.0,
+            48.0,
+          ],
+          selectedValue: currentFontSize,
+          defaultIndex: 1,
+        ),
+        PopUpButton(
+          text: "浏览器中打开",
+          enabled: chapterContent != null,
+          onTap: _onOpenInExternalBrowser,
+        ),
+        PopUpButton(
+          text: "前一章节",
+          enabled: chapterContent.hasPrevious,
+          onTap: _gotoPreviousChapter,
+        ),
+        PopUpButton(
+          text: "后一章节",
+          enabled: chapterContent.hasNext,
+          onTap: _gotoNextChapter,
+        ),
+      ]));
 
   void _onBackToChapterList() {
     _dismissPopUp();
@@ -117,8 +110,7 @@ class _ReadingPopUpMenuState extends State<ReadingPopUpMenu> {
     final urlString = chapterContent.url.toString();
 
     if (await canLaunch(urlString)) {
-      await launch(urlString,
-          forceSafariVC: false, forceWebView: false);
+      await launch(urlString, forceSafariVC: false, forceWebView: false);
     }
   }
 

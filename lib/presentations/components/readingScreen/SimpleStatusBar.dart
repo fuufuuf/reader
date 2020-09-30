@@ -40,16 +40,12 @@ class _SimpleStatusBarState extends State<SimpleStatusBar> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      _ThemeRender(
-          child: Row(
-              key: Key('ReadingStatusBar'),
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                _Clock(now),
-                _Battery(batteryState, batteryLevel),
-              ])
-      );
+  Widget build(BuildContext context) => _ThemeRender(
+          child:
+              Row(key: Key('ReadingStatusBar'), mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+        _Clock(now),
+        _Battery(batteryState, batteryLevel),
+      ]));
 
   void _onBatteryStateChanged(BatteryState newState) {
     setState(() {
@@ -97,16 +93,11 @@ class _Clock extends StatelessWidget {
     return "0$n";
   }
 
-  String get timeString =>
-      "${_twoDigits(now.hour)}:${_twoDigits(now.minute)}:${_twoDigits(
-          now.second)}";
+  String get timeString => "${_twoDigits(now.hour)}:${_twoDigits(now.minute)}:${_twoDigits(now.second)}";
 
   @override
   Widget build(BuildContext context) =>
-      Padding(
-          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
-          child: Text(timeString)
-      );
+      Padding(padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4), child: Text(timeString));
 }
 
 class _Battery extends StatelessWidget {
@@ -153,20 +144,13 @@ class _Battery extends StatelessWidget {
   Iterable<Widget> _renderContent() sync* {
     yield Text(_batteryLevelText());
 
-    yield Padding(
-        padding: EdgeInsets.symmetric(horizontal: 4),
-        child: Icon(_batteryIcon(), size: 16)
-    );
+    yield Padding(padding: EdgeInsets.symmetric(horizontal: 4), child: Icon(_batteryIcon(), size: 16));
 
     if (batteryState == BatteryState.charging) {
-      yield Padding(
-          padding: EdgeInsets.symmetric(horizontal: 4),
-          child: const Icon(BatteryIcons.charging, size: 14)
-      );
+      yield Padding(padding: EdgeInsets.symmetric(horizontal: 4), child: const Icon(BatteryIcons.charging, size: 14));
     }
   }
 
   @override
-  Widget build(BuildContext context) =>
-      Row(children: _renderContent().toList(growable: false));
+  Widget build(BuildContext context) => Row(children: _renderContent().toList(growable: false));
 }

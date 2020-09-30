@@ -8,11 +8,5 @@ class ErrorView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      Center(
-          child: Text(error.toString(),
-              style: TextStyle(color: Theme
-                  .of(context)
-                  .errorColor)
-          )
-      );
+      Center(child: Text(error.toString(), style: TextStyle(color: Theme.of(context).errorColor)));
 }

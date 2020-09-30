@@ -13,40 +13,25 @@ class ReadingScaffold extends StatelessWidget {
   ReadingScaffold({this.content, this.onDoubleTap, this.onTapWithPos});
 
   @override
-  Widget build(BuildContext context) =>
-      Scaffold(
-          key: Key('ReaderScaffold'),
-          backgroundColor: _renderBackground(context),
-          body: _renderGestureDetector(context,
-              child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Column(
-                          children: <Widget>[
-                          SimpleStatusBar(),
-                          Expanded(child:
-                          _renderTheme(context,
-                              child: content
-                          )
-                          )
-                        ],
-                      )
-                  )
-          )
-      );
+  Widget build(BuildContext context) => Scaffold(
+      key: Key('ReaderScaffold'),
+      backgroundColor: _renderBackground(context),
+      body: _renderGestureDetector(context,
+          child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                children: <Widget>[SimpleStatusBar(), Expanded(child: _renderTheme(context, child: content))],
+              ))));
 
-  Color _renderBackground(BuildContext context) =>
-      ReadingThemeProvider
-          .of(context)
-          .backgroundColor;
+  Color _renderBackground(BuildContext context) => ReadingThemeProvider.of(context).backgroundColor;
 
-  Widget _renderTheme(BuildContext context, { Widget child }) {
+  Widget _renderTheme(BuildContext context, {Widget child}) {
     final theme = ReadingThemeProvider.of(context);
     return DefaultTextStyle(
       style: theme.readingTextStyle,
       child: IconTheme.merge(data: theme.readingIconStyle, child: child),
-      );
+    );
   }
-
 
   bool get hasGestureDetectorCallback => onDoubleTap != null;
 
@@ -56,19 +41,17 @@ class ReadingScaffold extends StatelessWidget {
         onDoubleTap: onDoubleTap == null
             ? null
             : () {
-          onDoubleTap(context);
-        },
+                onDoubleTap(context);
+              },
         onTapUp: onTapWithPos == null
             ? null
             : (TapUpDetails tapDetails) {
-          onTapWithPos(context, tapDetails.globalPosition);
-        },
+                onTapWithPos(context, tapDetails.globalPosition);
+              },
         child: child,
       );
     } else {
       return child;
     }
   }
-
-
 }

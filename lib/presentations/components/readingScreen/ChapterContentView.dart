@@ -32,7 +32,8 @@ class _ChapterTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Padding(
       padding: EdgeInsets.all(8),
-      child: Text(content, style: TextStyle(fontWeight: FontWeight.w500) , textScaleFactor: 1.4, textAlign: TextAlign.center));
+      child: Text(content,
+          style: TextStyle(fontWeight: FontWeight.w500), textScaleFactor: 1.4, textAlign: TextAlign.center));
 }
 
 class _Paragraph extends StatelessWidget {
@@ -41,6 +42,5 @@ class _Paragraph extends StatelessWidget {
   _Paragraph(this.content);
 
   @override
-  Widget build(BuildContext context) =>
-      Padding(padding: EdgeInsets.all(8), child: Text(content));
+  Widget build(BuildContext context) => Padding(padding: EdgeInsets.all(8), child: Text(content));
 }
