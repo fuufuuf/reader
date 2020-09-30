@@ -8,24 +8,22 @@ class ReadingThemeProvider extends InheritedWidget {
   final ThemeCallback toggleNightModeApi;
   final ThemeCallback reloadThemeApi;
 
-  ReadingThemeProvider({
-    Key key,
-    this.theme,
-    this.toggleNightModeApi,
-    this.reloadThemeApi,
-    Widget child
-  }) : super(key: key, child: child);
+  ReadingThemeProvider(
+      {Key key,
+      this.theme,
+      this.toggleNightModeApi,
+      this.reloadThemeApi,
+      Widget child})
+      : super(key: key, child: child);
 
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) =>
       (oldWidget as ReadingThemeProvider).theme == theme;
 
   static ReadingThemeProvider _provider(BuildContext context) =>
-      (context.inheritFromWidgetOfExactType(
-          ReadingThemeProvider) as ReadingThemeProvider);
+      context.dependOnInheritedWidgetOfExactType();
 
-  static ReadingTheme of(BuildContext context) =>
-      _provider(context).theme;
+  static ReadingTheme of(BuildContext context) => _provider(context).theme;
 
   static void toggleNightMode(BuildContext context) =>
       _provider(context).toggleNightModeApi();
