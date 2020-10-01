@@ -1,7 +1,10 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:timnew_reader/models/NewBook.dart';
+import 'package:timnew_reader/models/NewBookRequest.dart';
 import 'package:timnew_reader/presentations/components/ScreenScaffold.dart';
-import 'package:timnew_reader/repositories/network/BookRepository.dart';
+import 'package:timnew_reader/presentations/wrappers/AsyncSnapShotRender.dart';
 
 class AddBookDialog extends StatefulWidget {
   @override
@@ -14,27 +17,45 @@ class AddBookDialog extends StatefulWidget {
 class _AddBookDialogState extends State<AddBookDialog> {
   final TextEditingController _urlController = TextEditingController();
 
-  Future<NewBook> future;
+  BuiltList<NewBookRequest> requests = BuiltList();
 
-  VoidCallback submitBookEntry;
-
-  void _loadBookEntry() {
+  void _clearRequests() {
     setState(() {
-      submitBookEntry = null;
-      future = BookRepository.createBookByUrlString(_urlController.text).then((newBook) {
-        setState(() {
-          submitBookEntry = () {
-            Navigator.pop(context, newBook);
-          };
-        });
-        return newBook;
+      requests = BuiltList();
+    });
+  }
+
+  void _onUserInputConfirmed() {
+    setState(() {
+      final text = _urlController.text;
+      _urlController.clear();
+      _parseNewBookUrls(text);
+    });
+  }
+
+  void _onLoadFromClipboard() async {
+    final data = await Clipboard.getData(Clipboard.kTextPlain);
+
+    if (data != null) {
+      setState(() {
+        _parseNewBookUrls(data.text);
       });
+    }
+  }
+
+  void _parseNewBookUrls(String text) {
+    final existing = requests.map((it) => it.url).toSet();
+
+    final newRequests = NewBookRequest.fromUrlInput(text).where((it) => !existing.contains(it.url)).toBuiltList();
+
+    setState(() {
+      requests += newRequests;
     });
   }
 
   @override
   Widget build(BuildContext context) => ScreenScaffold(
-      title: '添加新书',
+      title: '添加新書',
       body:
           Padding(padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4), child: Form(child: _renderForm(context))));
 
@@ -42,72 +63,125 @@ class _AddBookDialogState extends State<AddBookDialog> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           TextFormField(
-            decoration: InputDecoration(
-                labelText: "新书 Url",
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.clear),
-                  onPressed: () {
-                    _urlController.clear();
-                  },
-                )),
+            decoration: InputDecoration(labelText: "新書 Url", suffixIcon: _renderClearUrlButton()),
             controller: _urlController,
+            onChanged: (_) {
+              setState(() {});
+            },
             onFieldSubmitted: (_) {
-              _loadBookEntry();
+              _onUserInputConfirmed();
             },
           ),
-          Expanded(
-            child: FutureBuilder<NewBook>(
-              future: future,
-              builder: _renderBookEntryFuture,
-            ),
-          ),
+          Expanded(child: _renderNewBookList()),
           Align(
               alignment: Alignment.centerRight,
               child: ButtonBar(
                 children: <Widget>[
                   FlatButton(
                     padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                    child: Text('加载'),
-                    onPressed: _loadBookEntry,
+                    child: Text('清空'),
+                    onPressed: _clearRequests,
                   ),
-                  RaisedButton(
-                      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                      textTheme: ButtonTextTheme.primary,
-                      child: Text('添加'),
-                      onPressed: submitBookEntry)
+                  FlatButton(
+                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    child: Text('從剪貼盤加載'),
+                    onPressed: _onLoadFromClipboard,
+                  )
                 ],
               )),
         ],
       );
 
-  Widget _renderBookEntryFuture(BuildContext context, AsyncSnapshot<NewBook> snapshot) {
-    if (snapshot.connectionState == ConnectionState.waiting) {
-      return Align(
-        alignment: Alignment.center,
-        child: CircularProgressIndicator(value: null),
+  Widget _renderClearUrlButton() {
+    if (_urlController.text.isEmpty) {
+      return null;
+    }
+
+    return IconButton(
+      icon: Icon(Icons.clear),
+      onPressed: () {
+        setState(() {
+          _urlController.clear();
+        });
+      },
+    );
+  }
+
+  Widget _renderNewBookList() {
+    if (requests.isEmpty) {
+      return Center(
+        child: Text("輸入書目 Url 添加"),
       );
     }
 
-    if (snapshot.hasError) {
-      return Align(
-          alignment: Alignment.center,
-          child: Text(snapshot.error.toString(), style: TextStyle(color: Theme.of(context).errorColor)));
-    }
-
-    if (snapshot.hasData) {
-      return _renderBookEntry(snapshot.data);
-    }
-
-    return Container();
+    return ListView.builder(itemBuilder: _buildEntry, itemCount: requests.length);
   }
 
-  Widget _renderBookEntry(NewBook newBook) => ListView(children: <Widget>[
-        _renderEntryItem(Icons.vpn_key, newBook.bookId),
-        _renderEntryItem(Icons.title, newBook.bookName),
-        _renderEntryItem(Icons.book, newBook.bookInfoUrl.toString()),
-        _renderEntryItem(Icons.list, newBook.chapterListUrl.toString()),
-        _renderEntryItem(Icons.bookmark_border, newBook.currentChapterUrl?.toString() ?? "<未知>")
-      ]);
+  Widget _buildEntry(BuildContext context, int index) {
+    final request = requests[index];
+    final errorColor = Theme.of(context).errorColor;
 
-  ListTile _renderEntryItem(IconData icon, String value) => ListTile(leading: Icon(icon), title: Text(value));
+    VoidCallback onDismissed = () {
+      setState(() {
+        requests = requests.rebuild((b) => b.removeAt(index));
+      });
+    };
+
+    return AsyncSnapshotRender(
+      key: Key(request.url),
+      future: request.futureResponse,
+      dataBuilder: (BuildContext context, NewBook newBook) => Card(
+        child: ListTile(
+          leading: Icon(Icons.book),
+          title: Text(newBook.bookName),
+          subtitle: Text(request.url),
+        ),
+      ),
+      errorBuilder: (BuildContext context, Object error) => _removable(
+        key: Key(request.url),
+        onDismissed: onDismissed,
+        child: Card(
+          child: ListTile(
+            leading: Icon(Icons.error_outline, color: errorColor),
+            title: Text(request.url),
+            subtitle: Text(error.toString(), style: TextStyle(color: errorColor)),
+            onLongPress: () {
+              Clipboard.setData(ClipboardData(text: request.url));
+              Scaffold.of(context).showSnackBar(SnackBar(content: Text('網站鏈接已經複製')));
+            },
+          ),
+        ),
+      ),
+      waitingBuilder: (BuildContext context) => _ignorable(
+          key: Key(request.url),
+          onDismissed: onDismissed,
+          child: Card(child: ListTile(leading: CircularProgressIndicator(value: null), title: Text(request.url)))),
+    );
+  }
+
+  Widget _removable({Key key, VoidCallback onDismissed, Widget child}) => Dismissible(
+      key: key,
+      background: Container(
+        color: Colors.red,
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 16),
+        child: const Text('滑动删除', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+      ),
+      direction: DismissDirection.endToStart,
+      onDismissed: (DismissDirection direction) => onDismissed(),
+      dismissThresholds: const {DismissDirection.endToStart: .7},
+      child: child);
+
+  Widget _ignorable({Key key, VoidCallback onDismissed, Widget child}) => Dismissible(
+      key: key,
+      background: Container(
+        color: Colors.yellow.shade700,
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 16),
+        child: const Text('忽略', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+      ),
+      direction: DismissDirection.endToStart,
+      onDismissed: (DismissDirection direction) => onDismissed(),
+      dismissThresholds: const {DismissDirection.endToStart: .7},
+      child: child);
 }

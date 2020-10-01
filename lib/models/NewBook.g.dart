@@ -18,7 +18,7 @@ class _$NewBook extends NewBook {
   @override
   final Uri currentChapterUrl;
 
-  factory _$NewBook([void updates(NewBookBuilder b)]) =>
+  factory _$NewBook([void Function(NewBookBuilder) updates]) =>
       (new NewBookBuilder()..update(updates)).build();
 
   _$NewBook._(
@@ -43,7 +43,7 @@ class _$NewBook extends NewBook {
   }
 
   @override
-  NewBook rebuild(void updates(NewBookBuilder b)) =>
+  NewBook rebuild(void Function(NewBookBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -130,7 +130,7 @@ class NewBookBuilder implements Builder<NewBook, NewBookBuilder> {
   }
 
   @override
-  void update(void updates(NewBookBuilder b)) {
+  void update(void Function(NewBookBuilder) updates) {
     if (updates != null) updates(this);
   }
 
@@ -148,4 +148,4 @@ class NewBookBuilder implements Builder<NewBook, NewBookBuilder> {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

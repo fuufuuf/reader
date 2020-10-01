@@ -31,6 +31,10 @@ class BookIndexRepository {
     return serializers.deserializeWith(BookIndex.serializer, entryData);
   }
 
+  static bool isBookExists(String bookId) {
+    return _bookIds.contains(bookId);
+  }
+
   static Future<void> save(BookIndex index) async {
     final key = _bookIndexKey(index.bookId);
 

@@ -44,9 +44,7 @@ class _ReaderAppState extends State<ReaderApp> {
 
   Widget _renderApp() => MaterialApp(
         title: 'Reader',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
+        theme: ThemeData(),
         initialRoute: _appRouter.initialRoute,
         onGenerateRoute: _appRouter.generateRoute,
         onUnknownRoute: _appRouter.onUnknownRoute,

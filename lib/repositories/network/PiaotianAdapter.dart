@@ -54,7 +54,7 @@ class PiaotianAdapter extends SiteAdapter {
       return _buildBookEntryFromChapterContent(content);
     }
 
-    throw 'Unkonwn url';
+    throw StateError('Unknown url');
   }
 
   NewBook _buildBookEntryFromBookInfo(BookInfo bookInfo) => NewBook((builder) => builder

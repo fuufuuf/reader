@@ -16,7 +16,7 @@ class _$ChapterList extends ChapterList {
   @override
   final BuiltList<ChapterRef> chapters;
 
-  factory _$ChapterList([void updates(ChapterListBuilder b)]) =>
+  factory _$ChapterList([void Function(ChapterListBuilder) updates]) =>
       (new ChapterListBuilder()..update(updates)).build();
 
   _$ChapterList._({this.url, this.title, this.bookInfoUrl, this.chapters})
@@ -36,7 +36,7 @@ class _$ChapterList extends ChapterList {
   }
 
   @override
-  ChapterList rebuild(void updates(ChapterListBuilder b)) =>
+  ChapterList rebuild(void Function(ChapterListBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -112,7 +112,7 @@ class ChapterListBuilder implements Builder<ChapterList, ChapterListBuilder> {
   }
 
   @override
-  void update(void updates(ChapterListBuilder b)) {
+  void update(void Function(ChapterListBuilder) updates) {
     if (updates != null) updates(this);
   }
 
@@ -142,4 +142,4 @@ class ChapterListBuilder implements Builder<ChapterList, ChapterListBuilder> {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
