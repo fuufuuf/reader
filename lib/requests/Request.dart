@@ -12,11 +12,13 @@ abstract class Request<T> {
     _controller.onListen = reload;
   }
 
-  Future<T> reload({quiet: false}) async {
-    if (!quiet) _controller.add(null);
+  Future<T> reload({quiet: false}) async => putValue(execute(), quiet: quiet);
+
+  Future<T> putValue(FutureOr<T> value, {quiet: false}) async {
+    if (!quiet) markBusy();
 
     try {
-      final result = await execute();
+      final result = await value;
 
       _controller.add(result);
 
@@ -25,6 +27,10 @@ abstract class Request<T> {
       _controller.addError(error);
       throw error;
     }
+  }
+
+  void markBusy() {
+    _controller.add(null);
   }
 
   Future<T> execute();
