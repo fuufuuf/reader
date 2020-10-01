@@ -1,8 +1,11 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:timnew_reader/models/NewBook.dart';
-import 'package:timnew_reader/models/NewBookRequest.dart';
+
+import 'package:timnew_reader/requests/NewBookRequest.dart';
+
 import 'package:timnew_reader/presentations/components/ScreenScaffold.dart';
 import 'package:timnew_reader/presentations/wrappers/AsyncSnapShotRender.dart';
 

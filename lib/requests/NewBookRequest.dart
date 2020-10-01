@@ -1,15 +1,13 @@
-import 'package:built_value/built_value.dart';
+import 'package:timnew_reader/models/NewBook.dart';
 
 import 'package:timnew_reader/repositories/network/BookRepository.dart';
 import 'package:timnew_reader/repositories/settings/BookIndexRepository.dart';
-import 'NewBook.dart';
 
 class NewBookRequest {
   final String url;
   final Future<NewBook> futureResponse;
 
-  NewBookRequest(this.url) :
-        futureResponse = _execute(url);
+  NewBookRequest(this.url) : futureResponse = _execute(url);
 
   static Iterable<NewBookRequest> fromUrlInput(String text) {
     if (text.isEmpty) {
