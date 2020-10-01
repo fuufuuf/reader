@@ -1,7 +1,6 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
-import 'package:timnew_reader/models/NewBook.dart';
 import 'package:timnew_reader/presentations/ReaderApp.AppRouter.dart';
 import 'package:timnew_reader/presentations/components/ScreenScaffold.dart';
 import 'package:timnew_reader/presentations/screens/AddBookDialog.dart';
@@ -33,16 +32,6 @@ class _BookListScreenState extends State<BookListScreen> {
       body: ListView.builder(
           itemBuilder: (context, index) => _renderBookItem(context, bookIndexes[index]), itemCount: bookIndexes.length),
       floatingActionButton: _renderFab(context));
-
-  void _addBookEntry(NewBook newBook) async {
-    if (newBook == null) return;
-
-    final bookIndex = await newBook.save();
-
-    setState(() {
-      bookIndexes = bookIndexes.rebuild((b) => b.add(bookIndex));
-    });
-  }
 
   void _removeBookEntry(BookIndex bookIndex) async {
     await bookIndex.remove();
@@ -81,6 +70,9 @@ class _BookListScreenState extends State<BookListScreen> {
   Widget _renderFab(BuildContext context) => FloatingActionButton(
       child: Icon(Icons.add),
       onPressed: () async {
-        _addBookEntry(await AddBookDialog.show(context));
+        await AddBookDialog.show(context);
+        setState(() {
+          reload();
+        });
       });
 }

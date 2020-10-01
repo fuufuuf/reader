@@ -47,6 +47,7 @@ class ChapterListView extends StatelessWidget {
         title: Text(index.title),
         onTap: () async {
           await AppRouter.openBookReader(context, bookIndex.bookId, index.url);
+
         },
       );
 }
