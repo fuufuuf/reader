@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 
 import 'package:timnew_reader/models/NewBook.dart';
 
-import 'package:timnew_reader/requests/NewBookRequest.dart';
+import 'package:timnew_reader/requests/AddNewBook.dart';
 
 import 'package:timnew_reader/presentations/components/ScreenScaffold.dart';
 import 'package:timnew_reader/presentations/wrappers/AsyncSnapShotRender.dart';
@@ -20,7 +20,7 @@ class AddBookDialog extends StatefulWidget {
 class _AddBookDialogState extends State<AddBookDialog> {
   final TextEditingController _urlController = TextEditingController();
 
-  BuiltList<NewBookRequest> requests = BuiltList();
+  BuiltList<AddNewBook> requests = BuiltList();
 
   void _clearRequests() {
     setState(() {
@@ -49,7 +49,7 @@ class _AddBookDialogState extends State<AddBookDialog> {
   void _parseNewBookUrls(String text) {
     final existing = requests.map((it) => it.url).toSet();
 
-    final newRequests = NewBookRequest.fromUrlInput(text).where((it) => !existing.contains(it.url)).toBuiltList();
+    final newRequests = AddNewBook.fromUrlInput(text).where((it) => !existing.contains(it.url)).toBuiltList();
 
     setState(() {
       requests += newRequests;
