@@ -33,5 +33,5 @@ abstract class Request<T> {
     _controller.add(null);
   }
 
-  Future<T> execute();
+  FutureOr<T> execute();
 }

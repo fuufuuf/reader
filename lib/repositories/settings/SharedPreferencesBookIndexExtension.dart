@@ -12,6 +12,8 @@ extension SharedPreferencesBookIndexExtension on SharedPreferences {
 
   static String _currentChapterKey(String bookId) => "$bookId.currentChapter";
 
+  Iterable<BookIndex> loadBookIndexList(Iterable<String> ids) => ids.map((e) => loadBookIndex(e));
+
   BookIndex loadBookIndex(String bookId) {
     final key = _bookIndexKey(bookId);
 
