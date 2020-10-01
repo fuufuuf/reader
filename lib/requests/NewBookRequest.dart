@@ -5,9 +5,9 @@ import 'package:timnew_reader/repositories/settings/BookIndexRepository.dart';
 
 class NewBookRequest {
   final String url;
-  final Future<NewBook> futureResponse;
+  final Future<NewBook> futureNewBook;
 
-  NewBookRequest(this.url) : futureResponse = _execute(url);
+  NewBookRequest(this.url) : futureNewBook = _execute(url);
 
   static Iterable<NewBookRequest> fromUrlInput(String text) {
     if (text.isEmpty) {

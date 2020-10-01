@@ -132,7 +132,7 @@ class _AddBookDialogState extends State<AddBookDialog> {
 
     return AsyncSnapshotRender(
       key: Key(request.url),
-      future: request.futureResponse,
+      future: request.futureNewBook,
       dataBuilder: (BuildContext context, NewBook newBook) => Card(
         child: ListTile(
           leading: Icon(Icons.book),
