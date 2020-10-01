@@ -132,7 +132,7 @@ class _AddBookDialogState extends State<AddBookDialog> {
 
     return AsyncSnapshotRender(
       key: Key(request.url),
-      future: request.futureNewBook,
+      stream: request.resultStream,
       dataBuilder: (BuildContext context, NewBook newBook) => Card(
         child: ListTile(
           leading: Icon(Icons.book),
@@ -148,6 +148,9 @@ class _AddBookDialogState extends State<AddBookDialog> {
             leading: Icon(Icons.error_outline, color: errorColor),
             title: Text(request.url),
             subtitle: Text(error.toString(), style: TextStyle(color: errorColor)),
+            onTap: () {
+              request.reload();
+            },
             onLongPress: () {
               Clipboard.setData(ClipboardData(text: request.url));
               Scaffold.of(context).showSnackBar(SnackBar(content: Text('網站鏈接已經複製')));
