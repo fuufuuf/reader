@@ -2,7 +2,7 @@ import 'package:timnew_reader/models/NewBook.dart';
 
 import 'package:timnew_reader/repositories/network/BookRepository.dart';
 import 'package:timnew_reader/repositories/settings/BookIndexRepository.dart';
-import 'package:timnew_reader/requests/Request.dart';
+import 'package:timnew_reader/arch/Request.dart';
 
 class AddNewBook extends Request<NewBook> {
   final String url;

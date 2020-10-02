@@ -1,6 +1,8 @@
 import 'dart:async';
 
-import 'package:meta/meta.dart';
+import 'package:flutter/widgets.dart';
+
+import 'RequestHost.dart';
 
 abstract class Request<T> {
   @protected
@@ -34,4 +36,7 @@ abstract class Request<T> {
   }
 
   FutureOr<T> execute();
+
+  static TR findRequest<TR extends Request>(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<RequestProvider<TR>>().request;
 }

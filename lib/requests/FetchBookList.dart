@@ -3,7 +3,7 @@ import 'package:timnew_reader/models/BookList.dart';
 
 import 'package:timnew_reader/repositories/settings/SharedPreferencesBookIndexExtension.dart';
 
-import 'Request.dart';
+import '../arch/Request.dart';
 
 class FetchBookList extends Request<BookList> {
   final SharedPreferences shardPrefs;
