@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'Store.dart';
+import 'ValueSource.dart';
 
 typedef DataWidgetBuilder<T> = Widget Function(BuildContext context, T data);
 
@@ -37,16 +37,16 @@ abstract class AsyncValueBuilder<T> extends StatelessWidget {
       StreamValueBuilder(
           key, stream, waitForDone, dataBuilder, errorBuilder, waitingBuilder, activeBuilder, noneBuilder);
 
-  factory AsyncValueBuilder.request(
+  factory AsyncValueBuilder.valueSource(
           {Key key,
-          @required Store<T> request,
+          @required ValueSource<T> valueSource,
           @required DataWidgetBuilder<T> dataBuilder,
           DataWidgetBuilder<Object> errorBuilder: defaultErrorBuilder,
           WidgetBuilder waitingBuilder: defaultWaitingBuilder,
           WidgetBuilder activeBuilder,
           WidgetBuilder noneBuilder}) =>
       StreamValueBuilder(
-          key, request.valueStream, false, dataBuilder, errorBuilder, waitingBuilder, activeBuilder, noneBuilder);
+          key, valueSource.valueStream, false, dataBuilder, errorBuilder, waitingBuilder, activeBuilder, noneBuilder);
 
   AsyncValueBuilder._(
     Key key,

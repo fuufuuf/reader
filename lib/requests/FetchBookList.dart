@@ -3,9 +3,9 @@ import 'package:timnew_reader/models/BookList.dart';
 
 import 'package:timnew_reader/repositories/settings/SharedPreferencesBookIndexExtension.dart';
 
-import '../arch/Store.dart';
+import '../arch/ValueSource.dart';
 
-class FetchBookList extends Store<BookList> {
+class FetchBookList extends ValueSource<BookList> {
   final SharedPreferences shardPrefs;
 
   FetchBookList(this.shardPrefs);

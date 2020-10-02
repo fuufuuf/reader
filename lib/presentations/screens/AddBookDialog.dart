@@ -130,9 +130,9 @@ class _AddBookDialogState extends State<AddBookDialog> {
       });
     };
 
-    return AsyncValueBuilder.request(
+    return AsyncValueBuilder.valueSource(
       key: Key(request.url),
-      request: request,
+      valueSource: request,
       dataBuilder: (BuildContext context, NewBook newBook) => Card(
         child: ListTile(
           leading: Icon(Icons.book),

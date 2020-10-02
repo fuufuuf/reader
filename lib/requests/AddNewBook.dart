@@ -2,9 +2,9 @@ import 'package:timnew_reader/models/NewBook.dart';
 
 import 'package:timnew_reader/repositories/network/BookRepository.dart';
 import 'package:timnew_reader/repositories/settings/BookIndexRepository.dart';
-import 'package:timnew_reader/arch/Store.dart';
+import 'package:timnew_reader/arch/ValueSource.dart';
 
-class AddNewBook extends Store<NewBook> {
+class AddNewBook extends ValueSource<NewBook> {
   final String url;
 
   AddNewBook(this.url);
