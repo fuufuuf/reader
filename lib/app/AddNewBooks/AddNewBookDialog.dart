@@ -1,6 +1,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:timnew_reader/app/AddNewBooks/BookList/BookList.dart';
 import 'package:timnew_reader/app/AddNewBooks/NewBookRequestList.dart';
 import 'package:timnew_reader/app/AddNewBooks/NewBookRequest.dart';
 import 'package:timnew_reader/arch/ValueSourceBuilder.dart';
@@ -10,13 +11,16 @@ import 'package:timnew_reader/presentations/components/TextFormFieldWithClearBut
 import 'package:timnew_reader/presentations/components/ScreenScaffold.dart';
 
 class AddNewBookDialog extends StatefulWidget {
-  final NewBookRequestList requests = NewBookRequestList();
+  final BookList bookList;
+  final NewBookRequestList requests;
+
+  AddNewBookDialog(this.bookList) : requests = NewBookRequestList(bookList);
 
   @override
   _AddNewBookDialogState createState() => _AddNewBookDialogState();
 
-  static Future<NewBook> show(BuildContext context) =>
-      Navigator.push(context, MaterialPageRoute(builder: (_) => AddNewBookDialog(), fullscreenDialog: true));
+  static Future<NewBook> show(BuildContext context, BookList bookList) =>
+      Navigator.push(context, MaterialPageRoute(builder: (_) => AddNewBookDialog(bookList), fullscreenDialog: true));
 }
 
 class _AddNewBookDialogState extends State<AddNewBookDialog> {
@@ -106,12 +110,28 @@ class _NewBookListItem extends ValueSourceBuilder<NewBook, NewBookRequest> {
   Widget buildValue(BuildContext context, NewBook newBook) {
     return Card(
       child: ListTile(
-        leading: Icon(Icons.book),
-        title: Text(newBook.bookName),
+        leading: _buildBookIcon(context, newBook.isDuplicated),
+        title: _buildBookTitle(context, newBook),
         subtitle: Text(valueSource.url),
       ),
     );
   }
+
+  Widget _buildBookTitle(BuildContext context, NewBook newBook) {
+    final plainTitle = Text(newBook.bookName);
+
+    if (!newBook.isDuplicated) return plainTitle;
+
+    return Row(
+      children: [
+        Text("[已存在] ", style: TextStyle(color: Colors.yellow.shade700)),
+        plainTitle,
+      ],
+    );
+  }
+
+  Widget _buildBookIcon(BuildContext context, bool isDuplicated) =>
+      isDuplicated ? Icon(Icons.warning, color: Colors.yellow.shade700) : Icon(Icons.book);
 
   @override
   Widget buildError(BuildContext context, Object error) {

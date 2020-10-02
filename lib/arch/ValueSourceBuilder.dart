@@ -11,13 +11,13 @@ abstract class ValueSourceBuilder<T, TS extends ValueSource<T>> extends Stateles
   T get currentValue {
     if (!valueSource.hasValue) throw StateError("Access value when it doesn't exists");
 
-    return valueSource.value;
+    return valueSource.currentValue;
   }
 
   Object get currentError {
     if (!valueSource.hasError) throw StateError("Access value when it doesn't exists");
 
-    return valueSource.error;
+    return valueSource.currentError;
   }
 
   Future<T> putValue(FutureOr<T> value, {quiet: false}) => valueSource.putValue(value, quiet: quiet);

@@ -22,9 +22,16 @@ abstract class ValueSource<T> {
 
   bool get hasCurrent => hasValue || hasError;
 
-  T get value => _value;
+  T get currentValue => _value;
 
-  Object get error => _error;
+  Object get currentError => _error;
+
+  Future<T> get value async {
+    if (hasValue) return currentValue;
+    if (hasError) return Future.error(currentError);
+
+    return valueStream.first;
+  }
 
   T _putValue(T value) {
     _value = value;
@@ -43,8 +50,8 @@ abstract class ValueSource<T> {
   }
 
   void _announceCurrent() {
-    if (hasValue) _controller.add(value);
-    if (hasError) _controller.addError(error);
+    if (hasValue) _controller.add(currentValue);
+    if (hasError) _controller.addError(currentError);
   }
 
   void _onListen() {
@@ -57,7 +64,7 @@ abstract class ValueSource<T> {
   Future<T> reload({quiet: false}) async => putValue(initialize(), quiet: quiet);
 
   Future<T> putValue(FutureOr<T> value, {quiet: false}) async {
-    if (!quiet) markBusy();
+    if (!quiet && value is Future) markBusy();
 
     try {
       return _putValue(await value);
@@ -67,7 +74,7 @@ abstract class ValueSource<T> {
   }
 
   T putValueSync(T value) {
-    putValue(value, quiet: true);
+    putValue(value);
     return value;
   }
 

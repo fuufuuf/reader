@@ -21,7 +21,11 @@ abstract class BookIndex implements Built<BookIndex, BookIndexBuilder> {
 
   Uri get bookInfoUrl;
 
-  factory BookIndex([updates(BookIndexBuilder b)]) = _$BookIndex;
+  factory BookIndex({String bookId, String bookName, Uri bookInfoUrl, Uri chapterListUrl}) => _$BookIndex((b) => b
+    ..bookId = bookId
+    ..bookName = bookName
+    ..bookInfoUrl = bookInfoUrl
+    ..chapterListUrl = chapterListUrl);
 
   static Serializer<BookIndex> get serializer => _$bookIndexSerializer;
 

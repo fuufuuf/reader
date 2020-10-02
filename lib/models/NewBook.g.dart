@@ -8,13 +8,7 @@ part of 'NewBook.dart';
 
 class _$NewBook extends NewBook {
   @override
-  final String bookId;
-  @override
-  final String bookName;
-  @override
-  final Uri bookInfoUrl;
-  @override
-  final Uri chapterListUrl;
+  final BookIndex bookIndex;
   @override
   final bool isDuplicated;
   @override
@@ -23,25 +17,10 @@ class _$NewBook extends NewBook {
   factory _$NewBook([void Function(NewBookBuilder) updates]) =>
       (new NewBookBuilder()..update(updates)).build();
 
-  _$NewBook._(
-      {this.bookId,
-      this.bookName,
-      this.bookInfoUrl,
-      this.chapterListUrl,
-      this.isDuplicated,
-      this.currentChapterUrl})
+  _$NewBook._({this.bookIndex, this.isDuplicated, this.currentChapterUrl})
       : super._() {
-    if (bookId == null) {
-      throw new BuiltValueNullFieldError('NewBook', 'bookId');
-    }
-    if (bookName == null) {
-      throw new BuiltValueNullFieldError('NewBook', 'bookName');
-    }
-    if (bookInfoUrl == null) {
-      throw new BuiltValueNullFieldError('NewBook', 'bookInfoUrl');
-    }
-    if (chapterListUrl == null) {
-      throw new BuiltValueNullFieldError('NewBook', 'chapterListUrl');
+    if (bookIndex == null) {
+      throw new BuiltValueNullFieldError('NewBook', 'bookIndex');
     }
     if (isDuplicated == null) {
       throw new BuiltValueNullFieldError('NewBook', 'isDuplicated');
@@ -59,33 +38,21 @@ class _$NewBook extends NewBook {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is NewBook &&
-        bookId == other.bookId &&
-        bookName == other.bookName &&
-        bookInfoUrl == other.bookInfoUrl &&
-        chapterListUrl == other.chapterListUrl &&
+        bookIndex == other.bookIndex &&
         isDuplicated == other.isDuplicated &&
         currentChapterUrl == other.currentChapterUrl;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc(
-            $jc(
-                $jc($jc($jc(0, bookId.hashCode), bookName.hashCode),
-                    bookInfoUrl.hashCode),
-                chapterListUrl.hashCode),
-            isDuplicated.hashCode),
+    return $jf($jc($jc($jc(0, bookIndex.hashCode), isDuplicated.hashCode),
         currentChapterUrl.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('NewBook')
-          ..add('bookId', bookId)
-          ..add('bookName', bookName)
-          ..add('bookInfoUrl', bookInfoUrl)
-          ..add('chapterListUrl', chapterListUrl)
+          ..add('bookIndex', bookIndex)
           ..add('isDuplicated', isDuplicated)
           ..add('currentChapterUrl', currentChapterUrl))
         .toString();
@@ -95,22 +62,10 @@ class _$NewBook extends NewBook {
 class NewBookBuilder implements Builder<NewBook, NewBookBuilder> {
   _$NewBook _$v;
 
-  String _bookId;
-  String get bookId => _$this._bookId;
-  set bookId(String bookId) => _$this._bookId = bookId;
-
-  String _bookName;
-  String get bookName => _$this._bookName;
-  set bookName(String bookName) => _$this._bookName = bookName;
-
-  Uri _bookInfoUrl;
-  Uri get bookInfoUrl => _$this._bookInfoUrl;
-  set bookInfoUrl(Uri bookInfoUrl) => _$this._bookInfoUrl = bookInfoUrl;
-
-  Uri _chapterListUrl;
-  Uri get chapterListUrl => _$this._chapterListUrl;
-  set chapterListUrl(Uri chapterListUrl) =>
-      _$this._chapterListUrl = chapterListUrl;
+  BookIndexBuilder _bookIndex;
+  BookIndexBuilder get bookIndex =>
+      _$this._bookIndex ??= new BookIndexBuilder();
+  set bookIndex(BookIndexBuilder bookIndex) => _$this._bookIndex = bookIndex;
 
   bool _isDuplicated;
   bool get isDuplicated => _$this._isDuplicated;
@@ -125,10 +80,7 @@ class NewBookBuilder implements Builder<NewBook, NewBookBuilder> {
 
   NewBookBuilder get _$this {
     if (_$v != null) {
-      _bookId = _$v.bookId;
-      _bookName = _$v.bookName;
-      _bookInfoUrl = _$v.bookInfoUrl;
-      _chapterListUrl = _$v.chapterListUrl;
+      _bookIndex = _$v.bookIndex?.toBuilder();
       _isDuplicated = _$v.isDuplicated;
       _currentChapterUrl = _$v.currentChapterUrl;
       _$v = null;
@@ -151,14 +103,24 @@ class NewBookBuilder implements Builder<NewBook, NewBookBuilder> {
 
   @override
   _$NewBook build() {
-    final _$result = _$v ??
-        new _$NewBook._(
-            bookId: bookId,
-            bookName: bookName,
-            bookInfoUrl: bookInfoUrl,
-            chapterListUrl: chapterListUrl,
-            isDuplicated: isDuplicated,
-            currentChapterUrl: currentChapterUrl);
+    _$NewBook _$result;
+    try {
+      _$result = _$v ??
+          new _$NewBook._(
+              bookIndex: bookIndex.build(),
+              isDuplicated: isDuplicated,
+              currentChapterUrl: currentChapterUrl);
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'bookIndex';
+        bookIndex.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'NewBook', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }
