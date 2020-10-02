@@ -3,15 +3,15 @@ import 'package:timnew_reader/models/BookList.dart';
 
 import 'package:timnew_reader/repositories/settings/SharedPreferencesBookIndexExtension.dart';
 
-import '../arch/Request.dart';
+import '../arch/Store.dart';
 
-class FetchBookList extends Request<BookList> {
+class FetchBookList extends Store<BookList> {
   final SharedPreferences shardPrefs;
 
   FetchBookList(this.shardPrefs);
 
   @override
-  BookList execute() {
+  BookList initialize() {
     final bookIds = shardPrefs.loadBookIds();
 
     return BookList((b) => b

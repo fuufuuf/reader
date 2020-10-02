@@ -2,19 +2,19 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 
-import 'RequestHost.dart';
+import 'StoreHost.dart';
 
-abstract class Request<T> {
+abstract class Store<T> {
   @protected
   final StreamController<T> _controller;
 
-  Stream<T> get resultStream => _controller.stream;
+  Stream<T> get valueStream => _controller.stream;
 
-  Request() : _controller = StreamController(sync: true) {
+  Store() : _controller = StreamController(sync: true) {
     _controller.onListen = reload;
   }
 
-  Future<T> reload({quiet: false}) async => putValue(execute(), quiet: quiet);
+  Future<T> reload({quiet: false}) async => putValue(initialize(), quiet: quiet);
 
   Future<T> putValue(FutureOr<T> value, {quiet: false}) async {
     if (!quiet) markBusy();
@@ -35,8 +35,8 @@ abstract class Request<T> {
     _controller.add(null);
   }
 
-  FutureOr<T> execute();
+  FutureOr<T> initialize();
 
-  static TR findRequest<TR extends Request>(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<RequestProvider<TR>>().request;
+  static TR find<TR extends Store>(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<StoreProvider<TR>>().request;
 }
