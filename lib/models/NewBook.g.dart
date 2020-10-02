@@ -16,6 +16,8 @@ class _$NewBook extends NewBook {
   @override
   final Uri chapterListUrl;
   @override
+  final bool isDuplicated;
+  @override
   final Uri currentChapterUrl;
 
   factory _$NewBook([void Function(NewBookBuilder) updates]) =>
@@ -26,6 +28,7 @@ class _$NewBook extends NewBook {
       this.bookName,
       this.bookInfoUrl,
       this.chapterListUrl,
+      this.isDuplicated,
       this.currentChapterUrl})
       : super._() {
     if (bookId == null) {
@@ -39,6 +42,9 @@ class _$NewBook extends NewBook {
     }
     if (chapterListUrl == null) {
       throw new BuiltValueNullFieldError('NewBook', 'chapterListUrl');
+    }
+    if (isDuplicated == null) {
+      throw new BuiltValueNullFieldError('NewBook', 'isDuplicated');
     }
   }
 
@@ -57,6 +63,7 @@ class _$NewBook extends NewBook {
         bookName == other.bookName &&
         bookInfoUrl == other.bookInfoUrl &&
         chapterListUrl == other.chapterListUrl &&
+        isDuplicated == other.isDuplicated &&
         currentChapterUrl == other.currentChapterUrl;
   }
 
@@ -64,9 +71,11 @@ class _$NewBook extends NewBook {
   int get hashCode {
     return $jf($jc(
         $jc(
-            $jc($jc($jc(0, bookId.hashCode), bookName.hashCode),
-                bookInfoUrl.hashCode),
-            chapterListUrl.hashCode),
+            $jc(
+                $jc($jc($jc(0, bookId.hashCode), bookName.hashCode),
+                    bookInfoUrl.hashCode),
+                chapterListUrl.hashCode),
+            isDuplicated.hashCode),
         currentChapterUrl.hashCode));
   }
 
@@ -77,6 +86,7 @@ class _$NewBook extends NewBook {
           ..add('bookName', bookName)
           ..add('bookInfoUrl', bookInfoUrl)
           ..add('chapterListUrl', chapterListUrl)
+          ..add('isDuplicated', isDuplicated)
           ..add('currentChapterUrl', currentChapterUrl))
         .toString();
   }
@@ -102,6 +112,10 @@ class NewBookBuilder implements Builder<NewBook, NewBookBuilder> {
   set chapterListUrl(Uri chapterListUrl) =>
       _$this._chapterListUrl = chapterListUrl;
 
+  bool _isDuplicated;
+  bool get isDuplicated => _$this._isDuplicated;
+  set isDuplicated(bool isDuplicated) => _$this._isDuplicated = isDuplicated;
+
   Uri _currentChapterUrl;
   Uri get currentChapterUrl => _$this._currentChapterUrl;
   set currentChapterUrl(Uri currentChapterUrl) =>
@@ -115,6 +129,7 @@ class NewBookBuilder implements Builder<NewBook, NewBookBuilder> {
       _bookName = _$v.bookName;
       _bookInfoUrl = _$v.bookInfoUrl;
       _chapterListUrl = _$v.chapterListUrl;
+      _isDuplicated = _$v.isDuplicated;
       _currentChapterUrl = _$v.currentChapterUrl;
       _$v = null;
     }
@@ -142,6 +157,7 @@ class NewBookBuilder implements Builder<NewBook, NewBookBuilder> {
             bookName: bookName,
             bookInfoUrl: bookInfoUrl,
             chapterListUrl: chapterListUrl,
+            isDuplicated: isDuplicated,
             currentChapterUrl: currentChapterUrl);
     replace(_$result);
     return _$result;

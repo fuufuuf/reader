@@ -23,8 +23,7 @@ class FakeClient extends ReaderHttpClient {
   }
 
   FakeClient registerFixture(Uri url, String fileName) {
-    _fixtureMap[url] =
-        Platform.script.resolve('./test/fixtures/').resolve(fileName);
+    _fixtureMap[url] = Platform.script.resolve('./test/fixtures/').resolve(fileName);
     return this;
   }
 }
@@ -35,8 +34,7 @@ void main() {
 
   final bookUrl = Uri.parse('https://www.ptwxz.com/bookinfo/9/9054.html');
   final menuUrl = Uri.parse('https://www.ptwxz.com/html/9/9054/');
-  final chapterUrl =
-      Uri.parse('https://www.ptwxz.com/html/9/9054/5941036.html');
+  final chapterUrl = Uri.parse('https://www.ptwxz.com/html/9/9054/5941036.html');
   final testUrl = Uri.parse('/test');
 
   setUp(() {
@@ -60,12 +58,9 @@ void main() {
   });
 
   test('should parser as right type', () async {
-    expect(await adapter.fetchFromUrl(bookUrl),
-        allOf(isNotNull, isInstanceOf<BookInfo>()));
-    expect(await adapter.fetchFromUrl(menuUrl),
-        allOf(isNotNull, isInstanceOf<ChapterList>()));
-    expect(await adapter.fetchFromUrl(chapterUrl),
-        allOf(isNotNull, isInstanceOf<ChapterContent>()));
+    expect(await adapter.fetchFromUrl(bookUrl), allOf(isNotNull, isInstanceOf<BookInfo>()));
+    expect(await adapter.fetchFromUrl(menuUrl), allOf(isNotNull, isInstanceOf<ChapterList>()));
+    expect(await adapter.fetchFromUrl(chapterUrl), allOf(isNotNull, isInstanceOf<ChapterContent>()));
   });
 
   test('it should parse book info', () async {
@@ -73,8 +68,7 @@ void main() {
 
     expect(book.url, bookUrl);
     expect(book.bookId, equals('piaotian-9-9054'));
-    expect(book.chapterListUrl,
-        equals(Uri.parse('https://www.ptwxz.com/html/9/9054/')));
+    expect(book.chapterListUrl, equals(Uri.parse('https://www.ptwxz.com/html/9/9054/')));
     expect(book.title, equals('大道朝天'));
     expect(book.author, equals('猫腻'));
     expect(book.genre, equals('玄幻魔法'));
@@ -92,13 +86,11 @@ void main() {
 
     final firstChapter = menu.chapters.first;
     expect(firstChapter.title, equals('说在前面'));
-    expect(firstChapter.url,
-        equals(Uri.parse('https://www.ptwxz.com/html/9/9054/5941033.html')));
+    expect(firstChapter.url, equals(Uri.parse('https://www.ptwxz.com/html/9/9054/5941033.html')));
 
     final lastChapter = menu.chapters.last;
     expect(lastChapter.title, equals('第一章剑峰生于天地间'));
-    expect(lastChapter.url,
-        equals(Uri.parse('https://www.ptwxz.com/html/9/9054/6868941.html')));
+    expect(lastChapter.url, equals(Uri.parse('https://www.ptwxz.com/html/9/9054/6868941.html')));
 
     expect(menu.bookInfoUrl, equals(bookUrl));
   });
@@ -108,23 +100,20 @@ void main() {
 
     expect(chapter.url, equals(chapterUrl));
     expect(chapter.chapterListUrl, equals(menuUrl));
-    expect(chapter.previousChapterUrl,
-        equals(Uri.parse('https://www.ptwxz.com/html/9/9054/5941035.html')));
-    expect(chapter.nextChapterUrl,
-        equals(Uri.parse('https://www.ptwxz.com/html/9/9054/5941116.html')));
-    
+    expect(chapter.previousChapterUrl, equals(Uri.parse('https://www.ptwxz.com/html/9/9054/5941035.html')));
+    expect(chapter.nextChapterUrl, equals(Uri.parse('https://www.ptwxz.com/html/9/9054/5941116.html')));
+
     expect(chapter.paragraphs.length, equals(86));
     expect(chapter.paragraphs.first, equals('“稍后看着何等样的天地异变，都莫要惊慌。”'));
     expect(chapter.paragraphs.last, equals('无论是镇上的民宅还是峰间的崖洞，都镀上了一层金光，仿佛真实的仙境，或者神国。'));
   });
 
   group('parse book entry', () {
-    final newBook = NewBook((b) =>
-    b
-      ..bookId = 'piaotian-9-9054'
-      ..bookName = '大道朝天'
-      ..bookInfoUrl = Uri.parse('https://www.ptwxz.com/bookinfo/9/9054.html')
-      ..chapterListUrl = Uri.parse('https://www.ptwxz.com/html/9/9054/')
+    final newBook = NewBook(
+      bookId: 'piaotian-9-9054',
+      bookName: '大道朝天',
+      bookInfoUrl: Uri.parse('https://www.ptwxz.com/bookinfo/9/9054.html'),
+      chapterListUrl: Uri.parse('https://www.ptwxz.com/html/9/9054/'),
     );
 
     test('should parse from book info page', () async {

@@ -55,17 +55,17 @@ class PiaotianwAdapter extends SiteAdapter {
     throw Exception("無法解析的 Url: $url");
   }
 
-  NewBook _buildBookEntryFromBookInfo(BookInfo bookInfo) => NewBook((builder) => builder
-    ..bookId = _extractBookId(bookInfo.url)
-    ..bookName = bookInfo.title
-    ..bookInfoUrl = bookInfo.url
-    ..chapterListUrl = bookInfo.chapterListUrl);
+  NewBook _buildBookEntryFromBookInfo(BookInfo bookInfo) => NewBook(
+      bookId: _extractBookId(bookInfo.url),
+      bookName: bookInfo.title,
+      bookInfoUrl: bookInfo.url,
+      chapterListUrl: bookInfo.chapterListUrl);
 
-  NewBook _buildBookEntryFromChapterList(ChapterList list) => NewBook((builder) => builder
-    ..bookId = _extractBookId(list.bookInfoUrl)
-    ..bookName = list.title
-    ..bookInfoUrl = list.bookInfoUrl
-    ..chapterListUrl = list.url);
+  NewBook _buildBookEntryFromChapterList(ChapterList list) => NewBook(
+      bookId: _extractBookId(list.bookInfoUrl),
+      bookName: list.title,
+      bookInfoUrl: list.bookInfoUrl,
+      chapterListUrl: list.url);
 
   Future<NewBook> _buildBookEntryFromChapterContent(ChapterContent content) async {
     return _buildBookEntryFromChapterList(await content.fetchChapterList())

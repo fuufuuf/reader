@@ -6,7 +6,12 @@ part 'NewBook.g.dart';
 abstract class NewBook implements Built<NewBook, NewBookBuilder> {
   NewBook._();
 
-  factory NewBook([updates(NewBookBuilder b)]) = _$NewBook;
+  factory NewBook({String bookId, String bookName, Uri bookInfoUrl, Uri chapterListUrl}) => _$NewBook((b) => b
+    ..bookId = bookId
+    ..bookName = bookName
+    ..bookInfoUrl = bookInfoUrl
+    ..chapterListUrl = chapterListUrl
+    ..isDuplicated = false);
 
   String get bookId;
 
@@ -15,6 +20,8 @@ abstract class NewBook implements Built<NewBook, NewBookBuilder> {
   Uri get bookInfoUrl;
 
   Uri get chapterListUrl;
+
+  bool get isDuplicated;
 
   @nullable
   Uri get currentChapterUrl;
