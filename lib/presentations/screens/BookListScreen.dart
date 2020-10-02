@@ -1,9 +1,9 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
+import 'package:timnew_reader/app/AddNewBooks/AddNewBookDialog.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/presentations/ReaderApp.AppRouter.dart';
 import 'package:timnew_reader/presentations/components/ScreenScaffold.dart';
-import 'package:timnew_reader/presentations/screens/AddBookDialog.dart';
 
 class BookListScreen extends StatefulWidget {
   BookListScreen();
@@ -70,7 +70,7 @@ class _BookListScreenState extends State<BookListScreen> {
   Widget _renderFab(BuildContext context) => FloatingActionButton(
       child: Icon(Icons.add),
       onPressed: () async {
-        await AddBooksDialog.show(context);
+        await AddNewBookDialog.show(context);
         setState(() {
           reload();
         });

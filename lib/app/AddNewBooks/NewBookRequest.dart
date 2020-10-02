@@ -4,10 +4,10 @@ import 'package:timnew_reader/repositories/network/BookRepository.dart';
 import 'package:timnew_reader/repositories/settings/BookIndexRepository.dart';
 import 'package:timnew_reader/arch/ValueSource.dart';
 
-class AddNewBook extends ValueSource<NewBook> {
+class NewBookRequest extends ValueSource<NewBook> {
   final String url;
 
-  AddNewBook(this.url);
+  NewBookRequest(this.url);
 
   @override
   Future<NewBook> initialize() async {
@@ -22,11 +22,11 @@ class AddNewBook extends ValueSource<NewBook> {
     return newBook;
   }
 
-  static Iterable<AddNewBook> fromUrlInput(String text) {
+  static Iterable<NewBookRequest> fromUrlInput(String text) {
     if (text.isEmpty) {
       return Iterable.empty();
     }
 
-    return text.split("\n").map((e) => e.trim()).where((element) => element.isNotEmpty).map((e) => AddNewBook(e));
+    return text.split("\n").map((e) => e.trim()).where((element) => element.isNotEmpty).map((e) => NewBookRequest(e));
   }
 }

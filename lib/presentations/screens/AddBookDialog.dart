@@ -5,7 +5,7 @@ import 'package:timnew_reader/arch/AsyncValueBuilder.dart';
 
 import 'package:timnew_reader/models/NewBook.dart';
 
-import '../../app/AddNewBooks/ParseNewBookUrl.dart';
+import '../../app/AddNewBooks/NewBookRequest.dart';
 
 import 'package:timnew_reader/presentations/components/ScreenScaffold.dart';
 
@@ -20,7 +20,7 @@ class AddBooksDialog extends StatefulWidget {
 class _AddBooksDialogState extends State<AddBooksDialog> {
   final TextEditingController _urlController = TextEditingController();
 
-  BuiltList<ParseNewBookUrl> requests = BuiltList();
+  BuiltList<NewBookRequest> requests = BuiltList();
 
   void _clearRequests() {
     setState(() {
@@ -49,7 +49,7 @@ class _AddBooksDialogState extends State<AddBooksDialog> {
   void _parseNewBookUrls(String text) {
     final existing = requests.map((it) => it.url).toSet();
 
-    final newRequests = ParseNewBookUrl.fromUrlInput(text).where((it) => !existing.contains(it.url)).toBuiltList();
+    final newRequests = NewBookRequest.fromUrlInput(text).where((it) => !existing.contains(it.url)).toBuiltList();
 
     setState(() {
       requests += newRequests;
@@ -158,7 +158,7 @@ class _AddBooksDialogState extends State<AddBooksDialog> {
           ),
         ),
       ),
-      waitingBuilder: (BuildContext context) => _ignorable(
+      waitingBuilder: (BuildContext context) => _removable(
           key: Key(request.url),
           onDismissed: onDismissed,
           child: Card(child: ListTile(leading: CircularProgressIndicator(value: null), title: Text(request.url)))),
@@ -178,16 +178,4 @@ class _AddBooksDialogState extends State<AddBooksDialog> {
       dismissThresholds: const {DismissDirection.endToStart: .7},
       child: child);
 
-  Widget _ignorable({Key key, VoidCallback onDismissed, Widget child}) => Dismissible(
-      key: key,
-      background: Container(
-        color: Colors.yellow.shade700,
-        alignment: Alignment.centerRight,
-        padding: const EdgeInsets.only(right: 16),
-        child: const Text('忽略', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-      ),
-      direction: DismissDirection.endToStart,
-      onDismissed: (DismissDirection direction) => onDismissed(),
-      dismissThresholds: const {DismissDirection.endToStart: .7},
-      child: child);
 }
