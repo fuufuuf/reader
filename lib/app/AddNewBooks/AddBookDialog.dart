@@ -5,19 +5,19 @@ import 'package:timnew_reader/arch/AsyncValueBuilder.dart';
 
 import 'package:timnew_reader/models/NewBook.dart';
 
-import 'package:timnew_reader/requests/AddNewBook.dart';
+import 'package:timnew_reader/app/AddNewBooks/AddNewBook.dart';
 
 import 'package:timnew_reader/presentations/components/ScreenScaffold.dart';
 
-class AddBookDialog extends StatefulWidget {
+class AddBooksDialog extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _AddBookDialogState();
+  State<StatefulWidget> createState() => _AddBooksDialogState();
 
   static Future<NewBook> show(BuildContext context) =>
-      Navigator.push(context, MaterialPageRoute(builder: (_) => AddBookDialog(), fullscreenDialog: true));
+      Navigator.push(context, MaterialPageRoute(builder: (_) => AddBooksDialog(), fullscreenDialog: true));
 }
 
-class _AddBookDialogState extends State<AddBookDialog> {
+class _AddBooksDialogState extends State<AddBooksDialog> {
   final TextEditingController _urlController = TextEditingController();
 
   BuiltList<AddNewBook> requests = BuiltList();
