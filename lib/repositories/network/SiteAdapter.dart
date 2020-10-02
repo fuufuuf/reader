@@ -30,7 +30,7 @@ abstract class SiteAdapter {
       case ChapterContent:
         return fetchChapterContent(url);
       default:
-        throw "Unknown url type";
+        throw Exception("無法解析的 Url: $url");
     }
   }
 }

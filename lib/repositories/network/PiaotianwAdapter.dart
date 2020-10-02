@@ -33,7 +33,7 @@ class PiaotianwAdapter extends SiteAdapter {
       return BookInfo;
     }
 
-    throw "Unknown Url: $url";
+    throw Exception("無法解析的 Url: $url");
   }
 
   @override
@@ -52,7 +52,7 @@ class PiaotianwAdapter extends SiteAdapter {
       return _buildBookEntryFromChapterContent(content);
     }
 
-    throw 'Unkonwn url';
+    throw Exception("無法解析的 Url: $url");
   }
 
   NewBook _buildBookEntryFromBookInfo(BookInfo bookInfo) => NewBook((builder) => builder

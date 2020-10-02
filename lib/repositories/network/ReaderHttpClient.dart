@@ -13,7 +13,7 @@ class ReaderHttpClient {
     final response = await http.get(url);
 
     if (response.statusCode != 200) {
-      throw "Http Error ${response.statusCode}";
+      throw Exception("HTTP 錯誤 ${response.statusCode}");
     }
 
     if (enforceGbk) {

@@ -29,7 +29,7 @@ class BookRepository {
   static SiteAdapter _findAdapter(Uri url) {
     final adapter = adapters[url.host];
 
-    if (adapter == null) throw UnsupportedError('未知的網站');
+    if (adapter == null) throw Exception('未知的網站');
 
     return adapter;
   }
