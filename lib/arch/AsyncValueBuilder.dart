@@ -4,7 +4,7 @@ import 'Request.dart';
 typedef DataWidgetBuilder<T> = Widget Function(BuildContext context, T data);
 
 abstract class AsyncValueBuilder<T> extends StatelessWidget {
-  final bool respectResult;
+  final bool waitForDone;
 
   final DataWidgetBuilder<T> dataBuilder;
   final DataWidgetBuilder<Object> errorBuilder;
@@ -16,48 +16,47 @@ abstract class AsyncValueBuilder<T> extends StatelessWidget {
   factory AsyncValueBuilder.future(
           {Key key,
           @required Future<T> future,
-          bool respectResult: false,
+          bool waitForDone: false,
           @required DataWidgetBuilder<T> dataBuilder,
           DataWidgetBuilder<Object> errorBuilder: defaultErrorBuilder,
           WidgetBuilder waitingBuilder: defaultWaitingBuilder,
           WidgetBuilder activeBuilder,
           WidgetBuilder noneBuilder}) =>
       FutureValueBuilder(
-          key, future, respectResult, dataBuilder, errorBuilder, waitingBuilder, activeBuilder, noneBuilder);
+          key, future, waitForDone, dataBuilder, errorBuilder, waitingBuilder, activeBuilder, noneBuilder);
 
   factory AsyncValueBuilder.stream(
           {Key key,
           @required Stream<T> stream,
-          bool respectResult: false,
+          bool waitForDone: false,
           @required DataWidgetBuilder<T> dataBuilder,
           DataWidgetBuilder<Object> errorBuilder: defaultErrorBuilder,
           WidgetBuilder waitingBuilder: defaultWaitingBuilder,
           WidgetBuilder activeBuilder,
           WidgetBuilder noneBuilder}) =>
       StreamValueBuilder(
-          key, stream, respectResult, dataBuilder, errorBuilder, waitingBuilder, activeBuilder, noneBuilder);
+          key, stream, waitForDone, dataBuilder, errorBuilder, waitingBuilder, activeBuilder, noneBuilder);
 
   factory AsyncValueBuilder.request(
           {Key key,
           @required Request<T> request,
-          bool respectResult: false,
           @required DataWidgetBuilder<T> dataBuilder,
           DataWidgetBuilder<Object> errorBuilder: defaultErrorBuilder,
           WidgetBuilder waitingBuilder: defaultWaitingBuilder,
           WidgetBuilder activeBuilder,
           WidgetBuilder noneBuilder}) =>
-      StreamValueBuilder(key, request.resultStream, respectResult, dataBuilder, errorBuilder, waitingBuilder,
-          activeBuilder, noneBuilder);
+      StreamValueBuilder(
+          key, request.resultStream, false, dataBuilder, errorBuilder, waitingBuilder, activeBuilder, noneBuilder);
 
   AsyncValueBuilder._(
     Key key,
-    this.respectResult,
+    this.waitForDone,
     this.dataBuilder,
     this.errorBuilder,
     this.waitingBuilder,
     WidgetBuilder activeBuilder,
     WidgetBuilder noneBuilder,
-  )   : assert(respectResult != null),
+  )   : assert(waitForDone != null),
         assert(dataBuilder != null),
         assert(errorBuilder != null),
         assert(waitingBuilder != null),
@@ -65,9 +64,8 @@ abstract class AsyncValueBuilder<T> extends StatelessWidget {
         this.noneBuilder = noneBuilder ?? waitingBuilder,
         super(key: key);
 
-  @protected
-  Widget _buildSnapshot(BuildContext context, AsyncSnapshot<T> snapshot) {
-    if (this.respectResult) {
+  Widget buildSnapshot(BuildContext context, AsyncSnapshot<T> snapshot) {
+    if (!this.waitForDone) {
       final resultWidget = _buildResult(context, snapshot);
 
       if (resultWidget != null) return resultWidget;
@@ -122,17 +120,17 @@ class FutureValueBuilder<T> extends AsyncValueBuilder<T> {
   FutureValueBuilder(
     Key key,
     this.future,
-    bool respectResult,
+    bool waitForDone,
     DataWidgetBuilder<T> dataBuilder,
     DataWidgetBuilder<Object> errorBuilder,
     WidgetBuilder waitingBuilder,
     WidgetBuilder activeBuilder,
     WidgetBuilder noneBuilder,
   )   : assert(future != null),
-        super._(key, respectResult, dataBuilder, errorBuilder, waitingBuilder, activeBuilder, noneBuilder);
+        super._(key, waitForDone, dataBuilder, errorBuilder, waitingBuilder, activeBuilder, noneBuilder);
 
   @override
-  Widget build(BuildContext context) => FutureBuilder(future: this.future, builder: _buildSnapshot);
+  Widget build(BuildContext context) => FutureBuilder(future: this.future, builder: buildSnapshot);
 }
 
 class StreamValueBuilder<T> extends AsyncValueBuilder<T> {
@@ -141,15 +139,15 @@ class StreamValueBuilder<T> extends AsyncValueBuilder<T> {
   StreamValueBuilder(
     Key key,
     this.stream,
-    bool respectResult,
+    bool waitForDone,
     DataWidgetBuilder<T> dataBuilder,
     DataWidgetBuilder<Object> errorBuilder,
     WidgetBuilder waitingBuilder,
     WidgetBuilder activeBuilder,
     WidgetBuilder noneBuilder,
   )   : assert(stream != null),
-        super._(key, respectResult, dataBuilder, errorBuilder, waitingBuilder, activeBuilder, noneBuilder);
+        super._(key, waitForDone, dataBuilder, errorBuilder, waitingBuilder, activeBuilder, noneBuilder);
 
   @override
-  Widget build(BuildContext context) => StreamBuilder(stream: this.stream, builder: _buildSnapshot);
+  Widget build(BuildContext context) => StreamBuilder(stream: this.stream, builder: buildSnapshot);
 }

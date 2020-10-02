@@ -1,13 +1,13 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:timnew_reader/arch/AsyncValueBuilder.dart';
 
 import 'package:timnew_reader/models/NewBook.dart';
 
 import 'package:timnew_reader/requests/AddNewBook.dart';
 
 import 'package:timnew_reader/presentations/components/ScreenScaffold.dart';
-import 'package:timnew_reader/presentations/wrappers/AsyncSnapShotRender.dart';
 
 class AddBookDialog extends StatefulWidget {
   @override
@@ -130,9 +130,9 @@ class _AddBookDialogState extends State<AddBookDialog> {
       });
     };
 
-    return AsyncSnapshotRender(
+    return AsyncValueBuilder.request(
       key: Key(request.url),
-      stream: request.resultStream,
+      request: request,
       dataBuilder: (BuildContext context, NewBook newBook) => Card(
         child: ListTile(
           leading: Icon(Icons.book),
