@@ -79,18 +79,16 @@ abstract class AsyncValueBuilder<T> extends StatelessWidget {
       case ConnectionState.active:
         return activeBuilder(context);
       case ConnectionState.done:
-        return _buildResult(context, snapshot) ??
-            defaultErrorBuilder(context, "Flutter Bug: ConnectionState.done with neither data or error");
+        return _buildResult(context, snapshot) ?? {throw StateError('ConnectionState.done with no data or error')};
     }
 
-    return defaultErrorBuilder(context, "Flutter Bug: Impossible Connection State");
+    throw StateError("Flutter Bug: Impossible Connection State");
   }
 
   Widget _buildResult(BuildContext context, AsyncSnapshot<T> snapshot) {
     if (snapshot.hasError)
-      return errorBuilder(context, snapshot.error) ?? defaultErrorBuilder(context, "Error Render returns null");
-    if (snapshot.hasData)
-      return dataBuilder(context, snapshot.data) ?? defaultErrorBuilder(context, "Data Render returns null");
+      return errorBuilder(context, snapshot.error) ?? {throw StateError('ErrorBuilder returns null')};
+    if (snapshot.hasData) return dataBuilder(context, snapshot.data) ?? {throw StateError('DataBuilder returns null')};
 
     return null;
   }

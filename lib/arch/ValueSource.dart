@@ -13,20 +13,44 @@ abstract class ValueSource<T> {
     _controller.onListen = reload;
   }
 
+  T _value;
+  Object _error;
+
+  bool get hasValue => _value != null;
+
+  bool get hasError => _error != null;
+
+  bool get hasCurrent => hasValue || hasError;
+
+  T get value => _value;
+
+  Object get error => _error;
+
+  T _putValue(T value) {
+    _value = value;
+    _error = null;
+    _controller.add(value);
+
+    return value;
+  }
+
+  Object _putError(Object error) {
+    _error = error;
+    _value = null;
+    _controller.addError(error);
+
+    return error;
+  }
+
   Future<T> reload({quiet: false}) async => putValue(initialize(), quiet: quiet);
 
   Future<T> putValue(FutureOr<T> value, {quiet: false}) async {
     if (!quiet) markBusy();
 
     try {
-      final result = await value;
-
-      _controller.add(result);
-
-      return result;
-    } catch (error) {
-      _controller.addError(error);
-      throw error;
+      return _putValue(await value);
+    } on Exception catch (error) {
+      throw _putError(error);
     }
   }
 
