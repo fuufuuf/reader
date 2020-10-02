@@ -5,7 +5,7 @@ import 'package:timnew_reader/arch/AsyncValueBuilder.dart';
 
 import 'package:timnew_reader/models/NewBook.dart';
 
-import 'package:timnew_reader/app/AddNewBooks/AddNewBook.dart';
+import '../../app/AddNewBooks/ParseNewBookUrl.dart';
 
 import 'package:timnew_reader/presentations/components/ScreenScaffold.dart';
 
@@ -20,7 +20,7 @@ class AddBooksDialog extends StatefulWidget {
 class _AddBooksDialogState extends State<AddBooksDialog> {
   final TextEditingController _urlController = TextEditingController();
 
-  BuiltList<AddNewBook> requests = BuiltList();
+  BuiltList<ParseNewBookUrl> requests = BuiltList();
 
   void _clearRequests() {
     setState(() {
@@ -49,7 +49,7 @@ class _AddBooksDialogState extends State<AddBooksDialog> {
   void _parseNewBookUrls(String text) {
     final existing = requests.map((it) => it.url).toSet();
 
-    final newRequests = AddNewBook.fromUrlInput(text).where((it) => !existing.contains(it.url)).toBuiltList();
+    final newRequests = ParseNewBookUrl.fromUrlInput(text).where((it) => !existing.contains(it.url)).toBuiltList();
 
     setState(() {
       requests += newRequests;

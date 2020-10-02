@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/presentations/ReaderApp.AppRouter.dart';
 import 'package:timnew_reader/presentations/components/ScreenScaffold.dart';
-import 'package:timnew_reader/app/AddNewBooks/AddBookDialog.dart';
+import 'package:timnew_reader/presentations/screens/AddBookDialog.dart';
 
 class BookListScreen extends StatefulWidget {
   BookListScreen();
