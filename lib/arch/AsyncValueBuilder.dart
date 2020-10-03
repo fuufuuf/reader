@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'ValueSource.dart';
 
@@ -15,7 +16,7 @@ abstract class AsyncValueBuilder<T> extends StatelessWidget {
 
   factory AsyncValueBuilder.future(
           {Key key,
-          @required Future<T> future,
+          @required Future<T> source,
           bool waitForDone: false,
           @required DataWidgetBuilder<T> dataBuilder,
           DataWidgetBuilder<Object> errorBuilder: defaultErrorBuilder,
@@ -23,11 +24,11 @@ abstract class AsyncValueBuilder<T> extends StatelessWidget {
           WidgetBuilder activeBuilder,
           WidgetBuilder noneBuilder}) =>
       FutureValueBuilder(
-          key, future, waitForDone, dataBuilder, errorBuilder, waitingBuilder, activeBuilder, noneBuilder);
+          key, source, waitForDone, dataBuilder, errorBuilder, waitingBuilder, activeBuilder, noneBuilder);
 
   factory AsyncValueBuilder.stream(
           {Key key,
-          @required Stream<T> stream,
+          @required Stream<T> source,
           bool waitForDone: false,
           @required DataWidgetBuilder<T> dataBuilder,
           DataWidgetBuilder<Object> errorBuilder: defaultErrorBuilder,
@@ -35,18 +36,28 @@ abstract class AsyncValueBuilder<T> extends StatelessWidget {
           WidgetBuilder activeBuilder,
           WidgetBuilder noneBuilder}) =>
       StreamValueBuilder(
-          key, stream, waitForDone, dataBuilder, errorBuilder, waitingBuilder, activeBuilder, noneBuilder);
+          key, source, waitForDone, dataBuilder, errorBuilder, waitingBuilder, activeBuilder, noneBuilder);
 
   factory AsyncValueBuilder.valueSource(
           {Key key,
-          @required ValueSource<T> valueSource,
+          @required ValueSource<T> source,
           @required DataWidgetBuilder<T> dataBuilder,
           DataWidgetBuilder<Object> errorBuilder: defaultErrorBuilder,
           WidgetBuilder waitingBuilder: defaultWaitingBuilder,
           WidgetBuilder activeBuilder,
           WidgetBuilder noneBuilder}) =>
       StreamValueBuilder(
-          key, valueSource.valueStream, false, dataBuilder, errorBuilder, waitingBuilder, activeBuilder, noneBuilder);
+          key, source.valueStream, false, dataBuilder, errorBuilder, waitingBuilder, activeBuilder, noneBuilder);
+
+  factory AsyncValueBuilder.listenable(
+          {Key key,
+          @required ValueListenable<T> source,
+          @required DataWidgetBuilder<T> dataBuilder,
+          DataWidgetBuilder<Object> errorBuilder: defaultErrorBuilder,
+          WidgetBuilder waitingBuilder: defaultWaitingBuilder,
+          WidgetBuilder activeBuilder,
+          WidgetBuilder noneBuilder}) =>
+      ListenableValueBuilder(key, source, dataBuilder, errorBuilder, waitingBuilder, activeBuilder, noneBuilder);
 
   AsyncValueBuilder._(
     Key key,
@@ -110,6 +121,27 @@ abstract class AsyncValueBuilder<T> extends StatelessWidget {
       child: CircularProgressIndicator(value: null),
     );
   }
+}
+
+class ListenableValueBuilder<T> extends AsyncValueBuilder<T> {
+  final ValueListenable<T> listenable;
+
+  ListenableValueBuilder(
+    Key key,
+    this.listenable,
+    DataWidgetBuilder<T> dataBuilder,
+    DataWidgetBuilder<Object> errorBuilder,
+    WidgetBuilder waitingBuilder,
+    WidgetBuilder activeBuilder,
+    WidgetBuilder noneBuilder,
+  )   : assert(listenable != null),
+        super._(key, false, dataBuilder, errorBuilder, waitingBuilder, activeBuilder, noneBuilder);
+
+  @override
+  Widget build(BuildContext context) => ValueListenableBuilder(valueListenable: listenable, builder: _onValueChanged);
+
+  Widget _onValueChanged(BuildContext context, T value, Widget child) =>
+      buildSnapshot(context, AsyncSnapshot.withData(ConnectionState.done, value));
 }
 
 class FutureValueBuilder<T> extends AsyncValueBuilder<T> {

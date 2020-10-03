@@ -28,7 +28,7 @@ abstract class ValueSourceBuilder<T, TS extends ValueSource<T>> extends Stateles
 
   @override
   Widget build(BuildContext context) => AsyncValueBuilder.valueSource(
-        valueSource: valueSource,
+        source: valueSource,
         dataBuilder: buildValue,
         errorBuilder: buildError,
         waitingBuilder: buildWaiting,
