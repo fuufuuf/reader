@@ -1,5 +1,5 @@
 import 'package:built_collection/built_collection.dart';
-import 'package:timnew_reader/app/AddNewBooks/BookList/BookList.dart';
+import 'package:timnew_reader/app/BookList/BookList.dart';
 import 'package:timnew_reader/arch/ValueSource.dart';
 
 import 'NewBookRequest.dart';

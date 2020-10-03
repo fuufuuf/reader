@@ -1,9 +1,8 @@
+import 'package:timnew_reader/app/BookList/BookList.dart';
 import 'package:timnew_reader/models/NewBook.dart';
 
 import 'package:timnew_reader/repositories/network/BookRepository.dart';
 import 'package:timnew_reader/arch/ValueSource.dart';
-
-import 'BookList/BookList.dart';
 
 class NewBookRequest extends ValueSource<NewBook> {
   final BookList bookList;

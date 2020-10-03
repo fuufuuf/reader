@@ -1,7 +1,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:timnew_reader/app/AddNewBooks/AddNewBookDialog.dart';
-import 'package:timnew_reader/app/AddNewBooks/BookList/BookList.dart';
+import 'package:timnew_reader/app/BookList/BookList.dart';
 import 'package:timnew_reader/app/InitStorage.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/presentations/ReaderApp.AppRouter.dart';
