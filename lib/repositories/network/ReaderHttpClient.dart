@@ -17,7 +17,7 @@ class ReaderHttpClient {
     }
 
     if (enforceGbk) {
-      return decodeGbk(response.bodyBytes);
+      return gbk.decode(response.bodyBytes);
     } else {
       return response.body;
     }
