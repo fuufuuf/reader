@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:rxdart/rxdart.dart';
 
+import 'FuncTypes.dart';
+export 'FuncTypes.dart';
+
 abstract class Request<T> {
   final BehaviorSubject<T> _controller;
 
@@ -42,7 +45,18 @@ abstract class Request<T> {
 
   bool get hasCurrentValue => _controller.hasValue;
 
-  T get currentValue => _controller.value;
+  T get currentValue {
+    if (!hasCurrentValue) throw StateError("Reading currentValue before it is ready");
+    return _controller.value;
+  }
 
   Future<T> get firstValue => valueStream.first;
+
+  void updateValueSync(ValueUpdater<T> updater) {
+    try {
+      putValueSync(updater(currentValue));
+    } on Exception catch (error, stacktrace) {
+      _controller.addError(error, stacktrace);
+    }
+  }
 }
