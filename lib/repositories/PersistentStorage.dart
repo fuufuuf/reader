@@ -1,4 +1,4 @@
-import 'package:built_collection/src/list.dart';
+import 'package:built_collection/built_collection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/repositories/settings/SharedPreferencesBookIndexExtension.dart';

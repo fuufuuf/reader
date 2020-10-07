@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:timnew_reader/app/AddNewBooks/NewBookRequestList.dart';
 import 'package:timnew_reader/app/AddNewBooks/NewBookRequest.dart';
 import 'package:timnew_reader/app/BookList/BookList.dart';
-import 'package:timnew_reader/arch/ValueSourceBuilder.dart';
+import 'package:timnew_reader/arch/RenderMixin.dart';
 import 'package:timnew_reader/models/NewBook.dart';
 import 'package:timnew_reader/presentations/components/SwipeRemovable.dart';
 import 'package:timnew_reader/presentations/components/TextFormFieldWithClearButton.dart';
@@ -31,7 +31,7 @@ class _AddNewBookDialogState extends State<AddNewBookDialog> {
   @override
   Widget build(BuildContext context) {
     return ScreenScaffold(
-      title: '添加新書!!',
+      title: '添加新書',
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         child: Form(
@@ -75,58 +75,67 @@ class _AddNewBookDialogState extends State<AddNewBookDialog> {
   }
 }
 
-class _NewBookListView extends ValueSourceBuilder<BuiltList<NewBookRequest>, NewBookRequestList> {
-  _NewBookListView(NewBookRequestList newBookList) : super(newBookList);
+class _NewBookListView extends StatelessWidget
+    with RenderValueStore<BuiltList<NewBookRequest>>, WithEmptyContent<BuiltList<NewBookRequest>> {
+  final NewBookRequestList newBookList;
+
+  _NewBookListView(this.newBookList);
 
   @override
-  Widget buildValue(BuildContext context, BuiltList<NewBookRequest> value) {
-    if (value.isEmpty) return _buildEmptyView();
+  Widget build(BuildContext context) => buildValueStore(newBookList);
 
-    return ListView.builder(itemCount: value.length, itemBuilder: _buildListItem);
-  }
+  @override
+  bool checkEmpty(BuiltList<NewBookRequest> data) => data.isEmpty;
 
-  Widget _buildEmptyView() => Center(
+  @override
+  Widget buildEmpty(BuildContext context) => Center(
         child: Text("輸入書目 Url 添加"),
       );
 
+  @override
+  Widget buildContent(BuildContext context, BuiltList<NewBookRequest> content) =>
+      ListView.builder(itemCount: content.length, itemBuilder: _buildListItem);
+
   Widget _buildListItem(BuildContext context, int index) {
-    final request = currentValue[index];
+    final request = newBookList.value[index];
 
     return _NewBookListItem(
       request,
       () {
-        putValue(currentValue.rebuild((b) => b.removeAt(index)));
+        newBookList.value = newBookList.value.rebuild((b) => b.removeAt(index));
       },
     );
   }
 }
 
-class _NewBookListItem extends ValueSourceBuilder<NewBook, NewBookRequest> {
+class _NewBookListItem extends StatelessWidget with RenderAsyncSnapshot<NewBook> {
   final VoidCallback removeItem;
+  final NewBookRequest request;
 
-  _NewBookListItem(NewBookRequest request, this.removeItem) : super(request, key: Key(request.url));
+  _NewBookListItem(this.request, this.removeItem) : super(key: Key(request.url));
 
   @override
-  Widget buildValue(BuildContext context, NewBook newBook) {
-    return Card(
+  Widget build(BuildContext context) => buildStream(request.valueStream);
+
+  @override
+  Widget buildData(BuildContext context, NewBook data) {
+    throw Card(
       child: ListTile(
-        leading: _buildBookIcon(context, newBook.isDuplicated),
-        title: _buildBookTitle(context, newBook),
-        subtitle: Text(valueSource.url),
+        leading: _buildBookIcon(context, data.isDuplicated),
+        title: _buildBookTitle(context, data),
+        subtitle: Text(request.url),
       ),
     );
   }
 
   Widget _buildBookTitle(BuildContext context, NewBook newBook) {
-    final plainTitle = Text(newBook.bookName);
+    if (!newBook.isDuplicated) return Text(newBook.bookName);
 
-    if (!newBook.isDuplicated) return plainTitle;
-
-    return Row(
-      children: [
-        Text("[已存在] ", style: TextStyle(color: Colors.yellow.shade700)),
-        plainTitle,
-      ],
+    return RichText(
+      text: TextSpan(children: [
+        TextSpan(text: "[已存在] ", style: TextStyle(color: Colors.yellow.shade700)),
+        TextSpan(text: newBook.bookName),
+      ]),
     );
   }
 
@@ -138,18 +147,18 @@ class _NewBookListItem extends ValueSourceBuilder<NewBook, NewBookRequest> {
     final errorColor = Theme.of(context).errorColor;
 
     return SwipeRemovable(
-      key: Key(valueSource.url),
+      key: Key(request.url),
       onRemoved: removeItem,
       child: Card(
         child: ListTile(
           leading: Icon(Icons.error_outline, color: errorColor),
           title: Text(error.toString(), style: TextStyle(color: errorColor)),
-          subtitle: Text(valueSource.url),
+          subtitle: Text(request.url),
           onTap: () {
-            valueSource.reload();
+            request.reload();
           },
           onLongPress: () {
-            Clipboard.setData(ClipboardData(text: valueSource.url));
+            Clipboard.setData(ClipboardData(text: request.url));
             Scaffold.of(context).showSnackBar(SnackBar(content: Text('網站鏈接已經複製')));
           },
         ),
@@ -157,15 +166,16 @@ class _NewBookListItem extends ValueSourceBuilder<NewBook, NewBookRequest> {
     );
   }
 
-  Widget buildWaiting(BuildContext context) {
+  @override
+  Widget buildBusy(BuildContext context) {
     return SwipeRemovable(
-      key: Key(valueSource.url),
+      key: Key(request.url),
       onRemoved: removeItem,
       child: Card(
         child: ListTile(
           leading: CircularProgressIndicator(value: null),
           title: Text("加載中..."),
-          subtitle: Text(valueSource.url),
+          subtitle: Text(request.url),
         ),
       ),
     );

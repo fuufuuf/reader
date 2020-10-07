@@ -6,30 +6,30 @@ import 'FuncTypes.dart';
 export 'FuncTypes.dart';
 
 abstract class Request<T> {
-  final BehaviorSubject<T> _controller;
+  final BehaviorSubject<T> _subject;
 
-  Stream<T> get valueStream => _controller.stream;
+  Stream<T> get valueStream => _subject;
 
   Request({T initialValue, bool executeOnFirstListen = true})
-      : _controller = initialValue != null ? BehaviorSubject.seeded(initialValue) : BehaviorSubject() {
+      : _subject = initialValue != null ? BehaviorSubject.seeded(initialValue) : BehaviorSubject() {
     if (executeOnFirstListen) {
-      _controller.onListen = reload;
+      _subject.onListen = reload;
     }
   }
 
   FutureOr<T> execute();
 
-  Future<T> reload({quiet: false}) async => putValue(execute(), quiet: quiet);
+  Future<T> reload({quiet: false}) async => await putValue(execute(), quiet: quiet);
 
   Future<T> putValue(FutureOr<T> value, {quiet: false}) async {
     if (!quiet && value is Future) markBusy();
 
     try {
       final result = await value;
-      _controller.add(result);
+      _subject.add(result);
       return result;
     } catch (error, stacktrace) {
-      _controller.addError(error, stacktrace);
+      _subject.addError(error, stacktrace);
       rethrow;
     }
   }
@@ -40,14 +40,14 @@ abstract class Request<T> {
   }
 
   void markBusy() {
-    _controller.add(null);
+    _subject.add(null);
   }
 
-  bool get hasCurrentValue => _controller.hasValue;
+  bool get hasCurrentValue => _subject.hasValue;
 
   T get currentValue {
     if (!hasCurrentValue) throw StateError("Reading currentValue before it is ready");
-    return _controller.value;
+    return _subject.value;
   }
 
   Future<T> get firstValue => valueStream.first;
@@ -56,7 +56,7 @@ abstract class Request<T> {
     try {
       putValueSync(updater(currentValue));
     } on Exception catch (error, stacktrace) {
-      _controller.addError(error, stacktrace);
+      _subject.addError(error, stacktrace);
     }
   }
 }

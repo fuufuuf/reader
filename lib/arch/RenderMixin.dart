@@ -2,6 +2,8 @@ import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'Store.dart';
+
 class DefaultRenders {
   static Widget buildError(BuildContext context, Object error) {
     final errorColor = Theme.of(context).errorColor;
@@ -62,6 +64,10 @@ mixin RenderAsyncSnapshot<T> implements RenderAsyncResult<T> {
         return buildInitialState(context);
       case ConnectionState.waiting:
         return buildBusy(context);
+      case ConnectionState.active:
+        if (snapshot.hasError) return buildError(context, snapshot.error);
+        if (snapshot.hasData) return buildData(context, snapshot.data);
+        return buildBusy(context);
       default:
         if (snapshot.hasError) return buildError(context, snapshot.error);
         if (snapshot.hasData) return buildData(context, snapshot.data);
@@ -70,23 +76,23 @@ mixin RenderAsyncSnapshot<T> implements RenderAsyncResult<T> {
   }
 
   Widget buildFuture(Future<T> future, {Key key, T initialData}) =>
-      FutureBuilder(key: key, builder: buildAsyncSnapshot, initialData: initialData);
+      FutureBuilder(key: key, future: future, builder: buildAsyncSnapshot, initialData: initialData);
 
   Widget buildStream(Stream<T> stream, {Key key, T initialData}) =>
-      StreamBuilder(key: key, builder: buildAsyncSnapshot, initialData: initialData);
+      StreamBuilder(key: key, stream: stream, builder: buildAsyncSnapshot, initialData: initialData);
 }
 
-mixin RenderValueListenable<T> implements RenderData<T> {
-  Widget renderValueListenable(ValueListenable<T> listenable, {Key key}) => ValueListenableBuilder(
-      key: key, valueListenable: listenable, builder: (BuildContext context, T value, _) => buildData(context, value));
+mixin RenderValueStore<T> implements RenderData<T> {
+  Widget buildValueStore(ValueStore<T> store, {Key key}) => ValueListenableBuilder(
+      key: key, valueListenable: store, builder: (BuildContext context, T value, _) => buildData(context, value));
 }
 
 mixin RenderResultListenable<T> implements RenderResult<T> {
   Widget buildError(BuildContext context, Object error) => DefaultRenders.buildError(context, error);
 
-  Widget renderValueListenable(ValueListenable<Result<T>> listenable, {Key key}) => ValueListenableBuilder(
+  Widget buildResultStore(ResultStore<T> store, {Key key}) => ValueListenableBuilder(
         key: key,
-        valueListenable: listenable,
+        valueListenable: store.listenable,
         builder: (BuildContext context, Result<T> value, _) {
           if (value.isValue) {
             return buildData(context, value.asValue.value);

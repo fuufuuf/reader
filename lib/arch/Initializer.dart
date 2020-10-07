@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:timnew_reader/arch/AsyncValueBuilder.dart';
 import 'package:timnew_reader/arch/RenderMixin.dart';
+
+import 'FuncTypes.dart';
 
 class Initializer<T> extends StatelessWidget with RenderAsyncSnapshot<T> {
   final WidgetBuilder builder;

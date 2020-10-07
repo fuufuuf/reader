@@ -10,8 +10,6 @@ class ValueStore<T> extends ValueNotifier<T> {
   ValueStore(T value) : super(value);
 
   T putValue(T value) => this.value = value;
-
-  T updateValue(ValueUpdater<T> updater) => putValue(updater(value));
 }
 
 class ResultStore<T> {

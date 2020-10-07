@@ -1,10 +1,10 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:timnew_reader/app/BookList/BookList.dart';
-import 'package:timnew_reader/arch/ValueSource.dart';
+import 'package:timnew_reader/arch/Store.dart';
 
 import 'NewBookRequest.dart';
 
-class NewBookRequestList extends ValueSource<BuiltList<NewBookRequest>> {
+class NewBookRequestList extends ValueStore<BuiltList<NewBookRequest>> {
   final BookList bookList;
 
   NewBookRequestList(this.bookList) : super(BuiltList());
@@ -16,19 +16,14 @@ class NewBookRequestList extends ValueSource<BuiltList<NewBookRequest>> {
         .where((element) => element.isNotEmpty)
         .map((e) => NewBookRequest(bookList, e));
 
-    if (!hasValue) return putValueSync(requests.toBuiltList());
+    if (requests.isEmpty) return value;
 
-    if (requests.isEmpty) return currentValue;
-
-    final existedUrls = currentValue.map((e) => e.url).toSet();
+    final existedUrls = value.map((e) => e.url).toSet();
     final deduped = requests.where((r) => !existedUrls.contains(r.url)).toBuiltList();
-    return putValueSync(currentValue + deduped);
+    return putValue(value + deduped);
   }
 
   BuiltList<NewBookRequest> clear() {
-    return putValueSync(currentValue.rebuild((b) => b.clear()));
+    return putValue(value.rebuild((b) => b.clear()));
   }
-
-  @override
-  BuiltList<NewBookRequest> initialize() => BuiltList();
 }
