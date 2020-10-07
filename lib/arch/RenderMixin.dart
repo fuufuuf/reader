@@ -72,8 +72,8 @@ mixin RenderAsyncSnapshot<T> implements RenderAsyncResult<T> {
   Widget buildFuture(Future<T> future, {Key key, T initialData}) =>
       FutureBuilder(key: key, builder: buildAsyncSnapshot, initialData: initialData);
 
-  Widget buildStream(Future<T> future, {Key key, T initialData}) =>
-      FutureBuilder(key: key, builder: buildAsyncSnapshot, initialData: initialData);
+  Widget buildStream(Stream<T> stream, {Key key, T initialData}) =>
+      StreamBuilder(key: key, builder: buildAsyncSnapshot, initialData: initialData);
 }
 
 mixin RenderValueListenable<T> implements RenderData<T> {
