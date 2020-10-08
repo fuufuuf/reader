@@ -71,7 +71,11 @@ class _AddNewBookDialogState extends State<AddNewBookDialog> {
   void _onLoadFromClipboard() async {
     var data = await Clipboard.getData(Clipboard.kTextPlain);
 
-    if (data != null) requests.tryAdd(data.text);
+    if (data != null) {
+      requests.tryAdd(data.text);
+    } else {
+      Scaffold.of(context).showSnackBar(SnackBar(content: Text("剪貼板中沒有數據")));
+    }
   }
 }
 
@@ -119,7 +123,7 @@ class _NewBookListItem extends StatelessWidget with RenderAsyncSnapshot<NewBook>
 
   @override
   Widget buildData(BuildContext context, NewBook data) {
-    throw Card(
+    return Card(
       child: ListTile(
         leading: _buildBookIcon(context, data.isDuplicated),
         title: _buildBookTitle(context, data),
