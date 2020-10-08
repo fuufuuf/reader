@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:timnew_reader/app/InitStorage.dart';
-import 'package:timnew_reader/arch/ValueSource.dart';
+import 'package:timnew_reader/arch/Store.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/repositories/PersistentStorage.dart';
 
-class BookList extends ValueSource<BuiltList<BookIndex>> {
+class BookList extends ValueStore<BuiltList<BookIndex>> {
   final InitStorage initStorage;
 
   Future<PersistentStorage> get storage => initStorage.value;

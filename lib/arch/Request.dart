@@ -22,7 +22,7 @@ abstract class Request<T> {
   Future<T> reload({quiet: false}) async => await putValue(execute(), quiet: quiet);
 
   Future<T> putValue(FutureOr<T> value, {quiet: false}) async {
-    if (!quiet && value is Future) markBusy();
+    if (!quiet && value is Future) markAsWaiting();
 
     try {
       final result = await value;
@@ -39,7 +39,7 @@ abstract class Request<T> {
     return value;
   }
 
-  void markBusy() {
+  void markAsWaiting() {
     _subject.add(null);
   }
 

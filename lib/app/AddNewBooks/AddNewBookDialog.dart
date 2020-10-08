@@ -167,7 +167,7 @@ class _NewBookListItem extends StatelessWidget with RenderAsyncSnapshot<NewBook>
   }
 
   @override
-  Widget buildBusy(BuildContext context) {
+  Widget buildWaiting(BuildContext context) {
     return SwipeRemovable(
       key: Key(request.url),
       onRemoved: removeItem,

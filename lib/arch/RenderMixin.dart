@@ -16,7 +16,7 @@ class DefaultRenders {
     );
   }
 
-  static Widget buildBusy(BuildContext context) => Center(child: CircularProgressIndicator(value: null));
+  static Widget buildWaiting(BuildContext context) => Center(child: CircularProgressIndicator(value: null));
 }
 
 mixin RenderData<T> {
@@ -30,9 +30,9 @@ mixin RenderResult<T> implements RenderData<T> {
 mixin RenderAsyncResult<T> implements RenderResult<T> {
   Widget buildError(BuildContext context, Object error) => DefaultRenders.buildError(context, error);
 
-  Widget buildInitialState(BuildContext context) => buildBusy(context);
+  Widget buildInitialState(BuildContext context) => buildWaiting(context);
 
-  Widget buildBusy(BuildContext context) => DefaultRenders.buildBusy(context);
+  Widget buildWaiting(BuildContext context) => DefaultRenders.buildWaiting(context);
 }
 
 mixin WithEmptyContent<T> implements RenderData<T> {
@@ -51,9 +51,9 @@ mixin WithEmptyContent<T> implements RenderData<T> {
 mixin RenderAsyncSnapshot<T> implements RenderAsyncResult<T> {
   Widget buildError(BuildContext context, Object error) => DefaultRenders.buildError(context, error);
 
-  Widget buildInitialState(BuildContext context) => buildBusy(context);
+  Widget buildInitialState(BuildContext context) => buildWaiting(context);
 
-  Widget buildBusy(BuildContext context) => DefaultRenders.buildBusy(context);
+  Widget buildWaiting(BuildContext context) => DefaultRenders.buildWaiting(context);
 
   Widget buildAsyncSnapshot(BuildContext context, AsyncSnapshot<T> snapshot) {
     if (snapshot.hasError) return buildError(context, snapshot.error);
@@ -63,11 +63,11 @@ mixin RenderAsyncSnapshot<T> implements RenderAsyncResult<T> {
       case ConnectionState.none:
         return buildInitialState(context);
       case ConnectionState.waiting:
-        return buildBusy(context);
+        return buildWaiting(context);
       case ConnectionState.active:
         if (snapshot.hasError) return buildError(context, snapshot.error);
         if (snapshot.hasData) return buildData(context, snapshot.data);
-        return buildBusy(context);
+        return buildWaiting(context);
       default:
         if (snapshot.hasError) return buildError(context, snapshot.error);
         if (snapshot.hasData) return buildData(context, snapshot.data);
