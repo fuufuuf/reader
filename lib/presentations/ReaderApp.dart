@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:timnew_reader/app/AppInitializer.dart';
 import 'package:timnew_reader/presentations/ReaderApp.AppRouter.dart';
 import 'package:timnew_reader/presentations/wrappers/ReadingThemeProvider.dart';
 import 'package:timnew_reader/repositories/settings/ThemeRepository.dart';
@@ -36,17 +37,21 @@ class _ReaderAppState extends State<ReaderApp> {
       };
 
   @override
-  Widget build(BuildContext context) => ReadingThemeProvider(
-      theme: currentTheme,
-      toggleNightModeApi: wrap(toggleNightMode),
-      reloadThemeApi: wrap(reloadTheme),
-      child: _renderApp());
-
-  Widget _renderApp() => MaterialApp(
+  Widget build(BuildContext context) => MaterialApp(
         title: 'Reader',
         theme: ThemeData(),
+        builder: _buildWrapper,
         initialRoute: _appRouter.initialRoute,
         onGenerateRoute: _appRouter.generateRoute,
         onUnknownRoute: _appRouter.onUnknownRoute,
+      );
+
+  Widget _buildWrapper(BuildContext context, Widget child) => AppInitializer(
+       child: ReadingThemeProvider(
+          theme: currentTheme,
+          toggleNightModeApi: wrap(toggleNightMode),
+          reloadThemeApi: wrap(reloadTheme),
+          child: child,
+        ),
       );
 }

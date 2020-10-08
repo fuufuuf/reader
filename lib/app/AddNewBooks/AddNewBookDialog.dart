@@ -71,7 +71,7 @@ class _AddNewBookDialogState extends State<AddNewBookDialog> {
   void _onLoadFromClipboard() async {
     var data = await Clipboard.getData(Clipboard.kTextPlain);
 
-    requests.tryAdd(data.text);
+    if (data != null) requests.tryAdd(data.text);
   }
 }
 

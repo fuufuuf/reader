@@ -15,10 +15,20 @@ class BookList extends ValueStore<BuiltList<BookIndex>> {
   }
 
   Future<BuiltList<BookIndex>> add(BookIndex bookIndex) async {
-    final newList = value.rebuild((builder) => builder.add(bookIndex));
+    final newList = value.rebuild((b) => b.add(bookIndex));
 
     await storage.saveBookList(newList.map((e) => e.bookId).toList());
 
     return putValue(newList);
+  }
+
+  Future<BuiltList<BookIndex>> removeAtIndex(int index) async {
+    final newList = value.rebuild((b) => b.removeAt(index));
+
+    putValue(newList);
+
+    await storage.saveBookList(newList.map((e) => e.bookId).toList());
+
+    return newList;
   }
 }

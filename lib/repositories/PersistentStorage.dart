@@ -8,7 +8,19 @@ class PersistentStorage {
 
   PersistentStorage(this.prefs);
 
-  BuiltList<BookIndex> loadBookIndexList() => prefs.loadBookIndexList(prefs.loadBookIds()).toBuiltList();
+  BuiltList<BookIndex> loadBookIndexList() {
+    try {
+      final bookIds = prefs.loadBookIds();
+
+      final bookIndexList = prefs.loadBookIndexList(bookIds);
+
+      return bookIndexList.toBuiltList();
+    } catch (ex, stackTrace) {
+      print(ex);
+      print(stackTrace);
+      rethrow;
+    }
+  }
 
   Future saveCurrentChapter(String bookId, Uri url) async {
     await prefs.saveCurrentChapter(bookId, url);

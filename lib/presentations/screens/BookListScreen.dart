@@ -1,78 +1,77 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:timnew_reader/app/AddNewBooks/AddNewBookDialog.dart';
+import 'package:timnew_reader/app/BookList/BookList.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/presentations/ReaderApp.AppRouter.dart';
 import 'package:timnew_reader/presentations/components/ScreenScaffold.dart';
+import 'package:timnew_reader/presentations/components/SwipeRemovable.dart';
+import 'package:timnew_reader/repositories/PersistentStorage.dart';
 
-class BookListScreen extends StatefulWidget {
-  BookListScreen();
-
+class BookListScreen extends StatelessWidget {
   @override
-  State<StatefulWidget> createState() => _BookListScreenState();
+  Widget build(BuildContext context) => ProxyProvider<PersistentStorage, BookList>(
+        update: (_, storage, __) => BookList(storage),
+        child: Builder(builder: _buildScreen),
+      );
+
+  Widget _buildScreen(BuildContext context) {
+    final bookList = context.watch<BookList>();
+
+    print("bookList: $bookList");
+
+    return ScreenScaffold(
+        title: '米良追书', body: _buildList(bookList), floatingActionButton: _renderFab(context, bookList));
+  }
+
+  ListView _buildList(BookList bookList) {
+    return ListView.builder(
+      itemBuilder: (context, index) => _BookIndexEntry(bookList, index),
+      itemCount: bookList.value.length,
+    );
+  }
+
+  Widget _renderFab(BuildContext context, BookList bookList) => FloatingActionButton(
+      child: Icon(Icons.add),
+      onPressed: () {
+        AddNewBookDialog.show(context, bookList);
+      });
 }
 
-class _BookListScreenState extends State<BookListScreen> {
-  BuiltList<BookIndex> bookIndexes;
+class _BookIndexEntry extends StatelessWidget {
+  final BookList bookList;
+  final int index;
+  final BookIndex bookIndex;
 
-  void reload() {
-    bookIndexes = BookIndex.loadAll();
-  }
+  factory _BookIndexEntry(BookList bookList, int index) => _BookIndexEntry._(bookList, index, bookList.value[index]);
+
+  _BookIndexEntry._(this.bookList, this.index, this.bookIndex)
+      : assert(bookList != null),
+        assert(index != null),
+        assert(bookIndex != null),
+        super(key: Key(bookIndex.bookId));
 
   @override
-  void initState() {
-    super.initState();
-
-    reload();
-  }
-
-  @override
-  Widget build(BuildContext context) => ScreenScaffold(
-      title: '米良追书',
-      body: ListView.builder(
-          itemBuilder: (context, index) => _renderBookItem(context, bookIndexes[index]), itemCount: bookIndexes.length),
-      floatingActionButton: _renderFab(context));
-
-  void _removeBookEntry(BookIndex bookIndex) async {
-    await bookIndex.remove();
-
-    setState(() {
-      bookIndexes = bookIndexes.rebuild((b) => b.remove(bookIndex));
-    });
-  }
-
-  Widget _renderBookItem(BuildContext context, BookIndex bookIndex) => Dismissible(
+  Widget build(BuildContext context) {
+    return SwipeRemovable(
       key: Key(bookIndex.bookId),
-      background: Container(
-        color: Colors.redAccent,
-        alignment: Alignment.centerRight,
-        padding: EdgeInsets.only(right: 16),
-        child: Text('滑动删除', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-      ),
-      direction: DismissDirection.endToStart,
-      onDismissed: (DismissDirection direction) {
-        _removeBookEntry(bookIndex);
+      onRemoved: () {
+        bookList.removeAtIndex(index);
       },
-      dismissThresholds: const {DismissDirection.endToStart: .9},
       child: ListTile(
-          leading: Icon(Icons.book),
-          title: Text(bookIndex.bookName),
-          trailing: IconButton(
-              icon: Icon(Icons.info_outline),
-              onPressed: () {
-                AppRouter.openBookInfo(context, bookIndex.bookId);
-              }),
-          onTap: () async {
-            await AppRouter.openBookChapters(context, bookIndex.bookId, openReaderIfPossible: true);
-            reload();
-          }));
-
-  Widget _renderFab(BuildContext context) => FloatingActionButton(
-      child: Icon(Icons.add),
-      onPressed: () async {
-        await AddNewBookDialog.show(context);
-        setState(() {
-          reload();
-        });
-      });
+        leading: Icon(Icons.book),
+        title: Text(bookIndex.bookName),
+        trailing: IconButton(
+          icon: Icon(Icons.info_outline),
+          onPressed: () {
+            return AppRouter.openBookInfo(context, bookIndex.bookId);
+          },
+        ),
+        onTap: () {
+          AppRouter.openBookChapters(context, bookIndex.bookId, openReaderIfPossible: true);
+          // reload();
+        },
+      ),
+    );
+  }
 }
