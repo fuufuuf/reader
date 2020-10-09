@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:rxdart/rxdart.dart';
+import 'package:timnew_reader/arch/BehaviourSubject.dart';
 
 import 'FuncTypes.dart';
 export 'FuncTypes.dart';
@@ -43,18 +43,26 @@ abstract class Request<T> {
     _subject.add(null);
   }
 
-  bool get hasCurrentValue => _subject.hasValue;
+  bool get hasData => _subject.hasValue;
 
-  T get currentValue {
-    if (!hasCurrentValue) throw StateError("Reading currentValue before it is ready");
+  T get currentData {
+    if (!hasData) throw StateError("Reading currentValue when there isn't data");
     return _subject.value;
   }
 
-  Future<T> get firstValue => valueStream.first;
+  bool get hasError => _subject.hasError;
+
+  Object get currentError => _subject.error;
+
+  StackTrace get currentErrorStackTrace => _subject.errorStackTrace;
+
+  bool get hasCurrent => hasData || hasError;
+
+  Future<T> get first => valueStream.firstWhere((result) => result != null);
 
   void updateValueSync(ValueUpdater<T> updater) {
     try {
-      putValueSync(updater(currentValue));
+      putValueSync(updater(currentData));
     } on Exception catch (error, stacktrace) {
       _subject.addError(error, stacktrace);
     }
