@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:provider/provider.dart';
+import 'package:timnew_reader/app/routing/AppRouter.dart';
 
 import 'package:timnew_reader/arch/RenderMixin.dart';
 import 'package:timnew_reader/app/AddNewBooks/AddNewBookDialog.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
 
-import 'package:timnew_reader/presentations/ReaderApp.AppRouter.dart';
 import 'package:timnew_reader/presentations/components/ScreenScaffold.dart';
 import 'package:timnew_reader/presentations/components/SwipeRemovable.dart';
 
@@ -97,12 +97,13 @@ class _BookIndexEntry extends StatelessWidget {
         trailing: IconButton(
           icon: Icon(Icons.info_outline),
           onPressed: () {
-            return AppRouter.openBookInfo(context, bookIndex.bookId);
+            AppRouter.of(context).openBookInfo(bookIndex);
           },
         ),
-        onTap: () {
-          AppRouter.openBookChapters(context, bookIndex.bookId, openReaderIfPossible: true);
-          // reload();
+        onTap: () async {
+          await Navigator.of(context).openBook(bookIndex);
+
+          bookList.reload();
         },
       ),
     );

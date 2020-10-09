@@ -11,6 +11,10 @@ class BookList extends ValueStore<BuiltList<BookIndex>> {
 
   BookList(this.storage) : super(storage.loadBookIndexList());
 
+  BuiltList<BookIndex> reload() {
+    return putValue(storage.loadBookIndexList());
+  }
+
   bool isDuplicated(String bookId) {
     return value.any((e) => e.bookId == bookId);
   }

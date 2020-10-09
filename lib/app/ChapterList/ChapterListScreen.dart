@@ -1,32 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:timnew_reader/app/routing/AppRouter.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/models/ChapterList.dart';
 import 'package:timnew_reader/models/ChapterRef.dart';
-import 'package:timnew_reader/presentations/ReaderApp.AppRouter.dart';
 import 'package:timnew_reader/presentations/components/ScreenScaffold.dart';
 import 'package:timnew_reader/presentations/wrappers/ContentLoader.dart';
 
 class ChapterListScreen extends StatelessWidget {
   final BookIndex bookIndex;
 
-  ChapterListScreen({Key key, String bookId})
-      : bookIndex = BookIndex.load(bookId),
-        super(key: key);
+  ChapterListScreen(this.bookIndex);
 
   @override
   Widget build(BuildContext context) => ScreenScaffold(
         title: bookIndex.bookName,
         appBarActions: <Widget>[
           IconButton(
-              icon: Icon(Icons.info_outline),
-              onPressed: () => AppRouter.openBookInfo(context, bookIndex.bookId),
+            icon: Icon(Icons.info_outline),
+            onPressed: () => AppRouter.of(context).openBookInfo(bookIndex),
           ),
         ],
         body: ContentLoader<ChapterList>(
             future: bookIndex.fetchChapterList(),
             render: (BuildContext context, ChapterList chapterList) =>
                 ChapterListView(bookIndex: bookIndex, chapterList: chapterList)),
+      );
+
+  static MaterialPageRoute buildRoute(BookIndex bookIndex) => MaterialPageRoute(
+        settings: RouteSettings(name: "ChapterList", arguments: bookIndex),
+        builder: (_) => ChapterListScreen(bookIndex),
       );
 }
 
@@ -45,7 +48,7 @@ class ChapterListView extends StatelessWidget {
         leading: Icon(Icons.bookmark_border),
         title: Text(index.title),
         onTap: () async {
-          await AppRouter.openBookReader(context, bookIndex.bookId, index.url);
+          await AppRouter.of(context).openReader(bookIndex, index);
         },
       );
 }

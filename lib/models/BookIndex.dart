@@ -33,33 +33,26 @@ abstract class BookIndex implements Built<BookIndex, BookIndexBuilder> {
 
   Future<void> save() => BookIndexRepository.save(this);
 
-  Future<void > remove() => BookIndexRepository.remove(bookId);
+  Future<void> remove() => BookIndexRepository.remove(bookId);
 
-  bool get hasCurrentChapter =>
-      BookIndexRepository.hasCurrentChapterUrl(bookId);
+  bool get hasCurrentChapter => BookIndexRepository.hasCurrentChapterUrl(bookId);
 
   Uri get currentChapter => BookIndexRepository.loadCurrentChapter(bookId);
 
-  set currentChapter(Uri url) =>
-      BookIndexRepository.saveCurrentChapter(bookId, url);
+  set currentChapter(Uri url) => BookIndexRepository.saveCurrentChapter(bookId, url);
 
-  Future<void> setCurrentChapter(Uri url) =>
-      BookIndexRepository.saveCurrentChapter(bookId, url);
+  Future<void> setCurrentChapter(Uri url) => BookIndexRepository.saveCurrentChapter(bookId, url);
 
-  double get currentChapterProgress =>
-      BookIndexRepository.loadCurrentChapterProgress(bookId);
+  double get currentChapterProgress => BookIndexRepository.loadCurrentChapterProgress(bookId);
 
-  set currentChapterProgress(double progress) =>
-      BookIndexRepository.saveCurrentChapterProgress(bookId, progress);
+  set currentChapterProgress(double progress) => BookIndexRepository.saveCurrentChapterProgress(bookId, progress);
 
   Future<void> setCurrentChapterProgress(double progress) =>
       BookIndexRepository.saveCurrentChapterProgress(bookId, progress);
 
   static BuiltList<BookIndex> loadAll() => BookIndexRepository.loadAll();
 
-  Future<BookInfo> fetchBookInfo() =>
-      BookRepository.fetchBookInfo(bookInfoUrl);
+  Future<BookInfo> fetchBookInfo() => BookRepository.fetchBookInfo(bookInfoUrl);
 
-  Future<ChapterList> fetchChapterList() =>
-      BookRepository.fetchChapterList(chapterListUrl);
+  Future<ChapterList> fetchChapterList() => BookRepository.fetchChapterList(chapterListUrl);
 }
