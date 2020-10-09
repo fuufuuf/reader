@@ -39,4 +39,11 @@ class BookList extends ValueStore<BuiltList<BookIndex>> {
     await storage.saveNewBook(newBook);
     return newBook.bookIndex;
   }
+
+  Future<BuiltList<BookIndex>> reorder(int oldIndex, int newIndex) async {
+    return _updateBookList((b) {
+      final amendedIndex = newIndex > oldIndex ? newIndex - 1 : newIndex; // remove old item would shift index for 1
+      b.insert(amendedIndex, b.removeAt(oldIndex));
+    });
+  }
 }

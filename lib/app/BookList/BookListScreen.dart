@@ -50,16 +50,25 @@ class _BookIndexList extends StatelessWidget
   Widget build(BuildContext context) => buildValueStore(bookList);
 
   @override
-  Widget buildContent(BuildContext context, BuiltList<BookIndex> content) => ListView.builder(
-        itemBuilder: (context, index) => _BookIndexEntry(bookList, index),
-        itemCount: bookList.value.length,
-      );
+  Widget buildContent(BuildContext context, BuiltList<BookIndex> content) {
+    return ReorderableListView(
+      children: _buildChildren(content.length),
+      onReorder: _onReorder,
+    );
+  }
 
   @override
   Widget buildEmpty(BuildContext context) => Center(child: Text("請先添加圖書"));
 
   @override
   bool checkEmpty(BuiltList<BookIndex> data) => data.isEmpty;
+
+  List<Widget> _buildChildren(int length) =>
+      Iterable<int>.generate(length).map((index) => _BookIndexEntry(bookList, index)).toList();
+
+  void _onReorder(int oldIndex, int newIndex) async {
+    await bookList.reorder(oldIndex, newIndex);
+  }
 }
 
 class _BookIndexEntry extends StatelessWidget {

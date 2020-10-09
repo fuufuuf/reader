@@ -20,9 +20,8 @@ class ChapterListScreen extends StatelessWidget {
         appBarActions: <Widget>[
           IconButton(
               icon: Icon(Icons.info_outline),
-              onPressed: () {
-                AppRouter.openBookInfo(context, bookIndex.bookId);
-              })
+              onPressed: () => AppRouter.openBookInfo(context, bookIndex.bookId),
+          ),
         ],
         body: ContentLoader<ChapterList>(
             future: bookIndex.fetchChapterList(),
@@ -47,7 +46,6 @@ class ChapterListView extends StatelessWidget {
         title: Text(index.title),
         onTap: () async {
           await AppRouter.openBookReader(context, bookIndex.bookId, index.url);
-
         },
       );
 }

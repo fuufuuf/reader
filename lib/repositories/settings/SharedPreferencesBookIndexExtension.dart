@@ -55,5 +55,5 @@ extension SharedPreferencesBookIndexExtension on SharedPreferences {
 
   List<String> loadBookIds() => getStringList(_bookIdsKey) ?? List.empty(growable: false);
 
-  Future saveBookIds(Iterable<String> ids) => setStringList(_bookIdsKey, ids);
+  Future saveBookIds(Iterable<String> ids) => setStringList(_bookIdsKey, ids.toList());
 }
