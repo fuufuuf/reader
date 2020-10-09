@@ -29,8 +29,11 @@ class BookListScreen extends StatelessWidget {
 
   Widget _renderFab(BuildContext context, BookList bookList) => FloatingActionButton(
       child: Icon(Icons.add),
-      onPressed: () {
-        AddNewBookDialog.show(context, bookList);
+      onPressed: () async {
+        final newBooks = await AddNewBookDialog.show(context, bookList);
+
+        bookList.addNewBooks(newBooks);
+
       });
 }
 

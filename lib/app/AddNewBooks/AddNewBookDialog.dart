@@ -12,21 +12,21 @@ import 'package:timnew_reader/presentations/components/ScreenScaffold.dart';
 
 class AddNewBookDialog extends StatefulWidget {
   final BookList bookList;
-  final NewBookRequestList requests;
+  final NewBookRequestList requestList;
 
-  AddNewBookDialog(this.bookList) : requests = NewBookRequestList(bookList);
+  AddNewBookDialog(this.bookList) : requestList = NewBookRequestList(bookList);
 
   @override
   _AddNewBookDialogState createState() => _AddNewBookDialogState();
 
-  static Future<NewBook> show(BuildContext context, BookList bookList) =>
+  static Future<BuiltList<NewBook>> show(BuildContext context, BookList bookList) =>
       Navigator.push(context, MaterialPageRoute(builder: (_) => AddNewBookDialog(bookList), fullscreenDialog: true));
 }
 
 class _AddNewBookDialogState extends State<AddNewBookDialog> {
   final TextEditingController _urlController = TextEditingController();
 
-  NewBookRequestList get requests => widget.requests;
+  NewBookRequestList get requestList => widget.requestList;
 
   @override
   Widget build(BuildContext context) {
@@ -38,19 +38,22 @@ class _AddNewBookDialogState extends State<AddNewBookDialog> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              TextFormFieldWithClearButton(
-                labelText: "新書 Url",
-                controller: _urlController,
-                onFieldSubmitted: _newUrlEntered,
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: TextFormFieldWithClearButton(
+                  labelText: "新書 Url",
+                  controller: _urlController,
+                  onFieldSubmitted: _newUrlEntered,
+                ),
               ),
-              Expanded(child: _NewBookListView(requests)),
+              Expanded(child: _NewBookListView(requestList)),
               Align(
                   alignment: Alignment.centerRight,
                   child: ButtonBar(
                     children: <Widget>[
                       _FormButton(text: '清空', onPressed: _clearRequests),
                       _FormButton(text: '從剪貼盤加載', onPressed: _onLoadFromClipboard),
-                      _FormConfirmButton(requests),
+                      _FormConfirmButton(requestList),
                     ],
                   )),
             ],
@@ -62,18 +65,18 @@ class _AddNewBookDialogState extends State<AddNewBookDialog> {
 
   void _newUrlEntered(String value) {
     _urlController.clear();
-    requests.tryAdd(value);
+    requestList.tryAdd(value);
   }
 
   void _clearRequests() {
-    requests.clear();
+    requestList.clear();
   }
 
   Future _onLoadFromClipboard() async {
     var data = await Clipboard.getData(Clipboard.kTextPlain);
 
     if (data != null) {
-      requests.tryAdd(data.text);
+      requestList.tryAdd(data.text);
     } else {
       Scaffold.of(context).showSnackBar(SnackBar(content: Text("剪貼板中沒有數據")));
     }
@@ -90,7 +93,7 @@ class _NewBookListView extends StatelessWidget
   Widget build(BuildContext context) => buildValueStore(newBookList);
 
   @override
-  bool checkEmpty(BuiltList<NewBookRequest> data) => data.isEmpty;
+  bool checkEmpty(BuiltList<NewBookRequest> requests) => requests.isEmpty;
 
   @override
   Widget buildEmpty(BuildContext context) => Center(
@@ -98,8 +101,8 @@ class _NewBookListView extends StatelessWidget
       );
 
   @override
-  Widget buildContent(BuildContext context, BuiltList<NewBookRequest> content) =>
-      ListView.builder(itemCount: content.length, itemBuilder: _buildListItem);
+  Widget buildContent(BuildContext context, BuiltList<NewBookRequest> requests) =>
+      ListView.builder(itemCount: requests.length, itemBuilder: _buildListItem);
 
   Widget _buildListItem(BuildContext context, int index) {
     final request = newBookList.value[index];
@@ -123,11 +126,11 @@ class _NewBookListItem extends StatelessWidget with RenderAsyncSnapshot<NewBook>
   Widget build(BuildContext context) => buildStream(request.valueStream);
 
   @override
-  Widget buildData(BuildContext context, NewBook data) {
+  Widget buildData(BuildContext context, NewBook newBook) {
     return Card(
       child: ListTile(
-        leading: _buildBookIcon(context, data.isDuplicated),
-        title: _buildBookTitle(context, data),
+        leading: _buildBookIcon(context, newBook.isDuplicated),
+        title: _buildBookTitle(context, newBook),
         subtitle: Text(request.url),
       ),
     );
@@ -204,19 +207,19 @@ class _FormButton extends StatelessWidget {
 }
 
 class _FormConfirmButton extends StatelessWidget with RenderValueStore<BuiltList<NewBookRequest>> {
-  final NewBookRequestList requests;
+  final NewBookRequestList requestList;
 
-  _FormConfirmButton(this.requests, {Key key}) : super(key: key ?? Key("confirm"));
-
-  @override
-  Widget build(BuildContext context) => buildValueStore(requests);
+  _FormConfirmButton(this.requestList, {Key key}) : super(key: key ?? Key("confirm"));
 
   @override
-  Widget buildData(BuildContext context, BuiltList<NewBookRequest> data) =>
-      FutureBuilder(future: _countSucceeded(data), builder: _buildButton);
+  Widget build(BuildContext context) => buildValueStore(requestList);
 
-  Future<int> _countSucceeded(BuiltList<NewBookRequest> data) async {
-    final list = await Future.wait(data.map((r) => r.first.then((value) => 1, onError: (_) => 0)));
+  @override
+  Widget buildData(BuildContext context, BuiltList<NewBookRequest> requests) =>
+      FutureBuilder(future: _countSucceeded(requests), builder: _buildButton);
+
+  Future<int> _countSucceeded(BuiltList<NewBookRequest> requests) async {
+    final list = await Future.wait(requests.map((r) => r.first.then((value) => 1, onError: (_) => 0)));
 
     final sum = list.fold(0, (previousValue, element) => previousValue + element);
 
@@ -225,9 +228,11 @@ class _FormConfirmButton extends StatelessWidget with RenderValueStore<BuiltList
 
   Widget _buildButton(BuildContext context, AsyncSnapshot<int> snapshot) {
     return RaisedButton(
+      color: Theme.of(context).accentColor,
+      textTheme: ButtonTextTheme.primary,
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      child: Text(_buttonText(requests.value.length, snapshot.data)),
-      onPressed: _onPressedCallback(snapshot.connectionState == ConnectionState.done),
+      child: Text(_buttonText(requestList.value.length, snapshot.data)),
+      onPressed: _onPressedCallback(snapshot.connectionState == ConnectionState.done, context),
     );
   }
 
@@ -239,7 +244,17 @@ class _FormConfirmButton extends StatelessWidget with RenderValueStore<BuiltList
     return "添加全部";
   }
 
-  VoidCallback _onPressedCallback(bool finished) => finished ? _submit : null;
+  VoidCallback _onPressedCallback(bool finished, BuildContext context) => finished
+      ? () {
+          _submit(context);
+        }
+      : null;
 
-  void _submit() {}
+  void _submit(BuildContext context) async {
+    final result = requestList.collectResult();
+
+    if (result == null) return;
+
+    Navigator.of(context).pop(result);
+  }
 }

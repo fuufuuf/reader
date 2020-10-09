@@ -44,13 +44,11 @@ class _TextFormFieldWithClearButtonState extends State<TextFormFieldWithClearBut
   }
 
   @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-        decoration: InputDecoration(labelText: widget.labelText, suffixIcon: _buildClearButton()),
-        controller: widget.controller,
-        onChanged: _textChanged,
-        onFieldSubmitted: widget.onFieldSubmitted);
-  }
+  Widget build(BuildContext context) => TextFormField(
+      decoration: InputDecoration(labelText: widget.labelText, suffixIcon: _buildClearButton()),
+      controller: widget.controller,
+      onChanged: _textChanged,
+      onFieldSubmitted: widget.onFieldSubmitted);
 
   Widget _buildClearButton() {
     if (!_showClearButton) return null;

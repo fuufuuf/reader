@@ -23,17 +23,19 @@ extension SharedPreferencesBookIndexExtension on SharedPreferences {
     return serializers.deserializeWith(BookIndex.serializer, entryData);
   }
 
-  Future saveBookIndex(BookIndex index) async {
+  Future<BookIndex> saveBookIndex(BookIndex index) async {
     final key = _bookIndexKey(index.bookId);
 
     final rawData = serializers.serializeWith(BookIndex.serializer, index);
     final json = jsonEncode(rawData);
 
     await setString(key, json);
+
+    return index;
   }
 
-  Future removeBookIndex(String bookId) async {
-    await remove(_bookIndexKey(bookId));
+  Future<bool> removeBookIndex(String bookId) async {
+    return await remove(_bookIndexKey(bookId));
   }
 
   Uri loadCurrentChapter(String bookId) {

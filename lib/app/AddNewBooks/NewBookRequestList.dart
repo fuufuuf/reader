@@ -1,6 +1,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:timnew_reader/app/BookList/BookList.dart';
 import 'package:timnew_reader/arch/Store.dart';
+import 'package:timnew_reader/models/NewBook.dart';
 
 import 'NewBookRequest.dart';
 
@@ -25,5 +26,17 @@ class NewBookRequestList extends ValueStore<BuiltList<NewBookRequest>> {
 
   BuiltList<NewBookRequest> clear() {
     return putValue(value.rebuild((b) => b.clear()));
+  }
+
+  BuiltList<NewBook> collectResult() {
+    final requests = value;
+
+    final hasRunningRequest = requests.any((r) => !r.hasCurrent);
+
+    if (hasRunningRequest) return null;
+
+    final allNewBooks = requests.where((r) => r.hasData).map((r) => r.currentData).toBuiltList();
+
+    return allNewBooks;
   }
 }

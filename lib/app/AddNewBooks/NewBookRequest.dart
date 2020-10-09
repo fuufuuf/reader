@@ -20,14 +20,6 @@ class NewBookRequest extends Request<NewBook> {
     if (bookList.isDuplicated(newBook.bookId)) {
       return newBook.markAsDuplicated();
     } else {
-      final storage = bookList.storage;
-      await storage.saveBookIndex(newBook.bookIndex);
-      await bookList.add(newBook.bookIndex);
-
-      if (newBook.hasCurrentChapterUrl) {
-        await storage.saveCurrentChapter(newBook.bookId, newBook.currentChapterUrl);
-      }
-
       return newBook;
     }
   }
