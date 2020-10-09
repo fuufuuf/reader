@@ -35,16 +35,5 @@ abstract class NewBook implements Built<NewBook, NewBookBuilder> {
 
   BookIndex toBookIndex() => bookIndex;
 
-  Future<BookIndex> save() async {
-    var bookIndex = toBookIndex();
-    await bookIndex.save();
-
-    if (currentChapterUrl != null) {
-      await bookIndex.setCurrentChapter(currentChapterUrl);
-    }
-
-    return bookIndex;
-  }
-
   NewBook markAsDuplicated() => rebuild((builder) => builder.isDuplicated = true);
 }
