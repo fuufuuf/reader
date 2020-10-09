@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:built_collection/built_collection.dart';
+import 'package:timnew_reader/app/UserException.dart';
 import 'package:timnew_reader/arch/Request.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/models/ChapterRef.dart';
@@ -19,5 +20,19 @@ class ChapterListRequest extends Request<BuiltList<ChapterRef>> {
   Future<BuiltList<ChapterRef>> execute() async {
     final chapterList = await BookRepository.fetchChapterList(bookIndex.chapterListUrl);
     return chapterList.chapters;
+  }
+
+  int findCurrentChapterIndex() {
+    if (!bookIndex.hasCurrentChapter) return null;
+    final currentChapterUrl = bookIndex.currentChapter;
+
+    if (!hasData) return null;
+    final chapters = currentData;
+
+    final index = chapters.indexWhere((c) => c.url == currentChapterUrl);
+
+    if (index == -1) throw UserException("未找到當前章節");
+
+    return index;
   }
 }
