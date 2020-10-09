@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:timnew_reader/app/AppInitializer.dart';
+import 'package:timnew_reader/app/BookList/BookListScreen.dart';
 import 'package:timnew_reader/presentations/wrappers/ReadingThemeProvider.dart';
 import 'package:timnew_reader/repositories/settings/ThemeRepository.dart';
 import 'package:timnew_reader/models/ReadingTheme.dart';
@@ -37,6 +38,7 @@ class _ReaderAppState extends State<ReaderApp> {
         title: 'Reader',
         theme: ThemeData(),
         builder: _buildWrapper,
+        home: BookListScreen(),
       );
 
   Widget _buildWrapper(BuildContext context, Widget child) => AppInitializer(
