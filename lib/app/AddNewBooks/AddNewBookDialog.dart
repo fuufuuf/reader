@@ -133,11 +133,15 @@ class _NewBookListItem extends StatelessWidget with RenderAsyncSnapshot<NewBook>
 
   @override
   Widget buildData(BuildContext context, NewBook newBook) {
-    return Card(
-      child: ListTile(
-        leading: _buildBookIcon(context, newBook.isDuplicated),
-        title: _buildBookTitle(context, newBook),
-        subtitle: Text(request.url),
+    return SwipeRemovable(
+      key: Key(request.url),
+      onRemoved: removeItem,
+      child: Card(
+        child: ListTile(
+          leading: _buildBookIcon(context, newBook.isDuplicated),
+          title: _buildBookTitle(context, newBook),
+          subtitle: Text(request.url),
+        ),
       ),
     );
   }
