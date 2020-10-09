@@ -49,7 +49,8 @@ class _AddNewBookDialogState extends State<AddNewBookDialog> {
                   child: ButtonBar(
                     children: <Widget>[
                       _FormButton(text: '清空', onPressed: _clearRequests),
-                      _FormButton(text: '從剪貼盤加載', onPressed: _onLoadFromClipboard)
+                      _FormButton(text: '從剪貼盤加載', onPressed: _onLoadFromClipboard),
+                      _FormConfirmButton(requests),
                     ],
                   )),
             ],
@@ -68,7 +69,7 @@ class _AddNewBookDialogState extends State<AddNewBookDialog> {
     requests.clear();
   }
 
-  void _onLoadFromClipboard() async {
+  Future _onLoadFromClipboard() async {
     var data = await Clipboard.getData(Clipboard.kTextPlain);
 
     if (data != null) {
@@ -190,14 +191,55 @@ class _FormButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
 
-  _FormButton({Key key, this.text, this.onPressed}) : super(key: key ?? Key(text));
+  _FormButton({Key key, this.text, this.onPressed})
+      : assert(text != null),
+        super(key: key ?? Key(text));
 
   @override
-  Widget build(BuildContext context) {
-    return FlatButton(
+  Widget build(BuildContext context) => FlatButton(
+        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        child: Text(text),
+        onPressed: onPressed,
+      );
+}
+
+class _FormConfirmButton extends StatelessWidget with RenderValueStore<BuiltList<NewBookRequest>> {
+  final NewBookRequestList requests;
+
+  _FormConfirmButton(this.requests, {Key key}) : super(key: key ?? Key("confirm"));
+
+  @override
+  Widget build(BuildContext context) => buildValueStore(requests);
+
+  @override
+  Widget buildData(BuildContext context, BuiltList<NewBookRequest> data) =>
+      FutureBuilder(future: _countSucceeded(data), builder: _buildButton);
+
+  Future<int> _countSucceeded(BuiltList<NewBookRequest> data) async {
+    final list = await Future.wait(data.map((r) => r.first.then((value) => 1, onError: (_) => 0)));
+
+    final sum = list.fold(0, (previousValue, element) => previousValue + element);
+
+    return sum;
+  }
+
+  Widget _buildButton(BuildContext context, AsyncSnapshot<int> snapshot) {
+    return RaisedButton(
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      child: Text(text),
-      onPressed: onPressed,
+      child: Text(_buttonText(requests.value.length, snapshot.data)),
+      onPressed: _onPressedCallback(snapshot.connectionState == ConnectionState.done),
     );
   }
+
+  String _buttonText(int total, int succeeded) {
+    if (total == 0 || succeeded == 0) return "關閉";
+
+    if (succeeded < total) return "添加已解析";
+
+    return "添加全部";
+  }
+
+  VoidCallback _onPressedCallback(bool finished) => finished ? _submit : null;
+
+  void _submit() {}
 }
