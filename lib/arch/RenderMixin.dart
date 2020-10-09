@@ -5,7 +5,20 @@ import 'package:flutter/material.dart';
 import 'Store.dart';
 
 class DefaultRenders {
+  static DataWidgetBuilder<Object> _customErrorBuilder;
+  static WidgetBuilder _customWaitingBuilder;
+
+  static void registerDefaultErrorBuilder(DataWidgetBuilder<Object> builder) {
+    _customErrorBuilder = builder;
+  }
+
+  static void registerDefaultWaitingBuilder(WidgetBuilder builder) {
+    _customWaitingBuilder = builder;
+  }
+
   static Widget buildError(BuildContext context, Object error) {
+    if (_customErrorBuilder != null) return _customErrorBuilder(context, error);
+
     final errorColor = Theme.of(context).errorColor;
 
     return Center(
@@ -16,7 +29,11 @@ class DefaultRenders {
     );
   }
 
-  static Widget buildWaiting(BuildContext context) => Center(child: CircularProgressIndicator(value: null));
+  static Widget buildWaiting(BuildContext context) {
+    if (_customWaitingBuilder != null) return _customWaitingBuilder(context);
+
+    return Center(child: CircularProgressIndicator(value: null));
+  }
 }
 
 mixin RenderData<T> {
