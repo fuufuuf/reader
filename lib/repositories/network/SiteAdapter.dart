@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+import 'package:timnew_reader/app/UserException.dart';
 import 'package:timnew_reader/models/BookInfo.dart';
 import 'package:timnew_reader/models/ChapterContent.dart';
 import 'package:timnew_reader/models/ChapterList.dart';
@@ -30,7 +31,7 @@ abstract class SiteAdapter {
       case ChapterContent:
         return fetchChapterContent(url);
       default:
-        throw Exception("無法解析的 Url: $url");
+        throw UserException("無法解析的 Url: $url");
     }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:timnew_reader/app/UserException.dart';
 import 'package:timnew_reader/models/BookInfo.dart';
 import 'package:timnew_reader/models/ChapterContent.dart';
 import 'package:timnew_reader/models/ChapterList.dart';
@@ -29,7 +30,7 @@ class BookRepository {
   static SiteAdapter _findAdapter(Uri url) {
     final adapter = adapters[url.host];
 
-    if (adapter == null) throw Exception('未知的網站');
+    if (adapter == null) throw UserException('未知的網站');
 
     return adapter;
   }

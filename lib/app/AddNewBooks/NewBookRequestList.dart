@@ -1,5 +1,6 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:timnew_reader/app/BookList/BookList.dart';
+import 'package:timnew_reader/app/UserException.dart';
 import 'package:timnew_reader/arch/Store.dart';
 import 'package:timnew_reader/models/NewBook.dart';
 
@@ -11,17 +12,16 @@ class NewBookRequestList extends ValueStore<BuiltList<NewBookRequest>> {
   NewBookRequestList(this.bookList) : super(BuiltList());
 
   BuiltList<NewBookRequest> tryAdd(String text) {
-    final requests = text
-        .split("\n")
-        .map((e) => e.trim())
-        .where((element) => element.isNotEmpty)
-        .map((e) => NewBookRequest(bookList, e));
+    final newUrls =
+        text.split("\n").map((e) => e.trim()).where((element) => element.isNotEmpty).toSet(); // Ensure url is unique
 
-    if (requests.isEmpty) return value;
+    newUrls.removeAll(value.map((e) => e.url)); // Ensure not already added urls
 
-    final existedUrls = value.map((e) => e.url).toSet();
-    final deduped = requests.where((r) => !existedUrls.contains(r.url)).toBuiltList();
-    return putValue(value + deduped);
+    if (newUrls.isEmpty) return value;
+
+    final newRequests = newUrls.map((e) => NewBookRequest(bookList, e)).toBuiltList();
+
+    return putValue(value + newRequests);
   }
 
   BuiltList<NewBookRequest> clear() {
@@ -36,6 +36,12 @@ class NewBookRequestList extends ValueStore<BuiltList<NewBookRequest>> {
     if (hasRunningRequest) return null;
 
     final allNewBooks = requests.where((r) => r.hasData).map((r) => r.currentData).toBuiltList();
+
+    final bookIds = allNewBooks.map((b) => b.bookId).toSet();
+
+    if (bookIds.length < allNewBooks.length) {
+      throw UserException("有重複的新書籍");
+    }
 
     return allNewBooks;
   }

@@ -1,4 +1,5 @@
 import 'package:html/dom.dart';
+import 'package:timnew_reader/app/UserException.dart';
 
 import 'package:timnew_reader/models/BookInfo.dart';
 import 'package:timnew_reader/models/ChapterContent.dart';
@@ -34,7 +35,7 @@ class QidianAdapter extends SiteAdapter {
       return BookInfo;
     }
 
-    throw Exception("無法解析的 Url: $url");
+    throw UserException("無法解析的 Url: $url");
   }
 
   @override
@@ -53,7 +54,7 @@ class QidianAdapter extends SiteAdapter {
       return _buildBookEntryFromChapterContent(content);
     }
 
-    throw Exception("無法解析的 Url: $url");
+    throw UserException("無法解析的 Url: $url");
   }
 
   NewBook _buildBookEntryFromBookInfo(BookInfo bookInfo) => NewBook(

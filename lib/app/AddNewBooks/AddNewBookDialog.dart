@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:timnew_reader/app/AddNewBooks/NewBookRequestList.dart';
 import 'package:timnew_reader/app/AddNewBooks/NewBookRequest.dart';
 import 'package:timnew_reader/app/BookList/BookList.dart';
+import 'package:timnew_reader/app/UserException.dart';
 import 'package:timnew_reader/arch/RenderMixin.dart';
 import 'package:timnew_reader/models/NewBook.dart';
 import 'package:timnew_reader/presentations/components/SwipeRemovable.dart';
@@ -261,10 +262,12 @@ class _FormConfirmButton extends StatelessWidget with RenderValueStore<BuiltList
       : null;
 
   void _submit(BuildContext context) async {
-    final result = requestList.collectResult();
-
-    if (result == null) return;
-
-    Navigator.of(context).pop(result);
+    try {
+      final result = requestList.collectResult();
+      if (result == null) return;
+      Navigator.of(context).pop(result);
+    } on UserException catch (ex) {
+      ex.showAsSnackBar(context);
+    }
   }
 }

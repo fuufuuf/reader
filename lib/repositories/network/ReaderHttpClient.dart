@@ -2,6 +2,7 @@ import 'package:gbk2utf8/gbk2utf8.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' as htmlParser;
 import 'package:http/http.dart' as http;
+import 'package:timnew_reader/app/UserException.dart';
 
 class ReaderHttpClient {
   Future<Document> fetchDom(Uri url, {bool enforceGbk: false, String patchHtml(String html)}) =>
@@ -13,7 +14,7 @@ class ReaderHttpClient {
     final response = await http.get(url);
 
     if (response.statusCode != 200) {
-      throw Exception("HTTP 錯誤 ${response.statusCode}");
+      throw UserException("HTTP 錯誤 ${response.statusCode}");
     }
 
     if (enforceGbk) {
