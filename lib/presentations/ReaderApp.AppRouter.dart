@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:timnew_reader/presentations/screens/BookInfoScreen.dart';
-import 'package:timnew_reader/presentations/screens/BookListScreen.dart';
+import 'package:timnew_reader/app/BookList/BookListScreen.dart';
 import 'package:timnew_reader/presentations/screens/ChapterListScreen.dart';
 import 'package:timnew_reader/presentations/screens/NotFoudnScreen.dart';
 import 'package:timnew_reader/presentations/screens/ReadingScreen.dart';

@@ -1,14 +1,18 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
+import 'package:built_collection/built_collection.dart';
 import 'package:provider/provider.dart';
-import 'package:timnew_reader/app/AddNewBooks/AddNewBookDialog.dart';
-import 'package:timnew_reader/app/BookList/BookList.dart';
+
 import 'package:timnew_reader/arch/RenderMixin.dart';
+import 'package:timnew_reader/app/AddNewBooks/AddNewBookDialog.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
+
 import 'package:timnew_reader/presentations/ReaderApp.AppRouter.dart';
 import 'package:timnew_reader/presentations/components/ScreenScaffold.dart';
 import 'package:timnew_reader/presentations/components/SwipeRemovable.dart';
+
 import 'package:timnew_reader/repositories/PersistentStorage.dart';
+
+import 'BookList.dart';
 
 class BookListScreen extends StatelessWidget {
   @override
@@ -33,7 +37,6 @@ class BookListScreen extends StatelessWidget {
         final newBooks = await AddNewBookDialog.show(context, bookList);
 
         bookList.addNewBooks(newBooks);
-
       });
 }
 
