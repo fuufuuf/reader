@@ -1,7 +1,9 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:timnew_reader/app/AddNewBooks/AddNewBookDialog.dart';
 import 'package:timnew_reader/app/BookList/BookList.dart';
+import 'package:timnew_reader/arch/RenderMixin.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/presentations/ReaderApp.AppRouter.dart';
 import 'package:timnew_reader/presentations/components/ScreenScaffold.dart';
@@ -18,16 +20,10 @@ class BookListScreen extends StatelessWidget {
   Widget _buildScreen(BuildContext context) {
     final bookList = context.watch<BookList>();
 
-    print("bookList: $bookList");
-
     return ScreenScaffold(
-        title: '米良追书', body: _buildList(bookList), floatingActionButton: _renderFab(context, bookList));
-  }
-
-  ListView _buildList(BookList bookList) {
-    return ListView.builder(
-      itemBuilder: (context, index) => _BookIndexEntry(bookList, index),
-      itemCount: bookList.value.length,
+      title: '米良追书',
+      body: _BookIndexList(bookList),
+      floatingActionButton: _renderFab(context, bookList),
     );
   }
 
@@ -36,6 +32,28 @@ class BookListScreen extends StatelessWidget {
       onPressed: () {
         AddNewBookDialog.show(context, bookList);
       });
+}
+
+class _BookIndexList extends StatelessWidget
+    with RenderValueStore<BuiltList<BookIndex>>, WithEmptyContent<BuiltList<BookIndex>> {
+  final BookList bookList;
+
+  _BookIndexList(this.bookList);
+
+  @override
+  Widget build(BuildContext context) => buildValueStore(bookList);
+
+  @override
+  Widget buildContent(BuildContext context, BuiltList<BookIndex> content) => ListView.builder(
+        itemBuilder: (context, index) => _BookIndexEntry(bookList, index),
+        itemCount: bookList.value.length,
+      );
+
+  @override
+  Widget buildEmpty(BuildContext context) => Center(child: Text("請先添加圖書"));
+
+  @override
+  bool checkEmpty(BuiltList<BookIndex> data) => data.isEmpty;
 }
 
 class _BookIndexEntry extends StatelessWidget {
