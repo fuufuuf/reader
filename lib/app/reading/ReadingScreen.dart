@@ -57,10 +57,10 @@ class _ReadingScreenState extends State<ReadingScreen> with RenderAsyncSnapshot<
     );
   }
 
-  Widget _buildContainer({bool isWaiting, Widget child}) {
+  Widget _buildContainer({Widget child}) {
     return OverScrollNavigateContainer(
       key: Key("NavigateContainer"),
-      isLoading: isWaiting,
+      isLoading: false,
       allowUpwardOverScroll: request.hasPreviousChapter,
       allowDownwardOverScroll: request.hasNextChapter,
       onUpwardNavigate: _navigateUp,
@@ -69,47 +69,41 @@ class _ReadingScreenState extends State<ReadingScreen> with RenderAsyncSnapshot<
     );
   }
 
-  Widget buildWaiting(BuildContext context) => _buildContainer(
-        isWaiting: true,
-        child: Center(
-          child: Text("加載中..."),
-        ),
+  Widget buildWaiting(BuildContext context) => Center(
+        child: Text("加載中..."),
       );
 
   Widget buildError(BuildContext context, Object error) {
     final errorMessage = error is UserException ? error.message : error.toString();
     var theme = Theme.of(context);
-    return _buildContainer(
-      isWaiting: false,
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 30),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Icon(
-                Icons.sentiment_very_dissatisfied,
-                color: theme.errorColor,
-                size: theme.textTheme.headline3.fontSize,
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 30),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Icon(
+              Icons.sentiment_very_dissatisfied,
+              color: theme.errorColor,
+              size: theme.textTheme.headline3.fontSize,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0, bottom: 24.0),
+              child: Text(
+                errorMessage,
+                style: theme.textTheme.bodyText2,
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 16.0, bottom: 24.0),
-                child: Text(
-                  errorMessage,
-                  style: theme.textTheme.bodyText2,
-                ),
-              ),
-              OutlineButton(
-                  onPressed: () => request.reload(),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.refresh),
-                      Text("重新加載"),
-                    ],
-                  )),
-            ],
-          ),
+            ),
+            OutlineButton(
+                onPressed: () => request.reload(),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.refresh),
+                    Text("重新加載"),
+                  ],
+                )),
+          ],
         ),
       ),
     );
@@ -118,7 +112,6 @@ class _ReadingScreenState extends State<ReadingScreen> with RenderAsyncSnapshot<
   @override
   Widget buildData(BuildContext context, ChapterContent content) {
     return _buildContainer(
-      isWaiting: false,
       child: ChapterContentView(chapter: content),
     );
   }
