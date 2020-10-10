@@ -1,5 +1,6 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:timnew_reader/app/ChapterList/ChapterListRequest.dart';
@@ -42,7 +43,7 @@ class _ChapterListScreenState extends State<ChapterListScreen> with RenderAsyncS
       ),
       appBarActions: <Widget>[
         IconButton(icon: Icon(Icons.refresh), onPressed: _reload),
-        IconButton(icon: Icon(Icons.bookmark_border), onPressed: _scrollToCurrent)
+        IconButton(icon: Icon(Icons.bookmark_border), onPressed: _scrollToCurrent),
       ],
       body: Provider.value(
         value: scrollController,
@@ -60,7 +61,6 @@ class _ChapterListScreenState extends State<ChapterListScreen> with RenderAsyncS
 
   void _reload() {
     request.reload();
-    _scrollToCurrent();
   }
 
   void _scrollToCurrent() {
@@ -77,12 +77,29 @@ class _ChapterListView extends StatelessWidget {
   _ChapterListView(this.request, this.chapters, this.scrollController, this.scrollListener);
 
   @override
-  Widget build(BuildContext context) => ScrollablePositionedList.builder(
-        itemBuilder: (context, index) => _ChapterEntry(request, index, chapters[index]),
-        itemCount: chapters.length,
-        itemScrollController: scrollController,
-        itemPositionsListener: scrollListener,
-      );
+  Widget build(BuildContext context) {
+    scheduleJumpToCurrentPage(context);
+
+    return ScrollablePositionedList.builder(
+      itemBuilder: (context, index) => _ChapterEntry(request, index, chapters[index]),
+      itemCount: chapters.length,
+      itemScrollController: scrollController,
+      itemPositionsListener: scrollListener,
+    );
+  }
+
+  void scheduleJumpToCurrentPage(BuildContext context) {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      final index = request.findCurrentChapterIndex();
+      if (index != null && scrollController.isAttached) {
+        try {
+          scrollController.jumpTo(index: index);
+        } on UserException catch (ex) {
+          ex.showAsSnackBar(context);
+        }
+      }
+    });
+  }
 }
 
 class _ChapterEntry extends StatelessWidget {
@@ -107,14 +124,10 @@ class _ChapterEntry extends StatelessWidget {
 
 extension ScrollToChapterExtension on ItemScrollController {
   void scrollToCurrentChapter(BuildContext context, ChapterListRequest request) {
-    try {
-      final currentChapterIndex = request.findCurrentChapterIndex();
+    final currentChapterIndex = request.findCurrentChapterIndex();
 
-      if (currentChapterIndex == null) return;
+    if (currentChapterIndex == null || !isAttached) return;
 
-      jumpTo(index: currentChapterIndex);
-    } on UserException catch (ex) {
-      ex.showAsSnackBar(context);
-    }
+    jumpTo(index: currentChapterIndex);
   }
 }

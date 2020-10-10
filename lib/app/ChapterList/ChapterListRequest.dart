@@ -23,11 +23,11 @@ class ChapterListRequest extends Request<BuiltList<ChapterRef>> {
   }
 
   int findCurrentChapterIndex() {
-    if (!bookIndex.hasCurrentChapter) return null;
     final currentChapterUrl = bookIndex.currentChapter;
+    if (currentChapterUrl == null) return null;
 
-    if (!hasData) return null;
     final chapters = currentData;
+    if (chapters == null) return null;
 
     final index = chapters.indexWhere((c) => c.url == currentChapterUrl);
 
