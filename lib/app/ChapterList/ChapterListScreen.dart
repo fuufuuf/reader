@@ -90,14 +90,7 @@ class _ChapterListView extends StatelessWidget {
 
   void scheduleJumpToCurrentPage(BuildContext context) {
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      final index = request.findCurrentChapterIndex();
-      if (index != null && scrollController.isAttached) {
-        try {
-          scrollController.jumpTo(index: index);
-        } on UserException catch (ex) {
-          ex.showAsSnackBar(context);
-        }
-      }
+      scrollController.jumpToCurrentChapter(context, request);
     });
   }
 }
@@ -123,11 +116,31 @@ class _ChapterEntry extends StatelessWidget {
 }
 
 extension ScrollToChapterExtension on ItemScrollController {
-  void scrollToCurrentChapter(BuildContext context, ChapterListRequest request) {
+  void _scrollControl(BuildContext context, ChapterListRequest request, Function(int) callback) {
     final currentChapterIndex = request.findCurrentChapterIndex();
 
     if (currentChapterIndex == null || !isAttached) return;
 
-    jumpTo(index: currentChapterIndex);
+    try {
+      callback(currentChapterIndex);
+    } on UserException catch (ex) {
+      ex.showAsSnackBar(context);
+    }
+  }
+
+  void jumpToCurrentChapter(BuildContext context, ChapterListRequest request) {
+    _scrollControl(context, request, (index) => jumpTo(index: index));
+  }
+
+  void scrollToCurrentChapter(BuildContext context, ChapterListRequest request) {
+    _scrollControl(
+      context,
+      request,
+      (index) => scrollTo(
+        index: index,
+        duration: Duration(seconds: 1),
+        curve: Curves.linear,
+      ),
+    );
   }
 }
