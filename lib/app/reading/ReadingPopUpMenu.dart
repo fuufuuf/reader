@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:timnew_reader/models/ChapterContent.dart';
-import 'package:timnew_reader/presentations/components/readingScreen/PopUp.dart';
+import 'package:timnew_reader/app/reading/PopUp.dart';
 import 'package:timnew_reader/app/reading/ReadingScreen.dart';
 import 'package:timnew_reader/presentations/wrappers/ReadingThemeProvider.dart';
 import 'package:timnew_reader/repositories/settings/ThemeRepository.dart';

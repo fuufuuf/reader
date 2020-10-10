@@ -5,8 +5,7 @@ import 'package:timnew_reader/repositories/network/BookRepository.dart';
 
 part 'ChapterContent.g.dart';
 
-abstract class ChapterContent
-    implements Built<ChapterContent, ChapterContentBuilder> {
+abstract class ChapterContent implements Built<ChapterContent, ChapterContentBuilder> {
   ChapterContent._();
 
   factory ChapterContent([updates(ChapterContentBuilder b)]) = _$ChapterContent;
@@ -23,22 +22,19 @@ abstract class ChapterContent
 
   bool get isLocked;
 
-  Future<ChapterList> fetchChapterList() =>
-      BookRepository.fetchChapterList(chapterListUrl);
+  Future<ChapterList> fetchChapterList() => BookRepository.fetchChapterList(chapterListUrl);
 
   @nullable
   Uri get previousChapterUrl;
 
   bool get hasPrevious => previousChapterUrl != null;
 
-  Future<ChapterContent> fetchPreviousChapter() =>
-      BookRepository.fetchChapterContent(previousChapterUrl);
+  Future<ChapterContent> fetchPreviousChapter() => BookRepository.fetchChapterContent(previousChapterUrl);
 
   @nullable
   Uri get nextChapterUrl;
 
   bool get hasNext => nextChapterUrl != null;
 
-  Future<ChapterContent> fetchNextChapter() =>
-      BookRepository.fetchChapterContent(nextChapterUrl);
+  Future<ChapterContent> fetchNextChapter() => BookRepository.fetchChapterContent(nextChapterUrl);
 }

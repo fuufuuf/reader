@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:timnew_reader/presentations/components/readingScreen/SimpleStatusBar.dart';
+import 'package:timnew_reader/app/reading/SimpleStatusBar.dart';
 import 'package:timnew_reader/presentations/wrappers/ReadingThemeProvider.dart';
 
 typedef void GestureCallback(BuildContext context);

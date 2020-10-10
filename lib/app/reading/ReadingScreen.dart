@@ -4,10 +4,10 @@ import 'package:flutter/widgets.dart';
 import 'package:screen/screen.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/models/ChapterContent.dart';
-import 'package:timnew_reader/presentations/components/readingScreen/ChapterContentView.dart';
-import 'package:timnew_reader/presentations/components/readingScreen/OverScrollNavigator.dart';
-import 'package:timnew_reader/presentations/components/readingScreen/ReadingPopUpMenu.dart';
-import 'package:timnew_reader/presentations/components/readingScreen/ReadingScaffold.dart';
+import 'package:timnew_reader/app/reading/ChapterContentView.dart';
+import 'package:timnew_reader/app/reading/OverScrollNavigator.dart';
+import 'package:timnew_reader/app/reading/ReadingPopUpMenu.dart';
+import 'package:timnew_reader/app/reading/ReadingScaffold.dart';
 import 'package:timnew_reader/presentations/wrappers/ContentLoader.dart';
 import 'package:timnew_reader/repositories/network/BookRepository.dart';
 
