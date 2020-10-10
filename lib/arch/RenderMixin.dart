@@ -45,11 +45,11 @@ mixin RenderResult<T> implements RenderData<T> {
 }
 
 mixin RenderAsyncResult<T> implements RenderResult<T> {
-  Widget buildError(BuildContext context, Object error) => DefaultRenders.buildError(context, error);
-
   Widget buildInitialState(BuildContext context) => buildWaiting(context);
 
   Widget buildWaiting(BuildContext context) => DefaultRenders.buildWaiting(context);
+
+  Widget buildError(BuildContext context, Object error) => DefaultRenders.buildError(context, error);
 }
 
 mixin WithEmptyContent<T> implements RenderData<T> {
@@ -66,11 +66,11 @@ mixin WithEmptyContent<T> implements RenderData<T> {
 }
 
 mixin RenderAsyncSnapshot<T> implements RenderAsyncResult<T> {
-  Widget buildError(BuildContext context, Object error) => DefaultRenders.buildError(context, error);
-
   Widget buildInitialState(BuildContext context) => buildWaiting(context);
 
   Widget buildWaiting(BuildContext context) => DefaultRenders.buildWaiting(context);
+
+  Widget buildError(BuildContext context, Object error) => DefaultRenders.buildError(context, error);
 
   Widget buildAsyncSnapshot(BuildContext context, AsyncSnapshot<T> snapshot) {
     if (snapshot.hasError) return buildError(context, snapshot.error);

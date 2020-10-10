@@ -8,7 +8,7 @@ import 'package:timnew_reader/repositories/network/BookRepository.dart';
 
 class ChapterContentRequest extends Request<ChapterContent> {
   final BookIndex bookIndex;
-  Uri _currentUrl;
+  final Uri chapterUrl;
 
   factory ChapterContentRequest.fromChapterRef(BookIndex bookIndex, ChapterRef chapterRef) =>
       ChapterContentRequest(bookIndex, chapterRef.url);
@@ -21,13 +21,12 @@ class ChapterContentRequest extends Request<ChapterContent> {
     return ChapterContentRequest(bookIndex, currentChapterUrl);
   }
 
-  ChapterContentRequest(this.bookIndex, Uri chapterUrl)
+  ChapterContentRequest(this.bookIndex, this.chapterUrl)
       : assert(bookIndex != null),
-        assert(chapterUrl != null),
-        _currentUrl = chapterUrl;
+        assert(chapterUrl != null);
 
   @override
   Future<ChapterContent> load() async {
-    return await BookRepository.fetchChapterContent(_currentUrl);
+    return await BookRepository.fetchChapterContent(chapterUrl);
   }
 }

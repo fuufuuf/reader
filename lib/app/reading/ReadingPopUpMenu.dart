@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:timnew_reader/models/ChapterContent.dart';
+import 'package:timnew_reader/app/reading/ChapterContentRequest.dart';
 import 'package:timnew_reader/app/reading/PopUp.dart';
-import 'package:timnew_reader/app/reading/ReadingScreen.dart';
 import 'package:timnew_reader/presentations/wrappers/ReadingThemeProvider.dart';
 import 'package:timnew_reader/repositories/settings/ThemeRepository.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ReadingPopUpMenu extends StatefulWidget {
-  final ReadingScreenState parentState;
+  final ChapterContentRequest request;
+  final VoidCallback navigateUp;
+  final VoidCallback navigateDown;
 
-  ReadingPopUpMenu(this.parentState);
+  ReadingPopUpMenu({this.request, this.navigateUp, this.navigateDown});
 
   @override
   State<StatefulWidget> createState() => _ReadingPopUpMenuState();
 }
 
 class _ReadingPopUpMenuState extends State<ReadingPopUpMenu> {
-  ChapterContent get chapterContent => widget.parentState.currentContent;
-
   ValueNotifier<double> currentFontSize;
 
   @override
@@ -75,17 +74,17 @@ class _ReadingPopUpMenuState extends State<ReadingPopUpMenu> {
         ),
         PopUpButton(
           text: "浏览器中打开",
-          enabled: chapterContent != null,
+          enabled: widget.request.hasData,
           onTap: _onOpenInExternalBrowser,
         ),
         PopUpButton(
           text: "前一章节",
-          enabled: chapterContent.hasPrevious,
+          enabled: widget.request.currentData?.hasPrevious ?? false,
           onTap: _gotoPreviousChapter,
         ),
         PopUpButton(
           text: "后一章节",
-          enabled: chapterContent.hasNext,
+          enabled: widget.request.currentData?.hasNext ?? false,
           onTap: _gotoNextChapter,
         ),
       ]));
@@ -103,6 +102,8 @@ class _ReadingPopUpMenuState extends State<ReadingPopUpMenu> {
   void _onOpenInExternalBrowser() async {
     _dismissPopUp();
 
+    final chapterContent = widget.request.currentData;
+
     if (chapterContent == null) {
       return;
     }
@@ -117,16 +118,12 @@ class _ReadingPopUpMenuState extends State<ReadingPopUpMenu> {
   void _gotoPreviousChapter() {
     _dismissPopUp();
 
-    widget.parentState.setState(() {
-      widget.parentState.loadContent(chapterContent.previousChapterUrl);
-    });
+    widget.navigateUp();
   }
 
   void _gotoNextChapter() {
     _dismissPopUp();
 
-    widget.parentState.setState(() {
-      widget.parentState.loadContent(chapterContent.nextChapterUrl);
-    });
+    widget.navigateDown();
   }
 }
