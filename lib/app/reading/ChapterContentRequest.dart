@@ -11,22 +11,30 @@ class ChapterContentRequest extends Request<ChapterContent> {
   final Uri chapterUrl;
 
   factory ChapterContentRequest.fromChapterRef(BookIndex bookIndex, ChapterRef chapterRef) =>
-      ChapterContentRequest(bookIndex, chapterRef.url);
+      ChapterContentRequest._(bookIndex, chapterRef.url);
 
   factory ChapterContentRequest.currentChapter(BookIndex bookIndex) {
     final currentChapterUrl = bookIndex.currentChapter;
 
     if (currentChapterUrl == null) return null;
 
-    return ChapterContentRequest(bookIndex, currentChapterUrl);
+    return ChapterContentRequest._(bookIndex, currentChapterUrl);
   }
 
-  ChapterContentRequest(this.bookIndex, this.chapterUrl)
+  ChapterContentRequest._(this.bookIndex, this.chapterUrl)
       : assert(bookIndex != null),
         assert(chapterUrl != null);
 
   @override
   Future<ChapterContent> load() async {
-    return await BookRepository.fetchChapterContent(chapterUrl).timeout(Duration(seconds: 3));
+    final content = await BookRepository.fetchChapterContent(chapterUrl).timeout(Duration(seconds: 3));
+
+    await bookIndex.setCurrentChapter(chapterUrl);
+
+    return content;
   }
+
+  bool get hasNextChapter => currentData?.hasNext ?? false;
+
+  bool get hasPreviousChapter => currentData?.hasPrevious ?? false;
 }

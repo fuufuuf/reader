@@ -59,12 +59,12 @@ class _ReadingScreenState extends State<ReadingScreen> with RenderAsyncSnapshot<
     );
   }
 
-  Widget _buildContainer({bool isWaiting, ChapterContent content, Widget child}) {
+  Widget _buildContainer({bool isWaiting, Widget child}) {
     return OverScrollNavigateContainer(
       key: Key("NavigateContainer"),
       isLoading: isWaiting,
-      allowUpwardOverScroll: content?.hasPrevious ?? false,
-      allowDownwardOverScroll: content?.hasNext ?? false,
+      allowUpwardOverScroll: _request.hasPreviousChapter,
+      allowDownwardOverScroll: _request.hasNextChapter,
       onUpwardNavigate: _navigateUp,
       onDownwardNavigate: _navigateDown,
       child: child,
@@ -107,7 +107,6 @@ class _ReadingScreenState extends State<ReadingScreen> with RenderAsyncSnapshot<
   Widget buildData(BuildContext context, ChapterContent content) {
     return _buildContainer(
       isWaiting: false,
-      content: content,
       child: ChapterContentView(chapter: content),
     );
   }
