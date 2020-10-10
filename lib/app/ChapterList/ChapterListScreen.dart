@@ -34,9 +34,13 @@ class _ChapterListScreenState extends State<ChapterListScreen> with RenderAsyncS
 
   @override
   Widget build(BuildContext context) => ScreenScaffold(
-      title: request.bookName,
+      titleWidget: Row(
+        children: [
+          Text(request.bookName),
+          IconButton(icon: Icon(Icons.info_outline), onPressed: _openBookInfo),
+        ],
+      ),
       appBarActions: <Widget>[
-        IconButton(icon: Icon(Icons.info_outline), onPressed: _openBookInfo),
         IconButton(icon: Icon(Icons.refresh), onPressed: _reload),
         IconButton(icon: Icon(Icons.bookmark_border), onPressed: _scrollToCurrent)
       ],
