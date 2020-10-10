@@ -15,6 +15,11 @@ import 'package:timnew_reader/repositories/PersistentStorage.dart';
 import 'BookList.dart';
 
 class BookListScreen extends StatelessWidget {
+  static MaterialPageRoute buildRoute(BookIndex bookIndex) => MaterialPageRoute(
+        settings: RouteSettings(name: "BookList", arguments: bookIndex),
+        builder: (_) => BookListScreen(),
+      );
+
   @override
   Widget build(BuildContext context) => ProxyProvider<PersistentStorage, BookList>(
         update: (_, storage, __) => BookList(storage),
@@ -97,11 +102,11 @@ class _BookIndexEntry extends StatelessWidget {
         trailing: IconButton(
           icon: Icon(Icons.info_outline),
           onPressed: () {
-            AppRouter.of(context).openBookInfo(bookIndex);
+            AppRouter.of(context).gotoBookInfo(bookIndex);
           },
         ),
         onTap: () async {
-          await Navigator.of(context).openBook(bookIndex);
+          await Navigator.of(context).goToBookContent(bookIndex);
 
           bookList.reload();
         },

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:timnew_reader/app/BookInfo/BookInfoScreen.dart';
 import 'package:timnew_reader/app/ChapterList/ChapterListScreen.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/models/ChapterRef.dart';
@@ -8,19 +9,23 @@ class AppRouter {
 }
 
 extension NaivigatorStateRoutingExtension on NavigatorState {
-  static NavigatorState of(BuildContext context) => Navigator.of(context);
-
-  Future openBook(BookIndex bookIndex) {
-    final resultFuture = push(ChapterListScreen.buildRoute(bookIndex));
+  Future goToBookContent(BookIndex bookIndex) {
+    final firstNavigationResult = push(ChapterListScreen.buildRoute(bookIndex));
 
     if (bookIndex.hasCurrentChapter) {
       // push reading
     }
 
-    return resultFuture;
+    return firstNavigationResult;
   }
 
-  Future openBookInfo(BookIndex bookIndex) {}
+  Future goToChapterList(BookIndex bookIndex) {
+    return push(ChapterListScreen.buildRoute(bookIndex));
+  }
 
-  Future openReader(BookIndex bookIndex, ChapterRef chapter) {}
+  Future gotoBookInfo(BookIndex bookIndex) {
+    return push(BookInfoScreen.buildRoute(bookIndex));
+  }
+
+  Future gotoChapterContent(BookIndex bookIndex, ChapterRef chapter) {}
 }

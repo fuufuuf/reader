@@ -17,13 +17,13 @@ class ChapterListScreen extends StatefulWidget {
       : assert(bookIndex != null),
         request = ChapterListRequest(bookIndex);
 
-  @override
-  _ChapterListScreenState createState() => _ChapterListScreenState();
-
   static MaterialPageRoute buildRoute(BookIndex bookIndex) => MaterialPageRoute(
         settings: RouteSettings(name: "ChapterList", arguments: bookIndex),
         builder: (_) => ChapterListScreen(bookIndex),
       );
+
+  @override
+  _ChapterListScreenState createState() => _ChapterListScreenState();
 }
 
 class _ChapterListScreenState extends State<ChapterListScreen> with RenderAsyncSnapshot<BuiltList<ChapterRef>> {
@@ -51,7 +51,7 @@ class _ChapterListScreenState extends State<ChapterListScreen> with RenderAsyncS
   }
 
   void _openBookInfo() {
-    AppRouter.of(context).openBookInfo(request.bookIndex);
+    AppRouter.of(context).gotoBookInfo(request.bookIndex);
   }
 
   void _reload() {
@@ -94,7 +94,7 @@ class _ChapterEntry extends StatelessWidget {
       leading: Icon(Icons.bookmark_border),
       title: Text(chapter.title),
       onTap: () async {
-        await AppRouter.of(context).openReader(request.bookIndex, chapter);
+        await AppRouter.of(context).gotoChapterContent(request.bookIndex, chapter);
         context.read<ItemScrollController>().scrollToCurrentChapter(context, request);
       },
     );
