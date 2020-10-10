@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:async/async.dart';
+import 'package:flutter/material.dart';
 import 'package:timnew_reader/arch/BehaviourSubject.dart';
 
 import 'FuncTypes.dart';
 export 'FuncTypes.dart';
 
-abstract class Request<T> {
+abstract class Request<T> extends ChangeNotifier {
   final BehaviorSubject<T> _subject;
 
   Stream<T> get valueStream => _subject;
@@ -17,26 +19,35 @@ abstract class Request<T> {
     }
   }
 
-  FutureOr<T> execute();
+  T get result => null;
 
-  Future<T> reload({quiet: false}) async => await putValue(execute(), quiet: quiet);
+  FutureOr<T> load();
 
-  Future<T> putValue(FutureOr<T> value, {quiet: false}) async {
+  Future<Result<T>> reload({quiet: false}) async => await execute(load(), quiet: quiet);
+
+  Future<Result<T>> execute(FutureOr<T> value, {quiet: false}) async {
     if (!quiet && value is Future) markAsWaiting();
 
     try {
       final result = await value;
-      _subject.add(result);
-      return result;
-    } catch (error, stacktrace) {
-      _subject.addError(error, stacktrace);
+      return putValue(result);
+    } on Exception catch (error, stackTrace) {
+      return putError(error, stackTrace);
+    } catch (error) {
       rethrow;
     }
   }
 
-  T putValueSync(T value) {
-    putValue(value);
-    return value;
+  ValueResult<T> putValue(T value) {
+    _subject.add(value);
+    notifyListeners();
+    return Result.value(value);
+  }
+
+  ErrorResult putError(Object error, StackTrace stackTrace) {
+    _subject.addError(error, stackTrace);
+    notifyListeners();
+    return Result.error(error, stackTrace);
   }
 
   void markAsWaiting() {
@@ -60,11 +71,17 @@ abstract class Request<T> {
 
   Future<T> get first => valueStream.firstWhere((result) => result != null);
 
-  void updateValueSync(ValueUpdater<T> updater) {
+  Result<T> safeUpdate(ValueUpdater<T> updater) {
     try {
-      putValueSync(updater(currentData));
+      return putValue(updater(currentData));
     } on Exception catch (error, stacktrace) {
-      _subject.addError(error, stacktrace);
+      return putError(error, stacktrace);
+    } catch (error) {
+      rethrow;
     }
+  }
+
+  Future<Result<T>> safeUpdateAsync(AsyncValueUpdater<T> updater, {quiet: false}) {
+    return execute(updater(currentData), quiet: quiet);
   }
 }

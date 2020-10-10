@@ -17,7 +17,7 @@ class ChapterListRequest extends Request<BuiltList<ChapterRef>> {
   String get bookName => bookIndex.bookName;
 
   @override
-  Future<BuiltList<ChapterRef>> execute() async {
+  Future<BuiltList<ChapterRef>> load() async {
     final chapterList = await BookRepository.fetchChapterList(bookIndex.chapterListUrl);
     return chapterList.chapters;
   }

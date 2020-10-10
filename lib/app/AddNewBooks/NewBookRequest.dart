@@ -14,7 +14,7 @@ class NewBookRequest extends Request<NewBook> {
   NewBookRequest(this.bookList, this.url);
 
   @override
-  FutureOr<NewBook> execute() async {
+  FutureOr<NewBook> load() async {
     final newBook = await BookRepository.createBookByUrlString(url)
         .timeout(Duration(seconds: 5), onTimeout: () => Future.error(UserException("加載超時")));
 

@@ -12,7 +12,7 @@ class BookInfoRequest extends Request<BookInfo> {
   String get bookName => bookIndex.bookName;
 
   @override
-  Future<BookInfo> execute() async {
+  Future<BookInfo> load() async {
     return bookIndex.fetchBookInfo();
   }
 }
