@@ -22,8 +22,8 @@ class OverScrollNavigateContainer extends StatefulWidget {
     this.displacementThreshold = _defaultThreshold,
   })  : assert(child != null),
         assert(isLoading != null),
-        assert(allowUpwardOverScroll && onUpwardNavigate != null),
-        assert(allowDownwardOverScroll && onDownwardNavigate != null),
+        assert(!(allowUpwardOverScroll && onUpwardNavigate == null)),
+        assert(!(allowDownwardOverScroll && onDownwardNavigate == null)),
         super(key: key);
 
   @override
