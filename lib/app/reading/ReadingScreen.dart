@@ -60,7 +60,6 @@ class _ReadingScreenState extends State<ReadingScreen> with RenderAsyncSnapshot<
   Widget _buildContainer({Widget child}) {
     return OverScrollNavigateContainer(
       key: Key("NavigateContainer"),
-      isLoading: false,
       allowUpwardOverScroll: request.hasPreviousChapter,
       allowDownwardOverScroll: request.hasNextChapter,
       onUpwardNavigate: _navigateUp,

@@ -4,7 +4,6 @@ class OverScrollNavigateContainer extends StatefulWidget {
   static const double _defaultThreshold = 100;
 
   final Widget child;
-  final bool isLoading;
   final bool allowUpwardOverScroll;
   final bool allowDownwardOverScroll;
   final double displacementThreshold;
@@ -14,14 +13,12 @@ class OverScrollNavigateContainer extends StatefulWidget {
   const OverScrollNavigateContainer({
     Key key,
     @required this.child,
-    @required this.isLoading,
     this.allowUpwardOverScroll = true,
     this.allowDownwardOverScroll = true,
     this.onUpwardNavigate,
     this.onDownwardNavigate,
     this.displacementThreshold = _defaultThreshold,
   })  : assert(child != null),
-        assert(isLoading != null),
         assert(!(allowUpwardOverScroll && onUpwardNavigate == null)),
         assert(!(allowDownwardOverScroll && onDownwardNavigate == null)),
         super(key: key);
@@ -105,15 +102,6 @@ class _OverScrollNavigateContainerState extends State<OverScrollNavigateContaine
   }
 
   bool _onScrollNotification(ScrollNotification notification) {
-    if (widget.isLoading) {
-      setState(() {
-        _upDisplacement = 0;
-        _downDisplacement = 0;
-        mode = _Mode.Loading;
-      });
-      return true;
-    }
-
     final metrics = notification.metrics;
 
     if (widget.allowDownwardOverScroll && metrics.pixels > metrics.maxScrollExtent) {
