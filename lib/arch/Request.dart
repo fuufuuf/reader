@@ -1,13 +1,12 @@
 import 'dart:async';
 
 import 'package:async/async.dart';
-import 'package:flutter/material.dart';
 import 'package:timnew_reader/arch/BehaviourSubject.dart';
 
 import 'FuncTypes.dart';
 export 'FuncTypes.dart';
 
-abstract class Request<T> extends ChangeNotifier {
+abstract class Request<T> {
   final BehaviorSubject<T> _subject;
 
   Stream<T> get valueStream => _subject;
@@ -40,13 +39,11 @@ abstract class Request<T> extends ChangeNotifier {
 
   ValueResult<T> putValue(T value) {
     _subject.add(value);
-    notifyListeners();
     return Result.value(value);
   }
 
   ErrorResult putError(Object error, StackTrace stackTrace) {
     _subject.addError(error, stackTrace);
-    notifyListeners();
     return Result.error(error, stackTrace);
   }
 
