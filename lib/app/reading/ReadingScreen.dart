@@ -21,13 +21,11 @@ class ReadingScreen extends StatefulWidget {
       );
 
   @override
-  State<StatefulWidget> createState() => _ReadingScreenState(request);
+  State<StatefulWidget> createState() => _ReadingScreenState();
 }
 
 class _ReadingScreenState extends State<ReadingScreen> with RenderAsyncSnapshot<ChapterContent> {
-  ChapterContentRequest _request;
-
-  _ReadingScreenState(this._request);
+  ChapterContentRequest get request => widget.request;
 
   @override
   void initState() {
@@ -55,7 +53,7 @@ class _ReadingScreenState extends State<ReadingScreen> with RenderAsyncSnapshot<
   Widget build(BuildContext context) {
     return ReadingScaffold(
       onDoubleTap: _onDoubleTap,
-      content: buildStream(_request.valueStream),
+      content: buildStream(request.valueStream),
     );
   }
 
@@ -63,8 +61,8 @@ class _ReadingScreenState extends State<ReadingScreen> with RenderAsyncSnapshot<
     return OverScrollNavigateContainer(
       key: Key("NavigateContainer"),
       isLoading: isWaiting,
-      allowUpwardOverScroll: _request.hasPreviousChapter,
-      allowDownwardOverScroll: _request.hasNextChapter,
+      allowUpwardOverScroll: request.hasPreviousChapter,
+      allowDownwardOverScroll: request.hasNextChapter,
       onUpwardNavigate: _navigateUp,
       onDownwardNavigate: _navigateDown,
       child: child,
@@ -80,24 +78,38 @@ class _ReadingScreenState extends State<ReadingScreen> with RenderAsyncSnapshot<
 
   Widget buildError(BuildContext context, Object error) {
     final errorMessage = error is UserException ? error.message : error.toString();
-
+    var theme = Theme.of(context);
     return _buildContainer(
       isWaiting: false,
       child: Center(
-        child: Column(
-          children: <Widget>[
-            Icon(Icons.cancel_outlined),
-            Text("加載錯誤"),
-            Text(errorMessage),
-            TextButton(
-                onPressed: () => _request.reload(),
-                child: Row(
-                  children: [
-                    Icon(Icons.refresh),
-                    Text("重新加載"),
-                  ],
-                ))
-          ],
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 30),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Icon(
+                Icons.sentiment_very_dissatisfied,
+                color: theme.errorColor,
+                size: theme.textTheme.headline3.fontSize,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0, bottom: 24.0),
+                child: Text(
+                  errorMessage,
+                  style: theme.textTheme.bodyText2,
+                ),
+              ),
+              OutlineButton(
+                  onPressed: () => request.reload(),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.refresh),
+                      Text("重新加載"),
+                    ],
+                  )),
+            ],
+          ),
         ),
       ),
     );
@@ -116,14 +128,18 @@ class _ReadingScreenState extends State<ReadingScreen> with RenderAsyncSnapshot<
       context: context,
       barrierDismissible: true,
       builder: (BuildContext dialogContext) => ReadingPopUpMenu(
-        request: _request,
+        request: request,
         navigateUp: _navigateUp,
         navigateDown: _navigateDown,
       ),
     );
   }
 
-  void _navigateUp() {}
+  void _navigateUp() {
+    request.loadPreviousChapter();
+  }
 
-  void _navigateDown() {}
+  void _navigateDown() {
+    request.loadNextChapter();
+  }
 }

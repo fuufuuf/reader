@@ -57,6 +57,8 @@ class _OverScrollNavigateContainerState extends State<OverScrollNavigateContaine
     final downIndicator = _renderDownIndicator();
 
     return Stack(
+      fit: StackFit.expand,
+      alignment: AlignmentDirectional.topCenter,
       children: <Widget>[
         if (upIndicator != null) upIndicator,
         if (downIndicator != null) downIndicator,

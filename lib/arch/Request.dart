@@ -53,10 +53,7 @@ abstract class Request<T> {
 
   bool get hasData => _subject.hasValue;
 
-  T get currentData {
-    if (!hasData) throw StateError("Reading currentValue when there isn't data");
-    return _subject.value;
-  }
+  T get currentData => _subject.value;
 
   bool get hasError => _subject.hasError;
 

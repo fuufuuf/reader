@@ -20,7 +20,10 @@ class ReadingScaffold extends StatelessWidget {
           child: Padding(
               padding: const EdgeInsets.all(8),
               child: Column(
-                children: <Widget>[SimpleStatusBar(), Expanded(child: _renderTheme(context, child: content))],
+                children: <Widget>[
+                  SimpleStatusBar(),
+                  Expanded(child: _renderTheme(context, child: content)),
+                ],
               ))));
 
   Color _renderBackground(BuildContext context) => ReadingThemeProvider.of(context).backgroundColor;
@@ -29,7 +32,10 @@ class ReadingScaffold extends StatelessWidget {
     final theme = ReadingThemeProvider.of(context);
     return DefaultTextStyle(
       style: theme.readingTextStyle,
-      child: IconTheme.merge(data: theme.readingIconStyle, child: child),
+      child: IconTheme.merge(
+        data: theme.readingIconStyle,
+        child: child,
+      ),
     );
   }
 
