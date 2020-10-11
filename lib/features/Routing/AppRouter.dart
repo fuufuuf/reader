@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:timnew_reader/features/BookInfo/BookInfoScreen.dart';
+import 'package:timnew_reader/features/ChapterContent/ChapterContentRequest.dart';
+import 'package:timnew_reader/features/ChapterContent/ChapterContentScreen.dart';
 import 'package:timnew_reader/features/ChapterList/ChapterListScreen.dart';
-import 'package:timnew_reader/features/reading/ChapterContentRequest.dart';
-import 'package:timnew_reader/features/reading/ReadingScreen.dart';
+
 import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/models/ChapterRef.dart';
 
@@ -16,7 +17,7 @@ extension NaivigatorStateRoutingExtension on NavigatorState {
 
     var currentChapterRequest = ChapterContentRequest.currentChapter(bookIndex);
     if (currentChapterRequest != null) {
-      push(ReadingScreen.buildRoute(currentChapterRequest));
+      push(ChapterContentScreen.buildRoute(currentChapterRequest));
     }
 
     return firstNavigationResult;
@@ -32,6 +33,6 @@ extension NaivigatorStateRoutingExtension on NavigatorState {
 
   Future gotoChapterContent(BookIndex bookIndex, ChapterRef chapterRef) {
     var request = ChapterContentRequest.fromChapterRef(bookIndex, chapterRef);
-    return push(ReadingScreen.buildRoute(request));
+    return push(ChapterContentScreen.buildRoute(request));
   }
 }

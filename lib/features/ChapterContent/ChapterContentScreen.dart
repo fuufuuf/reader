@@ -2,29 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:screen/screen.dart';
 import 'package:timnew_reader/features/App/UserException.dart';
-import 'package:timnew_reader/features/reading/ChapterContentRequest.dart';
 import 'package:timnew_reader/arch/RenderMixin.dart';
 import 'package:timnew_reader/models/ChapterContent.dart';
-import 'package:timnew_reader/features/reading/ChapterContentView.dart';
-import 'package:timnew_reader/features/reading/OverScrollNavigateContainer.dart';
-import 'package:timnew_reader/features/reading/ReadingPopUpMenu.dart';
-import 'package:timnew_reader/features/reading/ReadingScaffold.dart';
 
-class ReadingScreen extends StatefulWidget {
+import 'ChapterContentRequest.dart';
+import 'ChapterContentView.dart';
+import 'OverScrollNavigateContainer.dart';
+import 'ReadingPopUpMenu.dart';
+import 'ReadingScaffold.dart';
+
+class ChapterContentScreen extends StatefulWidget {
   final ChapterContentRequest request;
 
-  ReadingScreen(this.request) : assert(request != null);
+  ChapterContentScreen(this.request) : assert(request != null);
 
   static MaterialPageRoute buildRoute(ChapterContentRequest request) => MaterialPageRoute(
         settings: RouteSettings(name: "ReadingScreen", arguments: request),
-        builder: (_) => ReadingScreen(request),
+        builder: (_) => ChapterContentScreen(request),
       );
 
   @override
-  State<StatefulWidget> createState() => _ReadingScreenState();
+  State<StatefulWidget> createState() => _ChapterContentScreenState();
 }
 
-class _ReadingScreenState extends State<ReadingScreen> with RenderAsyncSnapshot<ChapterContent> {
+class _ChapterContentScreenState extends State<ChapterContentScreen> with RenderAsyncSnapshot<ChapterContent> {
   ChapterContentRequest get request => widget.request;
 
   @override
@@ -111,7 +112,7 @@ class _ReadingScreenState extends State<ReadingScreen> with RenderAsyncSnapshot<
   @override
   Widget buildData(BuildContext context, ChapterContent content) {
     return _buildContainer(
-      child: ChapterContentView(chapter: content),
+      child: ReadingContent(chapter: content),
     );
   }
 

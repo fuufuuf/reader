@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:timnew_reader/features/reading/ChapterContentRequest.dart';
-import 'package:timnew_reader/features/reading/PopUp.dart';
+
 import 'package:timnew_reader/presentations/wrappers/ReadingThemeProvider.dart';
 import 'package:timnew_reader/repositories/settings/ThemeRepository.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'ChapterContentRequest.dart';
+import 'PopUp.dart';
 
 class ReadingPopUpMenu extends StatefulWidget {
   final ChapterContentRequest request;

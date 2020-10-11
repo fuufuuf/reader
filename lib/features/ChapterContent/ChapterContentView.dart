@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:timnew_reader/models/ChapterContent.dart';
 
-class ChapterContentView extends StatelessWidget {
+class ReadingContent extends StatelessWidget {
   final ChapterContent chapter;
 
-  const ChapterContentView({Key key, this.chapter}) : super(key: key);
+  const ReadingContent({Key key, this.chapter}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
