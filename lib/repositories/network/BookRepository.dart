@@ -1,4 +1,4 @@
-import 'package:timnew_reader/features/UserException.dart';
+import 'package:timnew_reader/features/App/UserException.dart';
 import 'package:timnew_reader/models/BookInfo.dart';
 import 'package:timnew_reader/models/ChapterContent.dart';
 import 'package:timnew_reader/models/ChapterList.dart';

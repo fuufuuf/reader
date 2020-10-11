@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:screen/screen.dart';
-import 'package:timnew_reader/features/UserException.dart';
+import 'package:timnew_reader/features/App/UserException.dart';
 import 'package:timnew_reader/features/reading/ChapterContentRequest.dart';
 import 'package:timnew_reader/arch/RenderMixin.dart';
 import 'package:timnew_reader/models/ChapterContent.dart';

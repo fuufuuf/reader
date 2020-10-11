@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:timnew_reader/features/AppInitializer.dart';
+import 'package:timnew_reader/features/App/AppInitializer.dart';
 import 'package:timnew_reader/features/BookList/BookListScreen.dart';
 import 'package:timnew_reader/presentations/wrappers/ReadingThemeProvider.dart';
 import 'package:timnew_reader/repositories/settings/ThemeRepository.dart';
