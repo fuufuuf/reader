@@ -121,7 +121,7 @@ class _MultiLoaderState extends State<MultiLoader> with RenderAsyncSnapshot<List
     _future = Future.wait(widget.aspects.map((e) => _buildProvider(e)), eagerError: true);
   }
 
-  Future<Provider> _buildProvider(AspectLoader aspect) async {
+  Future<InheritedProvider> _buildProvider(AspectLoader aspect) async {
     final value = await aspect.initialize();
     return aspect.buildProvider(data: value);
   }

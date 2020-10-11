@@ -47,7 +47,7 @@ class ThemeRepository {
     return ReadingThemeData(
       textColor: _loadColor(themeId, _textColorKey),
       backgroundColor: _loadColor(themeId, _backgroundColorKey),
-      fontScaleFactor: _preferences.getDouble(_fontScaleFactorKey),
+      fontScaleFactor: _preferences.getDouble(_fontScaleFactorKey) ?? 1.0,
       popUpTextColor: _loadColor(themeId, _popUpTextColorKey),
       popUpBackgroundColor: _loadColor(themeId, _popUpBackgroundColorKey),
     );
