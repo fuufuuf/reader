@@ -1,12 +1,12 @@
 import 'package:built_collection/built_collection.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:timnew_reader/features/BookList/BookList.dart';
 import 'package:timnew_reader/features/App/UserException.dart';
-import 'package:timnew_reader/arch/Store.dart';
 import 'package:timnew_reader/models/NewBook.dart';
 
 import 'NewBookRequest.dart';
 
-class NewBookRequestList extends ValueStore<BuiltList<NewBookRequest>> {
+class NewBookRequestList extends ValueNotifier<BuiltList<NewBookRequest>> {
   final BookList bookList;
 
   NewBookRequestList(this.bookList) : super(BuiltList());
@@ -21,11 +21,11 @@ class NewBookRequestList extends ValueStore<BuiltList<NewBookRequest>> {
 
     final newRequests = newUrls.map((e) => NewBookRequest(bookList, e)).toBuiltList();
 
-    return putValue(value + newRequests);
+    return value += newRequests;
   }
 
   BuiltList<NewBookRequest> clear() {
-    return putValue(value.rebuild((b) => b.clear()));
+    return value = value.rebuild((b) => b.clear());
   }
 
   BuiltList<NewBook> collectResult() {

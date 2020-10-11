@@ -46,7 +46,7 @@ class BookListScreen extends StatelessWidget {
 }
 
 class _BookIndexList extends StatelessWidget
-    with RenderValueStore<BuiltList<BookIndex>>, WithEmptyContent<BuiltList<BookIndex>> {
+    with RenderValueListenable<BuiltList<BookIndex>>, WithEmptyContent<BuiltList<BookIndex>> {
   final BookList bookList;
 
   _BookIndexList(this.bookList);

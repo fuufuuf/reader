@@ -4,14 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'FuncTypes.dart';
 export 'FuncTypes.dart';
 
-class ValueStore<T> extends ValueNotifier<T> {
-  ValueListenable<T> get listenable => this;
-
-  ValueStore(T value) : super(value);
-
-  T putValue(T value) => this.value = value;
-}
-
 class ResultStore<T> {
   final ValueNotifier<Result<T>> _notifier;
 

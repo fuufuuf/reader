@@ -99,8 +99,8 @@ mixin RenderAsyncSnapshot<T> implements RenderAsyncResult<T> {
       StreamBuilder(key: key, stream: stream, builder: buildAsyncSnapshot, initialData: initialData);
 }
 
-mixin RenderValueStore<T> implements RenderData<T> {
-  Widget buildValueStore(ValueStore<T> store, {Key key}) => ValueListenableBuilder(
+mixin RenderValueListenable<T> implements RenderData<T> {
+  Widget buildValueStore(ValueListenable<T> store, {Key key}) => ValueListenableBuilder(
       key: key, valueListenable: store, builder: (BuildContext context, T value, _) => buildData(context, value));
 }
 

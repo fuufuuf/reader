@@ -91,7 +91,7 @@ class _AddNewBookDialogState extends State<AddNewBookDialog> {
 }
 
 class _NewBookListView extends StatelessWidget
-    with RenderValueStore<BuiltList<NewBookRequest>>, WithEmptyContent<BuiltList<NewBookRequest>> {
+    with RenderValueListenable<BuiltList<NewBookRequest>>, WithEmptyContent<BuiltList<NewBookRequest>> {
   final NewBookRequestList newBookList;
 
   _NewBookListView(this.newBookList);
@@ -217,7 +217,7 @@ class _FormButton extends StatelessWidget {
       );
 }
 
-class _FormConfirmButton extends StatelessWidget with RenderValueStore<BuiltList<NewBookRequest>> {
+class _FormConfirmButton extends StatelessWidget with RenderValueListenable<BuiltList<NewBookRequest>> {
   final NewBookRequestList requestList;
 
   _FormConfirmButton(this.requestList, {Key key}) : super(key: key ?? Key("confirm"));

@@ -1,18 +1,18 @@
 import 'dart:async';
 
 import 'package:built_collection/built_collection.dart';
-import 'package:timnew_reader/arch/Store.dart';
+import 'package:flutter/foundation.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/models/NewBook.dart';
 import 'package:timnew_reader/repositories/PersistentStorage.dart';
 
-class BookList extends ValueStore<BuiltList<BookIndex>> {
+class BookList extends ValueNotifier<BuiltList<BookIndex>> {
   final PersistentStorage storage;
 
   BookList(this.storage) : super(storage.loadBookIndexList());
 
   BuiltList<BookIndex> reload() {
-    return putValue(storage.loadBookIndexList());
+    return value = storage.loadBookIndexList();
   }
 
   bool isDuplicated(String bookId) {
@@ -22,7 +22,7 @@ class BookList extends ValueStore<BuiltList<BookIndex>> {
   Future<BuiltList<BookIndex>> _updateBookList(Function(ListBuilder<BookIndex>) updates) async {
     final newList = value.rebuild(updates);
 
-    putValue(newList);
+    value = newList;
 
     await storage.saveBookList(newList);
 
