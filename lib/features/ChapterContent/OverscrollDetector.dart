@@ -1,35 +1,35 @@
 import 'package:flutter/material.dart';
 
-class OverScrollNavigateContainer extends StatefulWidget {
+class OverscrollDetector extends StatefulWidget {
   static const double _defaultThreshold = 100;
 
   final Widget child;
-  final bool allowUpwardOverScroll;
-  final bool allowDownwardOverScroll;
+  final bool allowUpwardOverscroll;
+  final bool allowDownwardOverscroll;
   final double displacementThreshold;
   final VoidCallback onUpwardNavigate;
   final VoidCallback onDownwardNavigate;
 
-  const OverScrollNavigateContainer({
+  const OverscrollDetector({
     Key key,
     @required this.child,
-    this.allowUpwardOverScroll = true,
-    this.allowDownwardOverScroll = true,
+    this.allowUpwardOverscroll = true,
+    this.allowDownwardOverscroll = true,
     this.onUpwardNavigate,
     this.onDownwardNavigate,
     this.displacementThreshold = _defaultThreshold,
   })  : assert(child != null),
-        assert(!(allowUpwardOverScroll && onUpwardNavigate == null)),
-        assert(!(allowDownwardOverScroll && onDownwardNavigate == null)),
+        assert(!(allowUpwardOverscroll && onUpwardNavigate == null)),
+        assert(!(allowDownwardOverscroll && onDownwardNavigate == null)),
         super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _OverScrollNavigateContainerState();
+  State<StatefulWidget> createState() => _OverscrollDetectorState();
 }
 
 enum _Mode { Loading, Normal, UpOver, UpArmed, Down, DownArmed }
 
-class _OverScrollNavigateContainerState extends State<OverScrollNavigateContainer> {
+class _OverscrollDetectorState extends State<OverscrollDetector> {
   double _upDisplacement = 0;
   double _downDisplacement = 0;
   _Mode _mode;
@@ -104,7 +104,7 @@ class _OverScrollNavigateContainerState extends State<OverScrollNavigateContaine
   bool _onScrollNotification(ScrollNotification notification) {
     final metrics = notification.metrics;
 
-    if (widget.allowDownwardOverScroll && metrics.pixels > metrics.maxScrollExtent) {
+    if (widget.allowDownwardOverscroll && metrics.pixels > metrics.maxScrollExtent) {
       setState(() {
         _downDisplacement =
             _normalizeDisplacement(metrics.pixels - metrics.maxScrollExtent, widget.displacementThreshold);
@@ -115,7 +115,7 @@ class _OverScrollNavigateContainerState extends State<OverScrollNavigateContaine
 
         if (_downDisplacement >= 1.0) mode = _Mode.DownArmed;
       });
-    } else if (widget.allowUpwardOverScroll && metrics.pixels < metrics.minScrollExtent) {
+    } else if (widget.allowUpwardOverscroll && metrics.pixels < metrics.minScrollExtent) {
       setState(() {
         _upDisplacement =
             _normalizeDisplacement(metrics.minScrollExtent - metrics.pixels, widget.displacementThreshold);

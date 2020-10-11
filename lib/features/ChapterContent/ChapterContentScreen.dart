@@ -7,7 +7,7 @@ import 'package:timnew_reader/models/ChapterContent.dart';
 
 import 'ChapterContentRequest.dart';
 import 'ChapterContentView.dart';
-import 'OverScrollNavigateContainer.dart';
+import 'OverscrollDetector.dart';
 import 'ReadingPopUpMenu.dart';
 import 'ReadingScaffold.dart';
 
@@ -59,10 +59,10 @@ class _ChapterContentScreenState extends State<ChapterContentScreen> with Render
   }
 
   Widget _buildContainer({Widget child}) {
-    return OverScrollNavigateContainer(
+    return OverscrollDetector(
       key: Key("NavigateContainer"),
-      allowUpwardOverScroll: request.hasPreviousChapter,
-      allowDownwardOverScroll: request.hasNextChapter,
+      allowUpwardOverscroll: request.hasPreviousChapter,
+      allowDownwardOverscroll: request.hasNextChapter,
       onUpwardNavigate: _navigateUp,
       onDownwardNavigate: _navigateDown,
       child: child,
