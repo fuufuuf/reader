@@ -1,5 +1,5 @@
 import 'package:html/dom.dart';
-import 'package:timnew_reader/app/UserException.dart';
+import 'package:timnew_reader/features/UserException.dart';
 
 import 'package:timnew_reader/models/BookInfo.dart';
 import 'package:timnew_reader/models/ChapterContent.dart';

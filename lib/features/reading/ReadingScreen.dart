@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:screen/screen.dart';
-import 'package:timnew_reader/app/UserException.dart';
-import 'package:timnew_reader/app/reading/ChapterContentRequest.dart';
+import 'package:timnew_reader/features/UserException.dart';
+import 'package:timnew_reader/features/reading/ChapterContentRequest.dart';
 import 'package:timnew_reader/arch/RenderMixin.dart';
 import 'package:timnew_reader/models/ChapterContent.dart';
-import 'package:timnew_reader/app/reading/ChapterContentView.dart';
-import 'package:timnew_reader/app/reading/OverScrollNavigateContainer.dart';
-import 'package:timnew_reader/app/reading/ReadingPopUpMenu.dart';
-import 'package:timnew_reader/app/reading/ReadingScaffold.dart';
+import 'package:timnew_reader/features/reading/ChapterContentView.dart';
+import 'package:timnew_reader/features/reading/OverScrollNavigateContainer.dart';
+import 'package:timnew_reader/features/reading/ReadingPopUpMenu.dart';
+import 'package:timnew_reader/features/reading/ReadingScaffold.dart';
 
 class ReadingScreen extends StatefulWidget {
   final ChapterContentRequest request;

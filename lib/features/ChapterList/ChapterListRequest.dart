@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:built_collection/built_collection.dart';
-import 'package:timnew_reader/app/UserException.dart';
+import 'package:timnew_reader/features/UserException.dart';
 import 'package:timnew_reader/arch/Request.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/models/ChapterRef.dart';

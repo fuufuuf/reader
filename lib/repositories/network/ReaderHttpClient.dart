@@ -2,7 +2,7 @@ import 'package:gbk2utf8/gbk2utf8.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' as htmlParser;
 import 'package:http/http.dart' as http;
-import 'package:timnew_reader/app/UserException.dart';
+import 'package:timnew_reader/features/UserException.dart';
 
 class ReaderHttpClient {
   Future<Document> fetchDom(Uri url, {bool enforceGbk: false, String patchHtml(String html)}) =>

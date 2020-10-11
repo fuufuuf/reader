@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:timnew_reader/app/BookList/BookList.dart';
-import 'package:timnew_reader/app/UserException.dart';
+import 'package:timnew_reader/features/BookList/BookList.dart';
+import 'package:timnew_reader/features/UserException.dart';
 import 'package:timnew_reader/arch/Request.dart';
 import 'package:timnew_reader/models/NewBook.dart';
 

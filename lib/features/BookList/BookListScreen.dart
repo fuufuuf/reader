@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:provider/provider.dart';
-import 'package:timnew_reader/app/Routing/AppRouter.dart';
+import 'package:timnew_reader/features/Routing/AppRouter.dart';
 
 import 'package:timnew_reader/arch/RenderMixin.dart';
-import 'package:timnew_reader/app/AddNewBooks/AddNewBookDialog.dart';
+import 'package:timnew_reader/features/AddNewBooks/AddNewBookDialog.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
 
 import 'package:timnew_reader/widgets/ScreenScaffold.dart';

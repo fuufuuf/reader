@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:timnew_reader/app/BookInfo/BookInfoScreen.dart';
-import 'package:timnew_reader/app/ChapterList/ChapterListScreen.dart';
-import 'package:timnew_reader/app/reading/ChapterContentRequest.dart';
-import 'package:timnew_reader/app/reading/ReadingScreen.dart';
+import 'package:timnew_reader/features/BookInfo/BookInfoScreen.dart';
+import 'package:timnew_reader/features/ChapterList/ChapterListScreen.dart';
+import 'package:timnew_reader/features/reading/ChapterContentRequest.dart';
+import 'package:timnew_reader/features/reading/ReadingScreen.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/models/ChapterRef.dart';
 

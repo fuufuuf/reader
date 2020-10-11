@@ -1,10 +1,10 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:timnew_reader/app/AddNewBooks/NewBookRequestList.dart';
-import 'package:timnew_reader/app/AddNewBooks/NewBookRequest.dart';
-import 'package:timnew_reader/app/BookList/BookList.dart';
-import 'package:timnew_reader/app/UserException.dart';
+import 'package:timnew_reader/features/AddNewBooks/NewBookRequestList.dart';
+import 'package:timnew_reader/features/AddNewBooks/NewBookRequest.dart';
+import 'package:timnew_reader/features/BookList/BookList.dart';
+import 'package:timnew_reader/features/UserException.dart';
 import 'package:timnew_reader/arch/RenderMixin.dart';
 import 'package:timnew_reader/models/NewBook.dart';
 import 'package:timnew_reader/widgets/SwipeRemovable.dart';

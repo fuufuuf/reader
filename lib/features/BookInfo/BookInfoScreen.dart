@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:timnew_reader/app/BookInfo/BookInfoRequest.dart';
+import 'package:timnew_reader/features/BookInfo/BookInfoRequest.dart';
 import 'package:timnew_reader/arch/RenderMixin.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/models/BookInfo.dart';

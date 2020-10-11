@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:timnew_reader/app/UserException.dart';
+import 'package:timnew_reader/features/UserException.dart';
 import 'package:timnew_reader/arch/RenderMixin.dart';
 import 'package:timnew_reader/presentations/ReaderApp.dart';
 import 'package:timnew_reader/repositories/settings/ThemeRepository.dart';
