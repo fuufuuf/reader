@@ -1,0 +1,46 @@
+{
+  "name": "ReaderIcons",
+  "css_prefix_text": "",
+  "css_use_suffix": false,
+  "hinting": true,
+  "units_per_em": 1000,
+  "ascent": 850,
+  "glyphs": [
+    {
+      "uid": "caef1de4ed866b574732e43d9cbc2136",
+      "css": "battery_chagring",
+      "code": 59683,
+      "src": "rpgawesome"
+    },
+    {
+      "uid": "d386c6ea042fb795eb75fb15f96a21ed",
+      "css": "battery_100",
+      "code": 59682,
+      "src": "rpgawesome"
+    },
+    {
+      "uid": "61f7c07cd8a0366c4d2a22639b95ab97",
+      "css": "battery_75",
+      "code": 59681,
+      "src": "rpgawesome"
+    },
+    {
+      "uid": "a62050670978afb7c3f5de118e68728d",
+      "css": "battery_50",
+      "code": 59680,
+      "src": "rpgawesome"
+    },
+    {
+      "uid": "3e31734219b8d8e9f27dfa7a3d4182bd",
+      "css": "battery_25",
+      "code": 59679,
+      "src": "rpgawesome"
+    },
+    {
+      "uid": "68a731d17e290111f32603e131d31100",
+      "css": "battery_0",
+      "code": 59678,
+      "src": "rpgawesome"
+    }
+  ]
+}

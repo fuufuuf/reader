@@ -36,6 +36,7 @@ class _ReaderAppState extends State<ReaderApp> {
   @override
   Widget build(BuildContext context) => MaterialApp(
         title: 'Reader',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(),
         builder: _buildWrapper,
         home: BookListScreen(),
