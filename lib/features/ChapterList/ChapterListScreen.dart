@@ -18,8 +18,10 @@ class ChapterListScreen extends StatefulWidget {
       : assert(bookIndex != null),
         request = ChapterListRequest(bookIndex);
 
+  static const String routeName = "ChapterList";
+
   static MaterialPageRoute buildRoute(BookIndex bookIndex) => MaterialPageRoute(
-        settings: RouteSettings(name: "ChapterList", arguments: bookIndex),
+        settings: RouteSettings(name: routeName, arguments: bookIndex),
         builder: (_) => ChapterListScreen(bookIndex),
       );
 

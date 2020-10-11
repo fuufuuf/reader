@@ -14,8 +14,10 @@ class BookInfoScreen extends StatelessWidget with RenderAsyncSnapshot<BookInfo> 
         request = BookInfoRequest(bookIndex),
         super();
 
+  static const String routeName = "BookInfo";
+
   static MaterialPageRoute buildRoute(BookIndex bookIndex) => MaterialPageRoute(
-        settings: RouteSettings(name: "BookInfo", arguments: bookIndex),
+        settings: RouteSettings(name: routeName, arguments: bookIndex),
         builder: (_) => BookInfoScreen(bookIndex),
       );
 

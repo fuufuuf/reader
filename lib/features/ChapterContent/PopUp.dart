@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:timnew_reader/presentations/wrappers/ReadingThemeProvider.dart';
+import 'package:provider/provider.dart';
+import 'package:timnew_reader/features/Theme/AppTheme.dart';
+import 'package:timnew_reader/features/Theme/ApplyTextColor.dart';
 
 class PopUpContainer extends StatelessWidget {
   final Duration insetAnimationDuration;
@@ -18,17 +20,22 @@ class PopUpContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final edgeInsets = MediaQuery.of(context).viewInsets + EdgeInsets.symmetric(horizontal: 140, vertical: 210);
-    final theme = ReadingThemeProvider.of(context);
+
+    var readingThemeData = context.watch<AppTheme>().readingThemeData;
+
     return Center(
       child: ConstrainedBox(
         constraints: BoxConstraints.expand(width: edgeInsets.horizontal, height: edgeInsets.vertical),
         child: Material(
-            elevation: 24.0,
-            color: theme.popUpBackgroundColor,
-            type: MaterialType.card,
-            shape: shape,
-            child: DefaultTextStyle(
-                style: theme.popUpMenuTextStyle, child: IconTheme.merge(data: theme.popUpMenuIconStyle, child: child))),
+          elevation: 24.0,
+          color: readingThemeData.popUpBackgroundColor,
+          type: MaterialType.card,
+          shape: shape,
+          child: ApplyTextColor(
+            textColor: readingThemeData.popUpTextColor,
+            child: child,
+          ),
+        ),
       ),
     );
   }
@@ -41,16 +48,20 @@ class PopUpButton extends StatelessWidget {
 
   const PopUpButton({Key key, this.text, this.enabled = true, this.onTap}) : super(key: key);
 
-  Decoration _renderDecoration(BuildContext context) =>
-      BoxDecoration(border: Border.all(color: ReadingThemeProvider.of(context).popUpTextColor, width: 1));
-
   @override
   Widget build(BuildContext context) => InkWell(
         onTap: enabled ? onTap : null,
         child: Container(
           alignment: Alignment.center,
-          decoration: _renderDecoration(context),
+          decoration: _buildDecoration(context),
           child: Text(text),
+        ),
+      );
+
+  Decoration _buildDecoration(BuildContext context) => BoxDecoration(
+        border: Border.all(
+          color: context.watch<AppTheme>().readingThemeData.popUpTextColor,
+          width: 1,
         ),
       );
 }
@@ -58,41 +69,28 @@ class PopUpButton extends StatelessWidget {
 class PopUpPicker<T> extends StatelessWidget {
   final List<String> options;
   final List<T> values;
-  final ValueNotifier<int> selectedIndex;
-  final ValueNotifier<T> selectedValue;
+  final int selectedIndex;
+  final Function(T) onValueChanged;
 
-  PopUpPicker(
-      {Key key,
-      @required this.options,
-      @required this.values,
-      @required this.selectedIndex,
-      @required this.selectedValue})
-      : assert(options != null),
+  PopUpPicker({
+    Key key,
+    @required this.options,
+    @required this.values,
+    int defaultIndex,
+    T value,
+    this.onValueChanged,
+  })  : assert(options != null),
         assert(values != null),
-        assert(selectedIndex != null),
-        assert(selectedValue != null),
+        selectedIndex = _findValueIndex(values, value, defaultIndex),
         super(key: key);
-
-  PopUpPicker.fromValue(
-      {Key key, List<String> options, List<T> values, ValueNotifier<T> selectedValue, int defaultIndex})
-      : this(
-            key: key,
-            options: options,
-            values: values,
-            selectedValue: selectedValue,
-            selectedIndex: ValueNotifier<int>(_findValueIndex(values, selectedValue.value, defaultIndex)));
 
   static int _findValueIndex<T>(List<T> values, T value, int defaultIndex) {
     var index = values.indexOf(value);
     return index == -1 ? defaultIndex : index;
   }
 
-  String get _currentOption => options[selectedIndex.value];
-
-  T get _currentValue => values[selectedIndex.value];
-
   Decoration _renderDecoration(BuildContext context) =>
-      BoxDecoration(border: Border.all(color: ReadingThemeProvider.of(context).popUpTextColor, width: 1));
+      BoxDecoration(border: Border.all(color: context.watch<AppTheme>().readingThemeData.popUpTextColor, width: 1));
 
   @override
   Widget build(BuildContext context) => Container(
@@ -100,27 +98,31 @@ class PopUpPicker<T> extends StatelessWidget {
       decoration: _renderDecoration(context),
       child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
         InkWell(
-          onTap: _renderOnIncrease(),
+          onTap: _buildOnIncrease(),
           child: Padding(padding: EdgeInsets.all(16), child: Icon(Icons.add)),
         ),
-        Text(_currentOption),
+        Text(options[selectedIndex]),
         InkWell(
           onTap: _renderOnDecrease(),
           child: Container(padding: EdgeInsets.all(16), child: Icon(Icons.remove)),
         ),
       ]));
 
-  GestureTapCallback _renderOnIncrease() => selectedIndex.value < options.length - 1
+  GestureTapCallback _buildOnIncrease() => selectedIndex < options.length - 1
       ? () {
-          selectedIndex.value = selectedIndex.value + 1;
-          selectedValue.value = _currentValue;
+          _onIndexChanged(selectedIndex + 1);
         }
       : null;
 
-  GestureTapCallback _renderOnDecrease() => selectedIndex.value > 0
+  GestureTapCallback _renderOnDecrease() => selectedIndex > 0
       ? () {
-          selectedIndex.value = selectedIndex.value - 1;
-          selectedValue.value = _currentValue;
+          _onIndexChanged(selectedIndex - 1);
         }
       : null;
+
+  void _onIndexChanged(int newIndex) {
+    if (onValueChanged != null) {
+      onValueChanged(values[newIndex]);
+    }
+  }
 }

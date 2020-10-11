@@ -20,8 +20,10 @@ class AddNewBookDialog extends StatefulWidget {
   @override
   _AddNewBookDialogState createState() => _AddNewBookDialogState();
 
+  static const String routeName = "AddNewBookDialog";
+
   static MaterialPageRoute<BuiltList<NewBook>> buildRoute(BookList bookList) => MaterialPageRoute(
-        settings: const RouteSettings(name: "AddNewBookDialog"),
+        settings: const RouteSettings(name: routeName),
         builder: (_) => AddNewBookDialog(bookList),
         fullscreenDialog: true,
       );

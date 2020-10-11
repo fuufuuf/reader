@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:timnew_reader/features/App/AppInitializer.dart';
+import 'package:provider/provider.dart';
+import 'package:timnew_reader/arch/Loader.dart';
 import 'package:timnew_reader/features/BookList/BookListScreen.dart';
-import 'package:timnew_reader/presentations/wrappers/ReadingThemeProvider.dart';
+import 'package:timnew_reader/features/Theme/AppTheme.dart';
+import 'package:timnew_reader/features/Theme/AppThemeLoader.dart';
+import 'package:timnew_reader/features/Theme/ThemeManager.dart';
 import 'package:timnew_reader/repositories/settings/ThemeRepository.dart';
-import 'package:timnew_reader/models/ReadingTheme.dart';
+import 'package:timnew_reader/features/Theme/ReadingThemeData.dart';
+
+import 'PersistentStorageInitializer.dart';
 
 class ReaderApp extends StatefulWidget {
   @override
@@ -12,7 +17,7 @@ class ReaderApp extends StatefulWidget {
 
 class _ReaderAppState extends State<ReaderApp> {
   bool nightMode;
-  ReadingTheme currentTheme;
+  ReadingThemeData currentTheme;
 
   _ReaderAppState(this.nightMode) {
     reloadTheme();
@@ -34,20 +39,23 @@ class _ReaderAppState extends State<ReaderApp> {
       };
 
   @override
-  Widget build(BuildContext context) => MaterialApp(
-        title: 'Reader',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(),
-        builder: _buildWrapper,
-        home: BookListScreen(),
+  Widget build(BuildContext context) => MultiLoader(
+        aspects: [
+          PersistentStorageInitializer(),
+          AppThemeLoader(),
+          AspectLoader.wrap(ListenableProvider<ThemeManager>(create: (context) => context.read<ThemeManager>())),
+        ],
+        builder: buildApp,
       );
 
-  Widget _buildWrapper(BuildContext context, Widget child) => AppInitializer(
-        child: ReadingThemeProvider(
-          theme: currentTheme,
-          toggleNightModeApi: wrap(toggleNightMode),
-          reloadThemeApi: wrap(reloadTheme),
-          child: child,
-        ),
-      );
+  Widget buildApp(BuildContext context, Widget child) {
+    final appTheme = context.watch<AppTheme>();
+
+    return MaterialApp(
+      title: 'Reader',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(brightness: appTheme.brightness),
+      home: BookListScreen(),
+    );
+  }
 }

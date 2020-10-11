@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:timnew_reader/presentations/wrappers/ReadingThemeProvider.dart';
+import 'package:provider/provider.dart';
+import 'package:timnew_reader/features/Theme/AppTheme.dart';
+import 'package:timnew_reader/features/Theme/ApplyTextColor.dart';
 
 import 'BatteryInfo.dart';
 import 'Clock.dart';
@@ -12,7 +13,8 @@ class SimpleStatusBar extends StatefulWidget {
 
 class _SimpleStatusBarState extends State<SimpleStatusBar> {
   @override
-  Widget build(BuildContext context) => _ThemeRender(
+  Widget build(BuildContext context) => ApplyTextColor(
+        textColor: context.watch<AppTheme>().readingThemeData.textColor,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Row(
@@ -24,21 +26,4 @@ class _SimpleStatusBarState extends State<SimpleStatusBar> {
           ),
         ),
       );
-}
-
-class _ThemeRender extends StatelessWidget {
-  final Widget child;
-
-  _ThemeRender({Key key, this.child}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = ReadingThemeProvider.of(context);
-    return DefaultTextStyle.merge(
-        style: theme.statusBarTextStyle,
-        child: IconTheme.merge(
-          data: theme.statusBarIconStyle,
-          child: child,
-        ));
-  }
 }

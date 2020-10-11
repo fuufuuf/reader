@@ -1,110 +1,98 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:timnew_reader/features/BookList/BookListScreen.dart';
+import 'package:timnew_reader/features/Theme/AppTheme.dart';
+import 'package:timnew_reader/features/Theme/ThemeManager.dart';
 
-import 'package:timnew_reader/presentations/wrappers/ReadingThemeProvider.dart';
-import 'package:timnew_reader/repositories/settings/ThemeRepository.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'ChapterContentRequest.dart';
 import 'PopUp.dart';
 
-class ReadingPopUpMenu extends StatefulWidget {
+class ReadingPopUpMenu extends StatelessWidget {
   final ChapterContentRequest request;
   final VoidCallback navigateUp;
   final VoidCallback navigateDown;
 
   ReadingPopUpMenu({this.request, this.navigateUp, this.navigateDown});
 
-  @override
-  State<StatefulWidget> createState() => _ReadingPopUpMenuState();
-}
-
-class _ReadingPopUpMenuState extends State<ReadingPopUpMenu> {
-  ValueNotifier<double> currentFontSize;
+  void _dismissPopUp(BuildContext context) => Navigator.of(context).pop();
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    _initFontSize();
+  Widget build(BuildContext context) {
+    return PopUpContainer(
+      child: GridView.count(
+        physics: const NeverScrollableScrollPhysics(),
+        crossAxisCount: 2,
+        children: <Widget>[
+          PopUpButton(
+            text: "章节目录",
+            onTap: () => _onBackToChapterList(context),
+          ),
+          PopUpButton(
+            text: "夜晚模式",
+            onTap: () => _onToggleNightMode(context),
+          ),
+          PopUpPicker<double>(
+            options: const <String>[
+              "標準",
+              "1.2x",
+              "1.4x",
+              "1.6x",
+              "1.8x",
+              "2.0x",
+            ],
+            values: const <double>[
+              1.0,
+              1.2,
+              1.4,
+              1.6,
+              1.8,
+              2.0,
+            ],
+            value: context.watch<AppTheme>().readingThemeData.fontScaleFactor,
+            defaultIndex: 0,
+            onValueChanged: (newScaleFactor) => _onTextScaleChanged(context, newScaleFactor),
+          ),
+          PopUpButton(
+            text: "浏览器中打开",
+            enabled: request.hasData,
+            onTap: () => _onOpenInExternalBrowser(context),
+          ),
+          PopUpButton(
+            text: "前一章节",
+            enabled: request.currentData?.hasPrevious ?? false,
+            onTap: () => _gotoPreviousChapter(context),
+          ),
+          PopUpButton(
+            text: "后一章节",
+            enabled: request.currentData?.hasNext ?? false,
+            onTap: () => _gotoNextChapter(context),
+          ),
+        ],
+      ),
+    );
   }
 
-  void _initFontSize() {
-    final theme = ReadingThemeProvider.of(context);
-    currentFontSize = ValueNotifier<double>(theme.fontSize);
-
-    currentFontSize.addListener(() async {
-      await ThemeRepository.saveFontSize(currentFontSize.value);
-
-      setState(() {
-        ReadingThemeProvider.reloadTheme(context);
-      });
-
-      _dismissPopUp();
-    });
+  void _onBackToChapterList(BuildContext context) {
+    Navigator.popUntil(context, ModalRoute.withName(BookListScreen.routeName));
   }
 
-  void _dismissPopUp() => Navigator.of(context).pop();
-
-  @override
-  Widget build(BuildContext context) => PopUpContainer(
-          child: GridView.count(physics: const NeverScrollableScrollPhysics(), crossAxisCount: 2, children: <Widget>[
-        PopUpButton(
-          text: "章节目录",
-          onTap: _onBackToChapterList,
-        ),
-        PopUpButton(
-          text: "夜晚模式",
-          onTap: _onToggleNightMode,
-        ),
-        PopUpPicker<double>.fromValue(
-          options: const <String>[
-            "字号 小",
-            "字号 中",
-            "字号 大",
-            "字号 加大",
-            "字号 超大",
-          ],
-          values: const <double>[
-            8.0,
-            14.0,
-            24.0,
-            32.0,
-            48.0,
-          ],
-          selectedValue: currentFontSize,
-          defaultIndex: 1,
-        ),
-        PopUpButton(
-          text: "浏览器中打开",
-          enabled: widget.request.hasData,
-          onTap: _onOpenInExternalBrowser,
-        ),
-        PopUpButton(
-          text: "前一章节",
-          enabled: widget.request.currentData?.hasPrevious ?? false,
-          onTap: _gotoPreviousChapter,
-        ),
-        PopUpButton(
-          text: "后一章节",
-          enabled: widget.request.currentData?.hasNext ?? false,
-          onTap: _gotoNextChapter,
-        ),
-      ]));
-
-  void _onBackToChapterList() {
-    _dismissPopUp();
-    Navigator.of(context).pop();
+  void _onToggleNightMode(BuildContext context) {
+    _dismissPopUp(context);
+    context.read<ThemeManager>().invertBrightness();
   }
 
-  void _onToggleNightMode() {
-    _dismissPopUp();
-    ReadingThemeProvider.toggleNightMode(context);
+  _onTextScaleChanged(BuildContext context, double newScaleFactor) {
+    _dismissPopUp(context);
+
+    context.read<ThemeManager>().updateTextScale(newScaleFactor);
   }
 
-  void _onOpenInExternalBrowser() async {
-    _dismissPopUp();
+  void _onOpenInExternalBrowser(BuildContext context) async {
+    _dismissPopUp(context);
 
-    final chapterContent = widget.request.currentData;
+    final chapterContent = request.currentData;
 
     if (chapterContent == null) {
       return;
@@ -117,15 +105,15 @@ class _ReadingPopUpMenuState extends State<ReadingPopUpMenu> {
     }
   }
 
-  void _gotoPreviousChapter() {
-    _dismissPopUp();
+  void _gotoPreviousChapter(BuildContext context) {
+    _dismissPopUp(context);
 
-    widget.navigateUp();
+    navigateUp();
   }
 
-  void _gotoNextChapter() {
-    _dismissPopUp();
+  void _gotoNextChapter(BuildContext context) {
+    _dismissPopUp(context);
 
-    widget.navigateDown();
+    navigateDown();
   }
 }

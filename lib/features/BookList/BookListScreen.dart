@@ -15,8 +15,10 @@ import 'package:timnew_reader/repositories/PersistentStorage.dart';
 import 'BookList.dart';
 
 class BookListScreen extends StatelessWidget {
+  static const String routeName = "BookList";
+
   static MaterialPageRoute buildRoute(BookIndex bookIndex) => MaterialPageRoute(
-        settings: RouteSettings(name: "BookList", arguments: bookIndex),
+        settings: RouteSettings(name: routeName, arguments: bookIndex),
         builder: (_) => BookListScreen(),
       );
 

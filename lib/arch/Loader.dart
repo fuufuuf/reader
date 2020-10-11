@@ -9,25 +9,49 @@ typedef FutureOr<T> LoadAction<T>();
 abstract class AspectLoader<T> {
   Future<T> initialize();
 
-  Provider<T> buildProvider(T data, Widget child) => Provider.value(
+  InheritedProvider<T> buildProvider({@required T data, TransitionBuilder builder, Widget child}) => Provider.value(
         value: data,
+        builder: builder,
         child: child,
       );
+
+  factory AspectLoader.wrap(InheritedProvider<T> provider) => _ProviderAspectLoaderWrapper(provider);
+}
+
+class _ProviderAspectLoaderWrapper<T> implements AspectLoader<T> {
+  final InheritedProvider<T> provider;
+
+  _ProviderAspectLoaderWrapper(this.provider);
+
+  @override
+  InheritedProvider<T> buildProvider({T data, TransitionBuilder builder, Widget child}) {
+    return provider;
+  }
+
+  @override
+  Future<T> initialize() => Future.value(null);
 }
 
 abstract class Loader<T> extends StatefulWidget with AspectLoader<T> {
-  final Widget child;
-
-  factory Loader.from(LoadAction<T> action, {Key key, Widget child}) => _SimpleLoader(
+  factory Loader.from(LoadAction<T> action, {Key key, TransitionBuilder builder, Widget child}) => _SimpleLoader(
         key: key,
-        child: child,
         loadAction: action,
+        builder: builder,
+        child: child,
       );
 
-  static MultiLoader group(Iterable<AspectLoader> aspects, {Key key, Widget child}) =>
-      MultiLoader(key: key, aspects: aspects.toList(growable: false), child: child);
+  static MultiLoader multi(List<AspectLoader> aspects, {Key key, TransitionBuilder builder, Widget child}) =>
+      MultiLoader(
+        key: key,
+        aspects: aspects,
+        builder: builder,
+        child: child,
+      );
 
-  Loader({Key key, this.child}) : super(key: key);
+  final Widget child;
+  final TransitionBuilder builder;
+
+  Loader({Key key, this.builder, this.child}) : super(key: key);
 
   Widget buildError(BuildContext context, Object error) => DefaultRenders.buildError(context, error);
 
@@ -35,17 +59,6 @@ abstract class Loader<T> extends StatefulWidget with AspectLoader<T> {
 
   @override
   _LoaderState<T> createState() => _LoaderState<T>();
-}
-
-class _SimpleLoader<T> extends Loader<T> {
-  final LoadAction<T> loadAction;
-
-  _SimpleLoader({Key key, @required this.loadAction, Widget child})
-      : assert(loadAction != null),
-        super(key: key, child: child);
-
-  @override
-  Future<T> initialize() async => await loadAction();
 }
 
 class _LoaderState<T> extends State<Loader<T>> with RenderAsyncSnapshot<T> {
@@ -65,14 +78,30 @@ class _LoaderState<T> extends State<Loader<T>> with RenderAsyncSnapshot<T> {
   Widget buildWaiting(BuildContext context) => widget.buildSplash(context);
 
   @override
-  Widget buildData(BuildContext context, T data) => widget.buildProvider(data, widget.child);
+  Widget buildData(BuildContext context, T data) => widget.buildProvider(
+        data: data,
+        builder: widget.builder,
+        child: widget.child,
+      );
+}
+
+class _SimpleLoader<T> extends Loader<T> {
+  final LoadAction<T> loadAction;
+
+  _SimpleLoader({Key key, @required this.loadAction, TransitionBuilder builder, Widget child})
+      : assert(loadAction != null),
+        super(key: key, builder: builder, child: child);
+
+  @override
+  Future<T> initialize() async => await loadAction();
 }
 
 class MultiLoader extends StatefulWidget {
-  final Widget child;
   final List<AspectLoader> aspects;
+  final Widget child;
+  final TransitionBuilder builder;
 
-  MultiLoader({Key key, this.aspects, this.child}) : super(key: key);
+  MultiLoader({Key key, this.aspects, this.child, this.builder}) : super(key: key);
 
   Widget buildError(BuildContext context, Object error) => DefaultRenders.buildError(context, error);
 
@@ -82,8 +111,8 @@ class MultiLoader extends StatefulWidget {
   _MultiLoaderState createState() => _MultiLoaderState();
 }
 
-class _MultiLoaderState extends State<MultiLoader> with RenderAsyncSnapshot<List<Provider>> {
-  Future<List<Provider>> _future;
+class _MultiLoaderState extends State<MultiLoader> with RenderAsyncSnapshot<List<InheritedProvider>> {
+  Future<List<InheritedProvider>> _future;
 
   @override
   void initState() {
@@ -94,7 +123,7 @@ class _MultiLoaderState extends State<MultiLoader> with RenderAsyncSnapshot<List
 
   Future<Provider> _buildProvider(AspectLoader aspect) async {
     final value = await aspect.initialize();
-    return aspect.buildProvider(value, null);
+    return aspect.buildProvider(data: value);
   }
 
   @override
@@ -105,6 +134,9 @@ class _MultiLoaderState extends State<MultiLoader> with RenderAsyncSnapshot<List
   Widget buildWaiting(BuildContext context) => widget.buildSplash(context);
 
   @override
-  Widget buildData(BuildContext context, List<Provider> providers) =>
-      MultiProvider(providers: providers, child: widget.child);
+  Widget buildData(BuildContext context, List<InheritedProvider> providers) => MultiProvider(
+        providers: providers,
+        child: widget.child,
+        builder: widget.builder,
+      );
 }

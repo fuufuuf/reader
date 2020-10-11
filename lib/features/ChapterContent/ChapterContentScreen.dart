@@ -16,8 +16,10 @@ class ChapterContentScreen extends StatefulWidget {
 
   ChapterContentScreen(this.request) : assert(request != null);
 
+  static const String routeName = "ReadingScreen";
+
   static MaterialPageRoute buildRoute(ChapterContentRequest request) => MaterialPageRoute(
-        settings: RouteSettings(name: "ReadingScreen", arguments: request),
+        settings: RouteSettings(name: routeName, arguments: request),
         builder: (_) => ChapterContentScreen(request),
       );
 

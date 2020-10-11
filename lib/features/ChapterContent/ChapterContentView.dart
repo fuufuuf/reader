@@ -8,12 +8,11 @@ class ReadingContent extends StatelessWidget {
   const ReadingContent({Key key, this.chapter}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
+  Widget build(BuildContext context) => ListView.builder(
         physics: const BouncingScrollPhysics(),
         itemBuilder: _renderParagraph,
-        itemCount: chapter.paragraphs.length + 1);
-  }
+        itemCount: chapter.paragraphs.length + 1,
+      );
 
   Widget _renderParagraph(BuildContext context, int index) {
     if (index == 0) {

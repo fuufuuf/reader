@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:timnew_reader/models/ReadingTheme.dart';
+import 'package:timnew_reader/features/Theme/ReadingThemeData.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeRepository {
@@ -9,7 +9,7 @@ class ThemeRepository {
 
   static const _textColorKey = 'reading.textColor';
   static const _backgroundColorKey = 'reading.backgroundColor';
-  static const _fontSizeKey = 'theme._.reading.fontSize';
+  static const _fontScaleFactorKey = 'theme._.reading.scaleFactor';
   static const _popUpTextColorKey = 'popUp.textColor';
   static const _popUpBackgroundColorKey = 'popUp.backgroundColor';
 
@@ -26,7 +26,7 @@ class ThemeRepository {
     if (_preferences.get(_themeKey(dayTheme, _textColorKey)) == null) {
       await saveTheme(
           dayTheme,
-          ReadingTheme(
+          ReadingThemeData(
               textColor: Colors.black,
               backgroundColor: const Color.fromARGB(255, 210, 180, 140),
               popUpBackgroundColor: Color.fromARGB(80, 0, 0, 0),
@@ -34,7 +34,7 @@ class ThemeRepository {
 
       await saveTheme(
           nightTheme,
-          ReadingTheme(
+          ReadingThemeData(
             textColor: Colors.white24,
             backgroundColor: Colors.black,
             popUpBackgroundColor: Color.fromARGB(80, 0, 0, 0),
@@ -43,26 +43,26 @@ class ThemeRepository {
     }
   }
 
-  static ReadingTheme fetchTheme(String themeId) {
-    return ReadingTheme(
+  static ReadingThemeData fetchTheme(String themeId) {
+    return ReadingThemeData(
       textColor: _loadColor(themeId, _textColorKey),
       backgroundColor: _loadColor(themeId, _backgroundColorKey),
-      fontSize: _preferences.getDouble(_fontSizeKey),
+      fontScaleFactor: _preferences.getDouble(_fontScaleFactorKey),
       popUpTextColor: _loadColor(themeId, _popUpTextColorKey),
       popUpBackgroundColor: _loadColor(themeId, _popUpBackgroundColorKey),
     );
   }
 
-  static Future<void> saveTheme(String themeId, ReadingTheme theme) async {
+  static Future<void> saveTheme(String themeId, ReadingThemeData theme) async {
     await _saveColor(themeId, _textColorKey, theme.textColor);
     await _saveColor(themeId, _backgroundColorKey, theme.backgroundColor);
-    await saveFontSize(theme.fontSize);
+    await saveFontScaleFactor(theme.fontScaleFactor);
     await _saveColor(themeId, _popUpTextColorKey, theme.popUpTextColor);
     await _saveColor(themeId, _popUpBackgroundColorKey, theme.popUpBackgroundColor);
   }
 
-  static Future<void> saveFontSize(double fontSize) async {
-    await _preferences.setDouble(_fontSizeKey, fontSize);
+  static Future<void> saveFontScaleFactor(double scaleFactor) async {
+    await _preferences.setDouble(_fontScaleFactorKey, scaleFactor);
   }
 
   static String _themeKey(String themeId, String field) => "theme.$themeId.$field";
