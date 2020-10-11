@@ -7,8 +7,8 @@ import 'package:timnew_reader/arch/RenderMixin.dart';
 import 'package:timnew_reader/app/AddNewBooks/AddNewBookDialog.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
 
-import 'package:timnew_reader/presentations/components/ScreenScaffold.dart';
-import 'package:timnew_reader/presentations/components/SwipeRemovable.dart';
+import 'package:timnew_reader/widgets/ScreenScaffold.dart';
+import 'package:timnew_reader/widgets/SwipeRemovable.dart';
 
 import 'package:timnew_reader/repositories/PersistentStorage.dart';
 

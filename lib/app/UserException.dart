@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:timnew_reader/presentations/components/Message.dart';
+import 'package:timnew_reader/widgets/Message.dart';
 
 class UserException implements Exception {
   final String message;

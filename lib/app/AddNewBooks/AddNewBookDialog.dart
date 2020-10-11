@@ -7,9 +7,9 @@ import 'package:timnew_reader/app/BookList/BookList.dart';
 import 'package:timnew_reader/app/UserException.dart';
 import 'package:timnew_reader/arch/RenderMixin.dart';
 import 'package:timnew_reader/models/NewBook.dart';
-import 'package:timnew_reader/presentations/components/SwipeRemovable.dart';
-import 'package:timnew_reader/presentations/components/TextFormFieldWithClearButton.dart';
-import 'package:timnew_reader/presentations/components/ScreenScaffold.dart';
+import 'package:timnew_reader/widgets/SwipeRemovable.dart';
+import 'package:timnew_reader/widgets/TextFormFieldWithClearButton.dart';
+import 'package:timnew_reader/widgets/ScreenScaffold.dart';
 
 class AddNewBookDialog extends StatefulWidget {
   final BookList bookList;

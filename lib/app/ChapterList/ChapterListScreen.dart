@@ -9,7 +9,7 @@ import 'package:timnew_reader/app/Routing/AppRouter.dart';
 import 'package:timnew_reader/arch/RenderMixin.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/models/ChapterRef.dart';
-import 'package:timnew_reader/presentations/components/ScreenScaffold.dart';
+import 'package:timnew_reader/widgets/ScreenScaffold.dart';
 
 class ChapterListScreen extends StatefulWidget {
   final ChapterListRequest request;

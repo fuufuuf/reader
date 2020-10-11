@@ -4,7 +4,7 @@ import 'package:timnew_reader/app/BookInfo/BookInfoRequest.dart';
 import 'package:timnew_reader/arch/RenderMixin.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/models/BookInfo.dart';
-import 'package:timnew_reader/presentations/components/ScreenScaffold.dart';
+import 'package:timnew_reader/widgets/ScreenScaffold.dart';
 
 class BookInfoScreen extends StatelessWidget with RenderAsyncSnapshot<BookInfo> {
   final BookInfoRequest request;
