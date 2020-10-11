@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:timnew_reader/presentations/wrappers/ReadingThemeProvider.dart';
 
-import 'BatteryInfo.dart';
-import 'Clock.dart';
+import '../../widgets/BatteryInfo.dart';
+import '../../widgets/Clock.dart';
 
 class SimpleStatusBar extends StatefulWidget {
   @override
