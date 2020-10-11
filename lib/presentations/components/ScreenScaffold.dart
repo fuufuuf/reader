@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-typedef void GestureCallback(BuildContext context);
-
 class ScreenScaffold extends StatelessWidget {
   final Widget floatingActionButton;
   final String title;
@@ -17,24 +15,20 @@ class ScreenScaffold extends StatelessWidget {
     this.appBarActions,
     this.body,
     this.floatingActionButton,
-  });
+  })  : assert(title != null || titleWidget != null),
+        assert(body != null);
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: _renderAppBar(context),
+        appBar: AppBar(
+          title: titleWidget ?? Text(title),
+          actions: appBarActions,
+          bottom: appBarBottom,
+        ),
         floatingActionButton: floatingActionButton,
-        body: _renderBody(context),
+        body: Padding(
+          padding: const EdgeInsets.all(8),
+          child: body,
+        ),
       );
-
-  Widget _renderAppBar(BuildContext context) => AppBar(
-        title: _renderTitle(context),
-        actions: appBarActions,
-        bottom: appBarBottom,
-      );
-
-  Widget _renderTitle(BuildContext context) {
-    return titleWidget ?? Text(title);
-  }
-
-  Widget _renderBody(BuildContext context) => Padding(padding: const EdgeInsets.all(8), child: body);
 }
