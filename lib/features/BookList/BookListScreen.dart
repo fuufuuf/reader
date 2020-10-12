@@ -1,60 +1,91 @@
 import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:timnew_reader/features/AddNewBooks/AddNewBookDialog.dart';
+
 import 'package:timnew_reader/features/Routing/AppRouter.dart';
 
 import 'package:timnew_reader/arch/RenderMixin.dart';
-import 'package:timnew_reader/features/AddNewBooks/AddNewBookDialog.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
+import 'package:timnew_reader/widgets/Message.dart';
 
 import 'package:timnew_reader/widgets/ScreenScaffold.dart';
 import 'package:timnew_reader/widgets/SwipeRemovable.dart';
 
 import 'package:timnew_reader/repositories/PersistentStorage.dart';
 
+import 'BookListBottomSheet.dart';
 import 'BookListRequest.dart';
 
 class BookListScreen extends StatelessWidget {
+  final BookListRequest request;
+
+  BookListScreen(this.request);
+
   static const String routeName = "BookList";
+
+  static Widget initialRoute() => Builder(builder: fromContext);
+
+  static Widget fromContext(BuildContext context) {
+    final storage = context.watch<PersistentStorage>();
+    return BookListScreen(BookListRequest(storage));
+  }
 
   static MaterialPageRoute buildRoute(BookIndex bookIndex) => MaterialPageRoute(
         settings: RouteSettings(name: routeName, arguments: bookIndex),
-        builder: (_) => BookListScreen(),
+        builder: BookListScreen.fromContext,
       );
 
   @override
-  Widget build(BuildContext context) => ProxyProvider<PersistentStorage, BookListRequest>(
-        update: (_, storage, __) => BookListRequest(storage),
-        child: Builder(builder: _buildScreen),
+  Widget build(BuildContext context) => ScreenScaffold(
+        title: '米良追书',
+        appBarActions: [Builder(builder: _buildMenuButton)],
+        body: _BookIndexList(request),
       );
 
-  Widget _buildScreen(BuildContext context) {
-    final bookList = context.watch<BookListRequest>();
+  Widget _buildMenuButton(BuildContext context) => IconButton(
+        icon: Icon(Icons.more_horiz),
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            builder: (_) => BookListBottomSheet(
+              request: request,
+              onAddNewBook: () => _addNewBook(context),
+              onExportAllBooks: () => _onExportAllBooks(context),
+            ),
+            routeSettings: RouteSettings(name: routeName),
+          );
+        },
+      );
 
-    return ScreenScaffold(
-      title: '米良追书',
-      body: _BookIndexList(bookList),
-      floatingActionButton: _renderFab(context, bookList),
-    );
+  Future _addNewBook(BuildContext context) async {
+    final newBooks = await AddNewBookDialog.show(context, request);
+
+    request.addNewBooks(newBooks);
   }
 
-  Widget _renderFab(BuildContext context, BookListRequest bookList) => FloatingActionButton(
-      child: Icon(Icons.add),
-      onPressed: () async {
-        final newBooks = await AddNewBookDialog.show(context, bookList);
+  void _onExportAllBooks(BuildContext context) async {
+    final bookUrls = request.exportAllBookUrls();
 
-        bookList.addNewBooks(newBooks);
-      });
+    await Clipboard.setData(ClipboardData(text: bookUrls));
+
+    Scaffold.of(context).showSnackBar(
+      SnackBar(
+        content: Message("數目 Url 已經複製到剪貼板", type: MessageType.Success),
+      ),
+    );
+  }
 }
 
 class _BookIndexList extends StatelessWidget
     with RenderAsyncSnapshot<BuiltList<BookIndex>>, WithEmptyContent<BuiltList<BookIndex>> {
-  final BookListRequest bookList;
+  final BookListRequest request;
 
-  _BookIndexList(this.bookList);
+  _BookIndexList(this.request);
 
   @override
-  Widget build(BuildContext context) => buildStream(bookList.valueStream);
+  Widget build(BuildContext context) => buildStream(request.valueStream);
 
   @override
   Widget buildContent(BuildContext context, BuiltList<BookIndex> content) {
@@ -71,10 +102,10 @@ class _BookIndexList extends StatelessWidget
   bool checkEmpty(BuiltList<BookIndex> data) => data.isEmpty;
 
   List<Widget> _buildChildren(BuiltList<BookIndex> content) =>
-      Iterable<int>.generate(content.length).map((index) => _BookIndexEntry(bookList, index)).toList();
+      Iterable<int>.generate(content.length).map((index) => _BookIndexEntry(request, index)).toList();
 
   void _onReorder(int oldIndex, int newIndex) async {
-    await bookList.reorder(oldIndex, newIndex);
+    await request.reorder(oldIndex, newIndex);
   }
 }
 

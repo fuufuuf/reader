@@ -14,7 +14,7 @@ class ReaderApp extends StatelessWidget {
         title: 'Reader',
         debugShowCheckedModeBanner: false,
         builder: buildWrapper,
-        home: BookListScreen(),
+        home: BookListScreen.initialRoute(),
       );
 
   Widget buildWrapper(BuildContext context, Widget child) {

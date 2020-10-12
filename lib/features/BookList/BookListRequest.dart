@@ -53,4 +53,6 @@ class BookListRequest extends Request<BuiltList<BookIndex>> {
       b.insert(amendedIndex, b.removeAt(oldIndex));
     });
   }
+
+  String exportAllBookUrls() => ensuredCurrentData.map((b) => b.chapterListUrl ?? b.chapterListUrl).join("\n");
 }
