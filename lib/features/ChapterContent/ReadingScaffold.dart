@@ -16,19 +16,25 @@ class ReadingScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appTheme = context.watch<AppTheme>();
+
     return Scaffold(
         key: Key('ReaderScaffold'),
-        backgroundColor: context.watch<AppTheme>().readingThemeData.backgroundColor,
-        body: GestureDetector(
-          onDoubleTap: () => onDoubleTap(context),
-          child: Padding(
+        body: AnimatedContainer(
+          color: appTheme.readingThemeData.backgroundColor,
+          duration: appTheme.transitionDuration,
+          child: GestureDetector(
+            onDoubleTap: () => onDoubleTap(context),
+            child: Padding(
               padding: const EdgeInsets.all(8),
               child: Column(
                 children: <Widget>[
                   SimpleStatusBar(),
                   Expanded(child: ReadingTheme(child: content)),
                 ],
-              )),
+              ),
+            ),
+          ),
         ));
   }
 }

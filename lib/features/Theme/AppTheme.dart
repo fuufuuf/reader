@@ -16,5 +16,7 @@ abstract class AppTheme implements Built<AppTheme, AppThemeBuilder> {
 
   Brightness get brightness;
 
+  Duration get transitionDuration => Duration(milliseconds: 500);
+
   AppTheme putAppThemeData(Function(ReadingThemeDataBuilder) builder) => rebuild((b) => builder(b.readingThemeData));
 }

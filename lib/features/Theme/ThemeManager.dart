@@ -8,8 +8,7 @@ class ThemeManager extends ValueNotifier<AppTheme> {
 
   void invertBrightness() {
     final newBrightness = value.brightness == Brightness.light ? Brightness.dark : Brightness.light;
-    final newThemeName = newBrightness == Brightness.light ? ThemeRepository.dayTheme : ThemeRepository.nightTheme;
-    final newReadingThemeData = ThemeRepository.fetchTheme(newThemeName);
+    final newReadingThemeData = ThemeRepository.getPalette(newBrightness);
 
     value = AppTheme(brightness: newBrightness, readingThemeData: newReadingThemeData);
   }

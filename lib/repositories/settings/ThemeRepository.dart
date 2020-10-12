@@ -23,24 +23,44 @@ class ThemeRepository {
   }
 
   static Future<void> _initTheme() async {
-    if (_preferences.get(_themeKey(dayTheme, _textColorKey)) == null) {
-      await saveTheme(
-          dayTheme,
-          ReadingThemeData(
-              textColor: Colors.black,
-              backgroundColor: const Color.fromARGB(255, 210, 180, 140),
-              popUpBackgroundColor: Color.fromARGB(80, 0, 0, 0),
-              popUpTextColor: Colors.white70));
-
-      await saveTheme(
-          nightTheme,
-          ReadingThemeData(
-            textColor: Colors.white24,
-            backgroundColor: Colors.black,
+    // if (_preferences.get(_themeKey(dayTheme, _textColorKey)) == null) {
+    await saveTheme(
+        dayTheme,
+        ReadingThemeData(
+            textColor: Colors.black,
+            backgroundColor: const Color.fromARGB(255, 210, 180, 140),
+            fontScaleFactor: 1.0,
             popUpBackgroundColor: Color.fromARGB(80, 0, 0, 0),
-            popUpTextColor: Colors.white24,
-          ));
-    }
+            popUpTextColor: Colors.white70));
+
+    await saveTheme(
+        nightTheme,
+        ReadingThemeData(
+          textColor: Colors.white24,
+          backgroundColor: Colors.black,
+          fontScaleFactor: 1.0,
+          popUpBackgroundColor: Color.fromARGB(80, 0, 0, 0),
+          popUpTextColor: Colors.white24,
+        ));
+    // }
+  }
+
+  static ReadingThemeData getPalette(Brightness brightness) {
+    if (brightness == Brightness.light)
+      return ReadingThemeData(
+          textColor: Colors.black87,
+          backgroundColor: const Color.fromARGB(255, 210, 180, 140),
+          fontScaleFactor: 1.0,
+          popUpBackgroundColor: Color.fromARGB(80, 0, 0, 0),
+          popUpTextColor: Colors.white70);
+    else
+      return ReadingThemeData(
+        textColor: Colors.white24,
+        backgroundColor: Colors.black,
+        fontScaleFactor: 1.0,
+        popUpBackgroundColor: Color.fromARGB(80, 0, 0, 0),
+        popUpTextColor: Colors.white24,
+      );
   }
 
   static ReadingThemeData fetchTheme(String themeId) {

@@ -36,7 +36,8 @@ class ReaderApp extends StatelessWidget {
   Widget buildTheme(BuildContext context, Widget child) {
     final appTheme = context.watch<AppTheme>();
 
-    return Theme(
+    return AnimatedTheme(
+      duration: appTheme.transitionDuration,
       data: ThemeData(brightness: appTheme.brightness),
       child: child,
     );

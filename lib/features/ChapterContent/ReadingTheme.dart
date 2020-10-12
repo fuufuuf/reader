@@ -11,16 +11,19 @@ class ReadingTheme extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final readingThemeData = context.watch<AppTheme>().readingThemeData;
+    final appTheme = context.watch<AppTheme>();
+    final readingThemeData = appTheme.readingThemeData;
 
     final newTheme = theme.copyWith(
       textTheme: theme.textTheme.apply(
         displayColor: readingThemeData.textColor,
+        bodyColor: readingThemeData.textColor,
         fontSizeFactor: readingThemeData.fontScaleFactor,
       ),
     );
 
-    return Theme(
+    return AnimatedTheme(
+      duration: appTheme.transitionDuration,
       data: newTheme,
       isMaterialAppTheme: true,
       child: child,

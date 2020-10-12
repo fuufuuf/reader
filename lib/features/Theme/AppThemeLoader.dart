@@ -14,7 +14,7 @@ class AppThemeLoader extends Loader<ThemeManager> {
   Future<ThemeManager> initialize() async {
     await ThemeRepository.init();
 
-    final readingThemeData = ThemeRepository.fetchTheme(ThemeRepository.dayTheme);
+    final readingThemeData = ThemeRepository.getPalette(Brightness.light);
 
     final appTheme = AppTheme(brightness: Brightness.light, readingThemeData: readingThemeData);
     return ThemeManager(appTheme);
