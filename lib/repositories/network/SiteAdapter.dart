@@ -34,4 +34,17 @@ abstract class SiteAdapter {
         throw UserException("無法解析的 Url: $url");
     }
   }
+
+  @protected
+  void parseFailed(String message) {
+    throw UserException(message);
+  }
+
+  @protected
+  bool safeCompare(String goal, String expected) => goal?.toLowerCase() == expected;
+
+  @protected
+  void parseAssert(bool assertion, String message) {
+    if (!assertion) parseFailed(message);
+  }
 }

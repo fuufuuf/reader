@@ -119,11 +119,11 @@ class _ChapterEntry extends StatelessWidget {
 
 extension ScrollToChapterExtension on ItemScrollController {
   void _scrollControl(BuildContext context, ChapterListRequest request, Function(int) callback) {
-    final currentChapterIndex = request.findCurrentChapterIndex();
-
-    if (currentChapterIndex == null || !isAttached) return;
-
     try {
+      final currentChapterIndex = request.findCurrentChapterIndex();
+
+      if (currentChapterIndex == null || !isAttached) return;
+
       callback(currentChapterIndex);
     } on UserException catch (ex) {
       ex.showAsSnackBar(context);

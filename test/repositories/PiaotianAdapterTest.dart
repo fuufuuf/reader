@@ -1,36 +1,17 @@
-import 'dart:io';
-
 import 'package:flutter_test/flutter_test.dart';
+
 import 'package:timnew_reader/models/BookInfo.dart';
 import 'package:timnew_reader/models/ChapterContent.dart';
 import 'package:timnew_reader/models/ChapterList.dart';
 import 'package:timnew_reader/models/NewBook.dart';
+
 import 'package:timnew_reader/repositories/network/PiaotianAdapter.dart';
-import 'package:timnew_reader/repositories/network/ReaderHttpClient.dart';
 
-class FakeClient extends ReaderHttpClient {
-  final Map<Uri, Uri> _fixtureMap = Map<Uri, Uri>();
-
-  @override
-  Future<String> fetchHtml(Uri url, {bool enforceGbk: false}) async {
-    var fileName = _fixtureMap[url];
-
-    if (fileName == null) {
-      throw "Http Error 404";
-    }
-
-    return File.fromUri(fileName).readAsString();
-  }
-
-  FakeClient registerFixture(Uri url, String fileName) {
-    _fixtureMap[url] = Platform.script.resolve('./test/fixtures/').resolve(fileName);
-    return this;
-  }
-}
+import 'FakeClient.dart';
 
 void main() {
-  final FakeClient client = FakeClient();
-  final PiaotianAdapter adapter = PiaotianAdapter(client);
+  final client = FakeClient();
+  final adapter = PiaotianAdapter(client);
 
   final bookUrl = Uri.parse('https://www.ptwxz.com/bookinfo/9/9054.html');
   final menuUrl = Uri.parse('https://www.ptwxz.com/html/9/9054/');
@@ -39,10 +20,10 @@ void main() {
 
   setUp(() {
     client
-        .registerFixture(bookUrl, "book.html")
-        .registerFixture(menuUrl, 'menu.html')
-        .registerFixture(chapterUrl, 'chapter.html')
-        .registerFixture(testUrl, 'test.html');
+        .registerFixture(bookUrl, "piaotian/book.html")
+        .registerFixture(menuUrl, 'piaotian/menu.html')
+        .registerFixture(chapterUrl, 'piaotian/chapter.html')
+        .registerFixture(testUrl, 'piaotian/test.html');
   });
 
   test('test setup', () async {

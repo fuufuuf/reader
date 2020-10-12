@@ -1,16 +1,23 @@
 import 'package:timnew_reader/features/App/UserException.dart';
+
 import 'package:timnew_reader/models/BookInfo.dart';
 import 'package:timnew_reader/models/ChapterContent.dart';
 import 'package:timnew_reader/models/ChapterList.dart';
 import 'package:timnew_reader/models/NewBook.dart';
-import 'package:timnew_reader/repositories/network/PiaotianAdapter.dart';
-import 'package:timnew_reader/repositories/network/ReaderHttpClient.dart';
-import 'package:timnew_reader/repositories/network/SiteAdapter.dart';
+
+import 'PiaotianAdapter.dart';
+import 'SiteAdapter.dart';
+
+import 'JingjiangAdapter.dart';
+import 'ReaderHttpClient.dart';
 
 class BookRepository {
   static ReaderHttpClient client = ReaderHttpClient();
 
-  static Map<String, SiteAdapter> adapters = {'www.ptwxz.com': PiaotianAdapter(client)};
+  static Map<String, SiteAdapter> adapters = {
+    'www.ptwxz.com': PiaotianAdapter(client),
+    "www.jjwxc.net": JingjiangAdapter(client)
+  };
 
   static Future<NewBook> createBook(Uri url) async => _findAdapter(url).createBook(url);
 
