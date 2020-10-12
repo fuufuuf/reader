@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:timnew_reader/features/BookList/BookList.dart';
+import 'package:timnew_reader/features/BookList/BookListRequest.dart';
 import 'package:timnew_reader/features/App/UserException.dart';
 import 'package:timnew_reader/arch/Request.dart';
 import 'package:timnew_reader/models/NewBook.dart';
@@ -8,7 +8,7 @@ import 'package:timnew_reader/models/NewBook.dart';
 import 'package:timnew_reader/repositories/network/BookRepository.dart';
 
 class NewBookRequest extends Request<NewBook> {
-  final BookList bookList;
+  final BookListRequest bookList;
   final String url;
 
   NewBookRequest(this.bookList, this.url);

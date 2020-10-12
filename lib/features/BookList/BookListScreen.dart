@@ -12,7 +12,7 @@ import 'package:timnew_reader/widgets/SwipeRemovable.dart';
 
 import 'package:timnew_reader/repositories/PersistentStorage.dart';
 
-import 'BookList.dart';
+import 'BookListRequest.dart';
 
 class BookListScreen extends StatelessWidget {
   static const String routeName = "BookList";
@@ -23,13 +23,13 @@ class BookListScreen extends StatelessWidget {
       );
 
   @override
-  Widget build(BuildContext context) => ProxyProvider<PersistentStorage, BookList>(
-        update: (_, storage, __) => BookList(storage),
+  Widget build(BuildContext context) => ProxyProvider<PersistentStorage, BookListRequest>(
+        update: (_, storage, __) => BookListRequest(storage),
         child: Builder(builder: _buildScreen),
       );
 
   Widget _buildScreen(BuildContext context) {
-    final bookList = context.watch<BookList>();
+    final bookList = context.watch<BookListRequest>();
 
     return ScreenScaffold(
       title: '米良追书',
@@ -38,7 +38,7 @@ class BookListScreen extends StatelessWidget {
     );
   }
 
-  Widget _renderFab(BuildContext context, BookList bookList) => FloatingActionButton(
+  Widget _renderFab(BuildContext context, BookListRequest bookList) => FloatingActionButton(
       child: Icon(Icons.add),
       onPressed: () async {
         final newBooks = await AddNewBookDialog.show(context, bookList);
@@ -48,18 +48,18 @@ class BookListScreen extends StatelessWidget {
 }
 
 class _BookIndexList extends StatelessWidget
-    with RenderValueListenable<BuiltList<BookIndex>>, WithEmptyContent<BuiltList<BookIndex>> {
-  final BookList bookList;
+    with RenderAsyncSnapshot<BuiltList<BookIndex>>, WithEmptyContent<BuiltList<BookIndex>> {
+  final BookListRequest bookList;
 
   _BookIndexList(this.bookList);
 
   @override
-  Widget build(BuildContext context) => buildValueStore(bookList);
+  Widget build(BuildContext context) => buildStream(bookList.valueStream);
 
   @override
   Widget buildContent(BuildContext context, BuiltList<BookIndex> content) {
     return ReorderableListView(
-      children: _buildChildren(content.length),
+      children: _buildChildren(content),
       onReorder: _onReorder,
     );
   }
@@ -70,8 +70,8 @@ class _BookIndexList extends StatelessWidget
   @override
   bool checkEmpty(BuiltList<BookIndex> data) => data.isEmpty;
 
-  List<Widget> _buildChildren(int length) =>
-      Iterable<int>.generate(length).map((index) => _BookIndexEntry(bookList, index)).toList();
+  List<Widget> _buildChildren(BuiltList<BookIndex> content) =>
+      Iterable<int>.generate(content.length).map((index) => _BookIndexEntry(bookList, index)).toList();
 
   void _onReorder(int oldIndex, int newIndex) async {
     await bookList.reorder(oldIndex, newIndex);
@@ -79,11 +79,12 @@ class _BookIndexList extends StatelessWidget
 }
 
 class _BookIndexEntry extends StatelessWidget {
-  final BookList bookList;
+  final BookListRequest bookList;
   final int index;
   final BookIndex bookIndex;
 
-  factory _BookIndexEntry(BookList bookList, int index) => _BookIndexEntry._(bookList, index, bookList.value[index]);
+  factory _BookIndexEntry(BookListRequest bookList, int index) =>
+      _BookIndexEntry._(bookList, index, bookList.ensuredCurrentData[index]);
 
   _BookIndexEntry._(this.bookList, this.index, this.bookIndex)
       : assert(bookList != null),

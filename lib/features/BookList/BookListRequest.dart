@@ -1,28 +1,29 @@
 import 'dart:async';
 
 import 'package:built_collection/built_collection.dart';
-import 'package:flutter/foundation.dart';
+import 'package:timnew_reader/arch/Request.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/models/NewBook.dart';
 import 'package:timnew_reader/repositories/PersistentStorage.dart';
 
-class BookList extends ValueNotifier<BuiltList<BookIndex>> {
+class BookListRequest extends Request<BuiltList<BookIndex>> {
   final PersistentStorage storage;
 
-  BookList(this.storage) : super(storage.loadBookIndexList());
+  BookListRequest(this.storage) : super(initialValue: storage.loadBookIndexList(), executeOnFirstListen: false);
 
-  BuiltList<BookIndex> reload() {
-    return value = storage.loadBookIndexList();
+  @override
+  FutureOr<BuiltList<BookIndex>> load() {
+    return storage.loadBookIndexList();
   }
 
   bool isDuplicated(String bookId) {
-    return value.any((e) => e.bookId == bookId);
+    return ensuredCurrentData.any((e) => e.bookId == bookId);
   }
 
   Future<BuiltList<BookIndex>> _updateBookList(Function(ListBuilder<BookIndex>) updates) async {
-    final newList = value.rebuild(updates);
+    final newList = ensuredCurrentData.rebuild(updates);
 
-    value = newList;
+    putValue(newList);
 
     await storage.saveBookList(newList);
 
@@ -34,6 +35,8 @@ class BookList extends ValueNotifier<BuiltList<BookIndex>> {
   }
 
   Future<BuiltList<BookIndex>> addNewBooks(Iterable<NewBook> newBooks) async {
+    if (newBooks == null) return ensuredCurrentData;
+
     final newBookIndexes = await Future.wait(newBooks.map((b) => _saveNewBook(b)));
 
     return _updateBookList((b) => b.addAll(newBookIndexes));

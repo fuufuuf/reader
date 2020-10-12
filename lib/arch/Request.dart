@@ -51,9 +51,16 @@ abstract class Request<T> {
     _subject.add(null);
   }
 
-  bool get hasData => _subject.hasValue;
+  bool get isWaiting => _subject.hasValue && currentData == null;
+
+  bool get hasData => _subject.hasValue && currentData != null;
 
   T get currentData => _subject.value;
+
+  T get ensuredCurrentData {
+    assert(hasData, "Access data when it is not yet available");
+    return currentData;
+  }
 
   bool get hasError => _subject.hasError;
 
