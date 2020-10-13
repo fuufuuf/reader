@@ -3,6 +3,7 @@ import 'dart:core';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
+import 'package:flutter/foundation.dart';
 import 'package:timnew_reader/models/BookInfo.dart';
 import 'package:timnew_reader/models/ChapterList.dart';
 import 'package:timnew_reader/repositories/network/BookRepository.dart';
@@ -21,11 +22,17 @@ abstract class BookIndex implements Built<BookIndex, BookIndexBuilder> {
 
   Uri get bookInfoUrl;
 
-  factory BookIndex({String bookId, String bookName, Uri bookInfoUrl, Uri chapterListUrl}) => _$BookIndex((b) => b
-    ..bookId = bookId
-    ..bookName = bookName
-    ..bookInfoUrl = bookInfoUrl
-    ..chapterListUrl = chapterListUrl);
+  factory BookIndex({
+    @required String bookId,
+    @required String bookName,
+    @required Uri bookInfoUrl,
+    @required Uri chapterListUrl,
+  }) =>
+      _$BookIndex((b) => b
+        ..bookId = bookId
+        ..bookName = bookName
+        ..bookInfoUrl = bookInfoUrl
+        ..chapterListUrl = chapterListUrl);
 
   static Serializer<BookIndex> get serializer => _$bookIndexSerializer;
 

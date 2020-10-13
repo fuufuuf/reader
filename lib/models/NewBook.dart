@@ -1,4 +1,5 @@
 import 'package:built_value/built_value.dart';
+import 'package:flutter/foundation.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
 
 part 'NewBook.g.dart';
@@ -6,7 +7,13 @@ part 'NewBook.g.dart';
 abstract class NewBook implements Built<NewBook, NewBookBuilder> {
   NewBook._();
 
-  factory NewBook({String bookId, String bookName, Uri bookInfoUrl, Uri chapterListUrl}) => _$NewBook((b) {
+  factory NewBook({
+    @required String bookId,
+    @required String bookName,
+    @required Uri bookInfoUrl,
+    @required Uri chapterListUrl,
+  }) =>
+      _$NewBook((b) {
         b.bookIndex
           ..bookId = bookId
           ..bookName = bookName
