@@ -100,3 +100,9 @@ class BookIndexRepository {
     }
   }
 }
+
+extension BookIndexStorageExtension on BookIndex {
+  bool get hasCurrentChapterUrl => BookIndexRepository.hasCurrentChapterUrl(bookId);
+
+  Uri get currentChapterUrl => BookIndexRepository.loadCurrentChapter(bookId);
+}

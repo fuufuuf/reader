@@ -5,6 +5,7 @@ import 'package:timnew_reader/arch/Request.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/models/NewBook.dart';
 import 'package:timnew_reader/repositories/PersistentStorage.dart';
+import 'package:timnew_reader/repositories/settings/BookIndexRepository.dart';
 
 class BookListRequest extends Request<BuiltList<BookIndex>> {
   final PersistentStorage storage;
@@ -54,5 +55,5 @@ class BookListRequest extends Request<BuiltList<BookIndex>> {
     });
   }
 
-  String exportAllBookUrls() => ensuredCurrentData.map((b) => b.chapterListUrl ?? b.chapterListUrl).join("\n");
+  String exportAllBookUrls() => ensuredCurrentData.map((b) => b.currentChapterUrl ?? b.chapterListUrl).join("\n");
 }

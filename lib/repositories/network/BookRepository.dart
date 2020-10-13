@@ -31,7 +31,7 @@ class BookRepository {
   }
 }
 
-extension BookIndexExtension on BookIndex {
+extension BookIndexNetworkExtension on BookIndex {
   SiteAdapter findAdapter() => BookRepository.adapters[adapter] ?? {throw UserException("應用版本異常，找不到網站適配器: $adapter")};
 
   Future<ChapterList> fetchChapterList() async => findAdapter().fetchChapterList(this);

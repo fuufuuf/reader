@@ -35,7 +35,7 @@ class NewBookRequestList extends ValueNotifier<BuiltList<NewBookRequest>> {
 
     if (hasRunningRequest) return null;
 
-    final allNewBooks = requests.where((r) => r.hasData).map((r) => r.currentData).toBuiltList();
+    final allNewBooks = requests.where((r) => r.hasData).map((r) => r.currentData);
 
     final bookIds = allNewBooks.map((b) => b.bookId).toSet();
 
@@ -43,6 +43,6 @@ class NewBookRequestList extends ValueNotifier<BuiltList<NewBookRequest>> {
       throw UserException("有重複的新書籍");
     }
 
-    return allNewBooks;
+    return allNewBooks.where((b) => !b.isDuplicated).toBuiltList();
   }
 }
