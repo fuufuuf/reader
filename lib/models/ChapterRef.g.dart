@@ -11,16 +11,21 @@ class _$ChapterRef extends ChapterRef {
   final Uri url;
   @override
   final String title;
+  @override
+  final bool isLocked;
 
   factory _$ChapterRef([void Function(ChapterRefBuilder) updates]) =>
       (new ChapterRefBuilder()..update(updates)).build();
 
-  _$ChapterRef._({this.url, this.title}) : super._() {
+  _$ChapterRef._({this.url, this.title, this.isLocked}) : super._() {
     if (url == null) {
       throw new BuiltValueNullFieldError('ChapterRef', 'url');
     }
     if (title == null) {
       throw new BuiltValueNullFieldError('ChapterRef', 'title');
+    }
+    if (isLocked == null) {
+      throw new BuiltValueNullFieldError('ChapterRef', 'isLocked');
     }
   }
 
@@ -34,19 +39,24 @@ class _$ChapterRef extends ChapterRef {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is ChapterRef && url == other.url && title == other.title;
+    return other is ChapterRef &&
+        url == other.url &&
+        title == other.title &&
+        isLocked == other.isLocked;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, url.hashCode), title.hashCode));
+    return $jf(
+        $jc($jc($jc(0, url.hashCode), title.hashCode), isLocked.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('ChapterRef')
           ..add('url', url)
-          ..add('title', title))
+          ..add('title', title)
+          ..add('isLocked', isLocked))
         .toString();
   }
 }
@@ -62,12 +72,17 @@ class ChapterRefBuilder implements Builder<ChapterRef, ChapterRefBuilder> {
   String get title => _$this._title;
   set title(String title) => _$this._title = title;
 
+  bool _isLocked;
+  bool get isLocked => _$this._isLocked;
+  set isLocked(bool isLocked) => _$this._isLocked = isLocked;
+
   ChapterRefBuilder();
 
   ChapterRefBuilder get _$this {
     if (_$v != null) {
       _url = _$v.url;
       _title = _$v.title;
+      _isLocked = _$v.isLocked;
       _$v = null;
     }
     return this;
@@ -88,7 +103,8 @@ class ChapterRefBuilder implements Builder<ChapterRef, ChapterRefBuilder> {
 
   @override
   _$ChapterRef build() {
-    final _$result = _$v ?? new _$ChapterRef._(url: url, title: title);
+    final _$result =
+        _$v ?? new _$ChapterRef._(url: url, title: title, isLocked: isLocked);
     replace(_$result);
     return _$result;
   }

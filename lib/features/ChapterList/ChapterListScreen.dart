@@ -108,11 +108,25 @@ class _ChapterEntry extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: Icon(Icons.bookmark_border),
-      title: Text(chapter.title),
+      title: _addLockIcon(child: Text(chapter.title)),
       onTap: () async {
         await AppRouter.of(context).gotoChapterContent(request.bookIndex, chapter);
         context.read<ItemScrollController>().scrollToCurrentChapter(context, request);
       },
+    );
+  }
+
+  Widget _addLockIcon({Widget child}) {
+    if (!chapter.isLocked) return child;
+
+    return Row(
+      children: <Widget>[
+        child,
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: Icon(Icons.lock),
+        ),
+      ],
     );
   }
 }
