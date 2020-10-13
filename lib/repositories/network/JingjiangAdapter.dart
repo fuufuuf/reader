@@ -109,42 +109,39 @@ class JingjiangAdapter extends SiteAdapter {
   Future<ChapterContent> fetchChapterContent(Uri url) async {
     final document = await client.fetchDom(url, enforceGbk: true);
 
-    return ChapterContent((result) {
-      result
-        ..url = url
-        ..chapterListUrl = url.resolve(document.querySelector('.noveltitle a').attributes['href']);
+    final contentTable = document.getElementById('oneboolt');
+    final rows = contentTable.querySelectorAll('tr');
 
-      final contentTable = document.getElementById('oneboolt');
-      final rows = contentTable.querySelectorAll('tr');
+    final pagingLinks = rows.last.querySelectorAll('a');
+    final pageLinksCount = pagingLinks.length;
 
-      final pagingLinks = rows.last.querySelectorAll('a');
-      final pageLinksCount = pagingLinks.length;
+    parseAssert(pageLinksCount == 1 || pageLinksCount == 2, "導航條解析錯誤：異常的導航鏈接數 $pageLinksCount");
 
-      parseAssert(pageLinksCount == 1 || pageLinksCount == 2, "導航條解析錯誤：異常的導航鏈接數 $pageLinksCount");
+    final previousChapterUrl = (pageLinksCount == 1) ? null : safeUrl(url, () => pagingLinks.first.attributes['href']);
 
-      if (pageLinksCount == 1) {
-        result..previousChapterUrl = null;
-      } else {
-        result..previousChapterUrl = safeUrl(url, () => pagingLinks.first.attributes['href']);
-      }
+    final nextUrl = url.resolve(pagingLinks.last.attributes['href']);
 
-      final nextUrl = url.resolve(pagingLinks.last.attributes['href']);
-      if (safeCompare(nextUrl.path, "/onebook.php"))
-        result..nextChapterUrl = nextUrl;
-      else
-        result..nextChapterUrl = null;
+    final nextChapterUrl = safeCompare(nextUrl.path, "/onebook.php") ? nextUrl : null;
 
-      final contentText = contentTable.querySelector('.noveltext');
+    final contentText = contentTable.querySelector('.noveltext');
 
-      result
-        ..title = safeText(() => contentText.querySelector('h2').text)
-        ..paragraphs.addAll(safeList(() => contentText.nodes
-            .where((node) => node.nodeType == Node.TEXT_NODE)
-            .map((node) => node.text.trim())
-            .where((text) => text.isNotEmpty)
-            .map((text) => '    ' + text)))
-        ..isLocked = false;
-    });
+    return ChapterContent(
+      url: url,
+      title: safeText(() => contentText.querySelector('h2').text),
+      chapterListUrl: safeUrl(url, () => document.querySelector('.noveltitle a').attributes['href']),
+      previousChapterUrl: previousChapterUrl,
+      nextChapterUrl: nextChapterUrl,
+      isLocked: false,
+      paragraphs: _buildParagraphs(contentText),
+    );
+  }
+
+  Iterable<String> _buildParagraphs(Element contentText) {
+    return safeList(() => contentText.nodes
+        .where((node) => node.nodeType == Node.TEXT_NODE)
+        .map((node) => node.text.trim())
+        .where((text) => text.isNotEmpty)
+        .map((text) => '    ' + text));
   }
 
   void _assertUrl(Uri url) {

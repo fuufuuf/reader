@@ -129,21 +129,25 @@ class QidianAdapter extends SiteAdapter {
 
     final chapterControls = document.querySelectorAll('chapter-control > a');
 
-    return ChapterContent((b) => b
-      ..url = url
-      ..title = safeText(() => document.querySelector('.j_chapterName').text)
-      ..chapterListUrl = safeUrl(url, () => chapterControls[1].attributes['href'])
-      ..previousChapterUrl = safeUrlWithPattern(
-          url, chapterContentUrlPattern, () => document.querySelectorAll('chapter-control > a')[0].attributes['href'])
-      ..nextChapterUrl = safeUrlWithPattern(
-          url, chapterContentUrlPattern, () => document.querySelectorAll('chapter-control > a')[2].attributes['href'])
-      ..paragraphs.addAll(safeList(() => document
-          .getElementById('content')
-          .nodes
-          .where((node) => node.nodeType == Node.TEXT_NODE)
-          .map((node) => node.text.trim())
-          .where((text) => text.isNotEmpty)
-          .map((text) => '    ' + text)))
-      ..isLocked = document.querySelector('.vip - limit - wrap') != null);
+    return ChapterContent(
+        url: url,
+        title: safeText(() => document.querySelector('.j_chapterName').text),
+        chapterListUrl: safeUrl(url, () => chapterControls[1].attributes['href']),
+        previousChapterUrl: safeUrlWithPattern(url, chapterContentUrlPattern,
+            () => document.querySelectorAll('chapter-control > a')[0].attributes['href']),
+        nextChapterUrl: safeUrlWithPattern(url, chapterContentUrlPattern,
+            () => document.querySelectorAll('chapter-control > a')[2].attributes['href']),
+        isLocked: document.querySelector('.vip - limit - wrap') != null,
+        paragraphs: _buildParagraphs(document));
+  }
+
+  Iterable<String> _buildParagraphs(Document document) {
+    return safeList(() => document
+        .getElementById('content')
+        .nodes
+        .where((node) => node.nodeType == Node.TEXT_NODE)
+        .map((node) => node.text.trim())
+        .where((text) => text.isNotEmpty)
+        .map((text) => '    ' + text));
   }
 }

@@ -133,21 +133,26 @@ class PiaotianAdapter extends SiteAdapter {
         patchHtml: (html) =>
             html.replaceFirst('<script language="javascript">GetFont();</script>', '<div id="content">'));
 
-    return ChapterContent((b) => b
-      ..url = url
-      ..title = safeText(() => document.querySelector('h1').text)
-      ..chapterListUrl = safeUrl(url, () => document.querySelectorAll('.toplink > a')[1].attributes['href'])
-      ..previousChapterUrl = safeUrlWithPattern(
-          url, chapterContentUrlPattern, () => document.querySelectorAll('.toplink > a')[0].attributes['href'])
-      ..nextChapterUrl = safeUrlWithPattern(
-          url, chapterContentUrlPattern, () => document.querySelectorAll('.toplink > a')[2].attributes['href'])
-      ..paragraphs.addAll(safeList(() => document
-          .getElementById('content')
-          .nodes
-          .where((node) => node.nodeType == Node.TEXT_NODE)
-          .map((node) => node.text.trim())
-          .where((text) => text.isNotEmpty)
-          .map((text) => '    ' + text)))
-      ..isLocked = false);
+    return ChapterContent(
+      url: url,
+      title: safeText(() => document.querySelector('h1').text),
+      chapterListUrl: safeUrl(url, () => document.querySelectorAll('.toplink > a')[1].attributes['href']),
+      previousChapterUrl: safeUrlWithPattern(
+          url, chapterContentUrlPattern, () => document.querySelectorAll('.toplink > a')[0].attributes['href']),
+      nextChapterUrl: safeUrlWithPattern(
+          url, chapterContentUrlPattern, () => document.querySelectorAll('.toplink > a')[2].attributes['href']),
+      isLocked: false,
+      paragraphs: _buildParagraphs(document),
+    );
+  }
+
+  Iterable<String> _buildParagraphs(Document document) {
+    return safeList(() => document
+        .getElementById('content')
+        .nodes
+        .where((node) => node.nodeType == Node.TEXT_NODE)
+        .map((node) => node.text.trim())
+        .where((text) => text.isNotEmpty)
+        .map((text) => '    ' + text));
   }
 }

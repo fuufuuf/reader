@@ -1,14 +1,30 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
+import 'package:flutter/foundation.dart';
 import 'package:timnew_reader/models/ChapterList.dart';
 import 'package:timnew_reader/repositories/network/BookRepository.dart';
 
 part 'ChapterContent.g.dart';
 
 abstract class ChapterContent implements Built<ChapterContent, ChapterContentBuilder> {
-  ChapterContent._();
+  factory ChapterContent({
+    @required Uri url,
+    @required String title,
+    @required Uri chapterListUrl,
+    Uri previousChapterUrl,
+    Uri nextChapterUrl,
+    bool isLocked: false,
+    BuiltList<String>  paragraphs,
+  }) =>
+      _$ChapterContent((b) => b
+        ..url = url
+        ..title = title
+        ..chapterListUrl = chapterListUrl
+        ..previousChapterUrl = previousChapterUrl
+        ..nextChapterUrl = nextChapterUrl
+        ..isLocked = isLocked);
 
-  factory ChapterContent([updates(ChapterContentBuilder b)]) = _$ChapterContent;
+  ChapterContent._();
 
   Uri get url;
 
