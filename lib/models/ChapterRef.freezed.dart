@@ -15,8 +15,12 @@ class _$ChapterRefTearOff {
 
 // ignore: unused_element
   _ChapterRef call(
-      {@required String title, @required Uri url, bool isLocked = false}) {
+      {@required BookIndex bookIndex,
+      @required String title,
+      @required Uri url,
+      bool isLocked = false}) {
     return _ChapterRef(
+      bookIndex: bookIndex,
       title: title,
       url: url,
       isLocked: isLocked,
@@ -30,6 +34,7 @@ const $ChapterRef = _$ChapterRefTearOff();
 
 /// @nodoc
 mixin _$ChapterRef {
+  BookIndex get bookIndex;
   String get title;
   Uri get url;
   bool get isLocked;
@@ -42,7 +47,9 @@ abstract class $ChapterRefCopyWith<$Res> {
   factory $ChapterRefCopyWith(
           ChapterRef value, $Res Function(ChapterRef) then) =
       _$ChapterRefCopyWithImpl<$Res>;
-  $Res call({String title, Uri url, bool isLocked});
+  $Res call({BookIndex bookIndex, String title, Uri url, bool isLocked});
+
+  $BookIndexCopyWith<$Res> get bookIndex;
 }
 
 /// @nodoc
@@ -55,15 +62,28 @@ class _$ChapterRefCopyWithImpl<$Res> implements $ChapterRefCopyWith<$Res> {
 
   @override
   $Res call({
+    Object bookIndex = freezed,
     Object title = freezed,
     Object url = freezed,
     Object isLocked = freezed,
   }) {
     return _then(_value.copyWith(
+      bookIndex:
+          bookIndex == freezed ? _value.bookIndex : bookIndex as BookIndex,
       title: title == freezed ? _value.title : title as String,
       url: url == freezed ? _value.url : url as Uri,
       isLocked: isLocked == freezed ? _value.isLocked : isLocked as bool,
     ));
+  }
+
+  @override
+  $BookIndexCopyWith<$Res> get bookIndex {
+    if (_value.bookIndex == null) {
+      return null;
+    }
+    return $BookIndexCopyWith<$Res>(_value.bookIndex, (value) {
+      return _then(_value.copyWith(bookIndex: value));
+    });
   }
 }
 
@@ -73,7 +93,10 @@ abstract class _$ChapterRefCopyWith<$Res> implements $ChapterRefCopyWith<$Res> {
           _ChapterRef value, $Res Function(_ChapterRef) then) =
       __$ChapterRefCopyWithImpl<$Res>;
   @override
-  $Res call({String title, Uri url, bool isLocked});
+  $Res call({BookIndex bookIndex, String title, Uri url, bool isLocked});
+
+  @override
+  $BookIndexCopyWith<$Res> get bookIndex;
 }
 
 /// @nodoc
@@ -88,11 +111,14 @@ class __$ChapterRefCopyWithImpl<$Res> extends _$ChapterRefCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object bookIndex = freezed,
     Object title = freezed,
     Object url = freezed,
     Object isLocked = freezed,
   }) {
     return _then(_ChapterRef(
+      bookIndex:
+          bookIndex == freezed ? _value.bookIndex : bookIndex as BookIndex,
       title: title == freezed ? _value.title : title as String,
       url: url == freezed ? _value.url : url as Uri,
       isLocked: isLocked == freezed ? _value.isLocked : isLocked as bool,
@@ -101,13 +127,20 @@ class __$ChapterRefCopyWithImpl<$Res> extends _$ChapterRefCopyWithImpl<$Res>
 }
 
 /// @nodoc
-class _$_ChapterRef implements _ChapterRef {
+class _$_ChapterRef extends _ChapterRef {
   _$_ChapterRef(
-      {@required this.title, @required this.url, this.isLocked = false})
-      : assert(title != null),
+      {@required this.bookIndex,
+      @required this.title,
+      @required this.url,
+      this.isLocked = false})
+      : assert(bookIndex != null),
+        assert(title != null),
         assert(url != null),
-        assert(isLocked != null);
+        assert(isLocked != null),
+        super._();
 
+  @override
+  final BookIndex bookIndex;
   @override
   final String title;
   @override
@@ -118,13 +151,16 @@ class _$_ChapterRef implements _ChapterRef {
 
   @override
   String toString() {
-    return 'ChapterRef(title: $title, url: $url, isLocked: $isLocked)';
+    return 'ChapterRef(bookIndex: $bookIndex, title: $title, url: $url, isLocked: $isLocked)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _ChapterRef &&
+            (identical(other.bookIndex, bookIndex) ||
+                const DeepCollectionEquality()
+                    .equals(other.bookIndex, bookIndex)) &&
             (identical(other.title, title) ||
                 const DeepCollectionEquality().equals(other.title, title)) &&
             (identical(other.url, url) ||
@@ -137,6 +173,7 @@ class _$_ChapterRef implements _ChapterRef {
   @override
   int get hashCode =>
       runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(bookIndex) ^
       const DeepCollectionEquality().hash(title) ^
       const DeepCollectionEquality().hash(url) ^
       const DeepCollectionEquality().hash(isLocked);
@@ -146,12 +183,16 @@ class _$_ChapterRef implements _ChapterRef {
       __$ChapterRefCopyWithImpl<_ChapterRef>(this, _$identity);
 }
 
-abstract class _ChapterRef implements ChapterRef {
+abstract class _ChapterRef extends ChapterRef {
+  _ChapterRef._() : super._();
   factory _ChapterRef(
-      {@required String title,
+      {@required BookIndex bookIndex,
+      @required String title,
       @required Uri url,
       bool isLocked}) = _$_ChapterRef;
 
+  @override
+  BookIndex get bookIndex;
   @override
   String get title;
   @override

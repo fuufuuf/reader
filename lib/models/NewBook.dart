@@ -13,6 +13,8 @@ abstract class NewBook implements _$NewBook {
     @required String bookName,
     @required Uri bookInfoUrl,
     @required Uri chapterListUrl,
+    Uri currentChapterUrl,
+    bool isDuplicated: false,
   }) =>
       NewBook.fromBookIndex(
         bookIndex: BookIndex(
@@ -21,6 +23,8 @@ abstract class NewBook implements _$NewBook {
           bookInfoUrl: bookInfoUrl,
           chapterListUrl: chapterListUrl,
         ),
+        currentChapterUrl: currentChapterUrl,
+        isDuplicated: isDuplicated,
       );
 
   factory NewBook.fromBookIndex({

@@ -18,11 +18,13 @@ class _$BookIndexTearOff {
 
 // ignore: unused_element
   _BookIndex call(
-      {@required String bookId,
+      {@required String adapter,
+      @required String bookId,
       @required String bookName,
       @required Uri bookInfoUrl,
       @required Uri chapterListUrl}) {
     return _BookIndex(
+      adapter: adapter,
       bookId: bookId,
       bookName: bookName,
       bookInfoUrl: bookInfoUrl,
@@ -42,6 +44,7 @@ const $BookIndex = _$BookIndexTearOff();
 
 /// @nodoc
 mixin _$BookIndex {
+  String get adapter;
   String get bookId;
   String get bookName;
   Uri get bookInfoUrl;
@@ -56,7 +59,11 @@ abstract class $BookIndexCopyWith<$Res> {
   factory $BookIndexCopyWith(BookIndex value, $Res Function(BookIndex) then) =
       _$BookIndexCopyWithImpl<$Res>;
   $Res call(
-      {String bookId, String bookName, Uri bookInfoUrl, Uri chapterListUrl});
+      {String adapter,
+      String bookId,
+      String bookName,
+      Uri bookInfoUrl,
+      Uri chapterListUrl});
 }
 
 /// @nodoc
@@ -69,12 +76,14 @@ class _$BookIndexCopyWithImpl<$Res> implements $BookIndexCopyWith<$Res> {
 
   @override
   $Res call({
+    Object adapter = freezed,
     Object bookId = freezed,
     Object bookName = freezed,
     Object bookInfoUrl = freezed,
     Object chapterListUrl = freezed,
   }) {
     return _then(_value.copyWith(
+      adapter: adapter == freezed ? _value.adapter : adapter as String,
       bookId: bookId == freezed ? _value.bookId : bookId as String,
       bookName: bookName == freezed ? _value.bookName : bookName as String,
       bookInfoUrl:
@@ -93,7 +102,11 @@ abstract class _$BookIndexCopyWith<$Res> implements $BookIndexCopyWith<$Res> {
       __$BookIndexCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String bookId, String bookName, Uri bookInfoUrl, Uri chapterListUrl});
+      {String adapter,
+      String bookId,
+      String bookName,
+      Uri bookInfoUrl,
+      Uri chapterListUrl});
 }
 
 /// @nodoc
@@ -107,12 +120,14 @@ class __$BookIndexCopyWithImpl<$Res> extends _$BookIndexCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object adapter = freezed,
     Object bookId = freezed,
     Object bookName = freezed,
     Object bookInfoUrl = freezed,
     Object chapterListUrl = freezed,
   }) {
     return _then(_BookIndex(
+      adapter: adapter == freezed ? _value.adapter : adapter as String,
       bookId: bookId == freezed ? _value.bookId : bookId as String,
       bookName: bookName == freezed ? _value.bookName : bookName as String,
       bookInfoUrl:
@@ -129,11 +144,13 @@ class __$BookIndexCopyWithImpl<$Res> extends _$BookIndexCopyWithImpl<$Res>
 /// @nodoc
 class _$_BookIndex implements _BookIndex {
   _$_BookIndex(
-      {@required this.bookId,
+      {@required this.adapter,
+      @required this.bookId,
       @required this.bookName,
       @required this.bookInfoUrl,
       @required this.chapterListUrl})
-      : assert(bookId != null),
+      : assert(adapter != null),
+        assert(bookId != null),
         assert(bookName != null),
         assert(bookInfoUrl != null),
         assert(chapterListUrl != null);
@@ -141,6 +158,8 @@ class _$_BookIndex implements _BookIndex {
   factory _$_BookIndex.fromJson(Map<String, dynamic> json) =>
       _$_$_BookIndexFromJson(json);
 
+  @override
+  final String adapter;
   @override
   final String bookId;
   @override
@@ -152,13 +171,16 @@ class _$_BookIndex implements _BookIndex {
 
   @override
   String toString() {
-    return 'BookIndex(bookId: $bookId, bookName: $bookName, bookInfoUrl: $bookInfoUrl, chapterListUrl: $chapterListUrl)';
+    return 'BookIndex(adapter: $adapter, bookId: $bookId, bookName: $bookName, bookInfoUrl: $bookInfoUrl, chapterListUrl: $chapterListUrl)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _BookIndex &&
+            (identical(other.adapter, adapter) ||
+                const DeepCollectionEquality()
+                    .equals(other.adapter, adapter)) &&
             (identical(other.bookId, bookId) ||
                 const DeepCollectionEquality().equals(other.bookId, bookId)) &&
             (identical(other.bookName, bookName) ||
@@ -175,6 +197,7 @@ class _$_BookIndex implements _BookIndex {
   @override
   int get hashCode =>
       runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(adapter) ^
       const DeepCollectionEquality().hash(bookId) ^
       const DeepCollectionEquality().hash(bookName) ^
       const DeepCollectionEquality().hash(bookInfoUrl) ^
@@ -192,7 +215,8 @@ class _$_BookIndex implements _BookIndex {
 
 abstract class _BookIndex implements BookIndex {
   factory _BookIndex(
-      {@required String bookId,
+      {@required String adapter,
+      @required String bookId,
       @required String bookName,
       @required Uri bookInfoUrl,
       @required Uri chapterListUrl}) = _$_BookIndex;
@@ -200,6 +224,8 @@ abstract class _BookIndex implements BookIndex {
   factory _BookIndex.fromJson(Map<String, dynamic> json) =
       _$_BookIndex.fromJson;
 
+  @override
+  String get adapter;
   @override
   String get bookId;
   @override

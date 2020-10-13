@@ -15,7 +15,7 @@ class NewBookRequest extends Request<NewBook> {
 
   @override
   FutureOr<NewBook> load() async {
-    final newBook = await BookRepository.createBookByUrlString(url)
+    final newBook = await BookRepository.parseNewBook(url)
         .timeout(Duration(seconds: 5), onTimeout: () => Future.error(UserException("加載超時")));
 
     if (bookList.isDuplicated(newBook.bookId)) {

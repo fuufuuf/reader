@@ -1,16 +1,15 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'BookIndex.dart';
+
 part 'BookInfo.freezed.dart';
 
 @freezed
-abstract class BookInfo implements _$BookInfo {
+abstract class BookInfo with HasBookIndex implements _$BookInfo {
   BookInfo._();
 
   factory BookInfo({
-    @required Uri url,
-    @required Uri chapterListUrl,
-    @required String bookId,
-    @required String title,
+    @required BookIndex bookIndex,
     String author,
     String genre,
     String completeness,

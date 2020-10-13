@@ -14,15 +14,11 @@ class _$ChapterListTearOff {
   const _$ChapterListTearOff();
 
 // ignore: unused_element
-  _ChapterList call(
-      {@required Uri url,
-      @required String title,
-      @required Uri bookInfoUrl,
+  _ChapterList fromBookIndex(
+      {@required BookIndex bookIndex,
       @required BuiltList<ChapterRef> chapters}) {
     return _ChapterList(
-      url: url,
-      title: title,
-      bookInfoUrl: bookInfoUrl,
+      bookIndex: bookIndex,
       chapters: chapters,
     );
   }
@@ -34,10 +30,29 @@ const $ChapterList = _$ChapterListTearOff();
 
 /// @nodoc
 mixin _$ChapterList {
-  Uri get url;
-  String get title;
-  Uri get bookInfoUrl;
+  BookIndex get bookIndex;
   BuiltList<ChapterRef> get chapters;
+
+  @optionalTypeArgs
+  Result when<Result extends Object>({
+    @required
+        Result fromBookIndex(
+            BookIndex bookIndex, BuiltList<ChapterRef> chapters),
+  });
+  @optionalTypeArgs
+  Result maybeWhen<Result extends Object>({
+    Result fromBookIndex(BookIndex bookIndex, BuiltList<ChapterRef> chapters),
+    @required Result orElse(),
+  });
+  @optionalTypeArgs
+  Result map<Result extends Object>({
+    @required Result fromBookIndex(_ChapterList value),
+  });
+  @optionalTypeArgs
+  Result maybeMap<Result extends Object>({
+    Result fromBookIndex(_ChapterList value),
+    @required Result orElse(),
+  });
 
   $ChapterListCopyWith<ChapterList> get copyWith;
 }
@@ -47,8 +62,9 @@ abstract class $ChapterListCopyWith<$Res> {
   factory $ChapterListCopyWith(
           ChapterList value, $Res Function(ChapterList) then) =
       _$ChapterListCopyWithImpl<$Res>;
-  $Res call(
-      {Uri url, String title, Uri bookInfoUrl, BuiltList<ChapterRef> chapters});
+  $Res call({BookIndex bookIndex, BuiltList<ChapterRef> chapters});
+
+  $BookIndexCopyWith<$Res> get bookIndex;
 }
 
 /// @nodoc
@@ -61,20 +77,26 @@ class _$ChapterListCopyWithImpl<$Res> implements $ChapterListCopyWith<$Res> {
 
   @override
   $Res call({
-    Object url = freezed,
-    Object title = freezed,
-    Object bookInfoUrl = freezed,
+    Object bookIndex = freezed,
     Object chapters = freezed,
   }) {
     return _then(_value.copyWith(
-      url: url == freezed ? _value.url : url as Uri,
-      title: title == freezed ? _value.title : title as String,
-      bookInfoUrl:
-          bookInfoUrl == freezed ? _value.bookInfoUrl : bookInfoUrl as Uri,
+      bookIndex:
+          bookIndex == freezed ? _value.bookIndex : bookIndex as BookIndex,
       chapters: chapters == freezed
           ? _value.chapters
           : chapters as BuiltList<ChapterRef>,
     ));
+  }
+
+  @override
+  $BookIndexCopyWith<$Res> get bookIndex {
+    if (_value.bookIndex == null) {
+      return null;
+    }
+    return $BookIndexCopyWith<$Res>(_value.bookIndex, (value) {
+      return _then(_value.copyWith(bookIndex: value));
+    });
   }
 }
 
@@ -85,8 +107,10 @@ abstract class _$ChapterListCopyWith<$Res>
           _ChapterList value, $Res Function(_ChapterList) then) =
       __$ChapterListCopyWithImpl<$Res>;
   @override
-  $Res call(
-      {Uri url, String title, Uri bookInfoUrl, BuiltList<ChapterRef> chapters});
+  $Res call({BookIndex bookIndex, BuiltList<ChapterRef> chapters});
+
+  @override
+  $BookIndexCopyWith<$Res> get bookIndex;
 }
 
 /// @nodoc
@@ -101,16 +125,12 @@ class __$ChapterListCopyWithImpl<$Res> extends _$ChapterListCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object url = freezed,
-    Object title = freezed,
-    Object bookInfoUrl = freezed,
+    Object bookIndex = freezed,
     Object chapters = freezed,
   }) {
     return _then(_ChapterList(
-      url: url == freezed ? _value.url : url as Uri,
-      title: title == freezed ? _value.title : title as String,
-      bookInfoUrl:
-          bookInfoUrl == freezed ? _value.bookInfoUrl : bookInfoUrl as Uri,
+      bookIndex:
+          bookIndex == freezed ? _value.bookIndex : bookIndex as BookIndex,
       chapters: chapters == freezed
           ? _value.chapters
           : chapters as BuiltList<ChapterRef>,
@@ -119,42 +139,29 @@ class __$ChapterListCopyWithImpl<$Res> extends _$ChapterListCopyWithImpl<$Res>
 }
 
 /// @nodoc
-class _$_ChapterList implements _ChapterList {
-  _$_ChapterList(
-      {@required this.url,
-      @required this.title,
-      @required this.bookInfoUrl,
-      @required this.chapters})
-      : assert(url != null),
-        assert(title != null),
-        assert(bookInfoUrl != null),
-        assert(chapters != null);
+class _$_ChapterList extends _ChapterList {
+  _$_ChapterList({@required this.bookIndex, @required this.chapters})
+      : assert(bookIndex != null),
+        assert(chapters != null),
+        super._();
 
   @override
-  final Uri url;
-  @override
-  final String title;
-  @override
-  final Uri bookInfoUrl;
+  final BookIndex bookIndex;
   @override
   final BuiltList<ChapterRef> chapters;
 
   @override
   String toString() {
-    return 'ChapterList(url: $url, title: $title, bookInfoUrl: $bookInfoUrl, chapters: $chapters)';
+    return 'ChapterList.fromBookIndex(bookIndex: $bookIndex, chapters: $chapters)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _ChapterList &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.title, title) ||
-                const DeepCollectionEquality().equals(other.title, title)) &&
-            (identical(other.bookInfoUrl, bookInfoUrl) ||
+            (identical(other.bookIndex, bookIndex) ||
                 const DeepCollectionEquality()
-                    .equals(other.bookInfoUrl, bookInfoUrl)) &&
+                    .equals(other.bookIndex, bookIndex)) &&
             (identical(other.chapters, chapters) ||
                 const DeepCollectionEquality()
                     .equals(other.chapters, chapters)));
@@ -163,29 +170,68 @@ class _$_ChapterList implements _ChapterList {
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(url) ^
-      const DeepCollectionEquality().hash(title) ^
-      const DeepCollectionEquality().hash(bookInfoUrl) ^
+      const DeepCollectionEquality().hash(bookIndex) ^
       const DeepCollectionEquality().hash(chapters);
 
   @override
   _$ChapterListCopyWith<_ChapterList> get copyWith =>
       __$ChapterListCopyWithImpl<_ChapterList>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  Result when<Result extends Object>({
+    @required
+        Result fromBookIndex(
+            BookIndex bookIndex, BuiltList<ChapterRef> chapters),
+  }) {
+    assert(fromBookIndex != null);
+    return fromBookIndex(bookIndex, chapters);
+  }
+
+  @override
+  @optionalTypeArgs
+  Result maybeWhen<Result extends Object>({
+    Result fromBookIndex(BookIndex bookIndex, BuiltList<ChapterRef> chapters),
+    @required Result orElse(),
+  }) {
+    assert(orElse != null);
+    if (fromBookIndex != null) {
+      return fromBookIndex(bookIndex, chapters);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  Result map<Result extends Object>({
+    @required Result fromBookIndex(_ChapterList value),
+  }) {
+    assert(fromBookIndex != null);
+    return fromBookIndex(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  Result maybeMap<Result extends Object>({
+    Result fromBookIndex(_ChapterList value),
+    @required Result orElse(),
+  }) {
+    assert(orElse != null);
+    if (fromBookIndex != null) {
+      return fromBookIndex(this);
+    }
+    return orElse();
+  }
 }
 
-abstract class _ChapterList implements ChapterList {
+abstract class _ChapterList extends ChapterList {
+  _ChapterList._() : super._();
   factory _ChapterList(
-      {@required Uri url,
-      @required String title,
-      @required Uri bookInfoUrl,
+      {@required BookIndex bookIndex,
       @required BuiltList<ChapterRef> chapters}) = _$_ChapterList;
 
   @override
-  Uri get url;
-  @override
-  String get title;
-  @override
-  Uri get bookInfoUrl;
+  BookIndex get bookIndex;
   @override
   BuiltList<ChapterRef> get chapters;
   @override

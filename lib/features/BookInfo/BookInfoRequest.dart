@@ -13,7 +13,5 @@ class BookInfoRequest extends Request<BookInfo> {
   String get bookName => bookIndex.bookName;
 
   @override
-  Future<BookInfo> load() async {
-    return BookRepository.fetchBookInfo(bookIndex.bookInfoUrl);
-  }
+  Future<BookInfo> load() async => bookIndex.fetchBookInfo();
 }

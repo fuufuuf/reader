@@ -8,6 +8,7 @@ part of 'BookIndex.dart';
 
 _$_BookIndex _$_$_BookIndexFromJson(Map<String, dynamic> json) {
   return _$_BookIndex(
+    adapter: json['adapter'] as String,
     bookId: json['bookId'] as String,
     bookName: json['bookName'] as String,
     bookInfoUrl: json['bookInfoUrl'] == null
@@ -21,6 +22,7 @@ _$_BookIndex _$_$_BookIndexFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$_$_BookIndexToJson(_$_BookIndex instance) =>
     <String, dynamic>{
+      'adapter': instance.adapter,
       'bookId': instance.bookId,
       'bookName': instance.bookName,
       'bookInfoUrl': instance.bookInfoUrl?.toString(),

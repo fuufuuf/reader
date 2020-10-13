@@ -14,21 +14,15 @@ class _$BookInfoTearOff {
   const _$BookInfoTearOff();
 
 // ignore: unused_element
-  _BookInfo call(
-      {@required Uri url,
-      @required Uri chapterListUrl,
-      @required String bookId,
-      @required String title,
+  _BookInfo fromBookIndex(
+      {@required BookIndex bookIndex,
       String author,
       String genre,
       String completeness,
       String lastUpdated,
       String length}) {
     return _BookInfo(
-      url: url,
-      chapterListUrl: chapterListUrl,
-      bookId: bookId,
-      title: title,
+      bookIndex: bookIndex,
       author: author,
       genre: genre,
       completeness: completeness,
@@ -44,15 +38,34 @@ const $BookInfo = _$BookInfoTearOff();
 
 /// @nodoc
 mixin _$BookInfo {
-  Uri get url;
-  Uri get chapterListUrl;
-  String get bookId;
-  String get title;
+  BookIndex get bookIndex;
   String get author;
   String get genre;
   String get completeness;
   String get lastUpdated;
   String get length;
+
+  @optionalTypeArgs
+  Result when<Result extends Object>({
+    @required
+        Result fromBookIndex(BookIndex bookIndex, String author, String genre,
+            String completeness, String lastUpdated, String length),
+  });
+  @optionalTypeArgs
+  Result maybeWhen<Result extends Object>({
+    Result fromBookIndex(BookIndex bookIndex, String author, String genre,
+        String completeness, String lastUpdated, String length),
+    @required Result orElse(),
+  });
+  @optionalTypeArgs
+  Result map<Result extends Object>({
+    @required Result fromBookIndex(_BookInfo value),
+  });
+  @optionalTypeArgs
+  Result maybeMap<Result extends Object>({
+    Result fromBookIndex(_BookInfo value),
+    @required Result orElse(),
+  });
 
   $BookInfoCopyWith<BookInfo> get copyWith;
 }
@@ -62,15 +75,14 @@ abstract class $BookInfoCopyWith<$Res> {
   factory $BookInfoCopyWith(BookInfo value, $Res Function(BookInfo) then) =
       _$BookInfoCopyWithImpl<$Res>;
   $Res call(
-      {Uri url,
-      Uri chapterListUrl,
-      String bookId,
-      String title,
+      {BookIndex bookIndex,
       String author,
       String genre,
       String completeness,
       String lastUpdated,
       String length});
+
+  $BookIndexCopyWith<$Res> get bookIndex;
 }
 
 /// @nodoc
@@ -83,10 +95,7 @@ class _$BookInfoCopyWithImpl<$Res> implements $BookInfoCopyWith<$Res> {
 
   @override
   $Res call({
-    Object url = freezed,
-    Object chapterListUrl = freezed,
-    Object bookId = freezed,
-    Object title = freezed,
+    Object bookIndex = freezed,
     Object author = freezed,
     Object genre = freezed,
     Object completeness = freezed,
@@ -94,12 +103,8 @@ class _$BookInfoCopyWithImpl<$Res> implements $BookInfoCopyWith<$Res> {
     Object length = freezed,
   }) {
     return _then(_value.copyWith(
-      url: url == freezed ? _value.url : url as Uri,
-      chapterListUrl: chapterListUrl == freezed
-          ? _value.chapterListUrl
-          : chapterListUrl as Uri,
-      bookId: bookId == freezed ? _value.bookId : bookId as String,
-      title: title == freezed ? _value.title : title as String,
+      bookIndex:
+          bookIndex == freezed ? _value.bookIndex : bookIndex as BookIndex,
       author: author == freezed ? _value.author : author as String,
       genre: genre == freezed ? _value.genre : genre as String,
       completeness: completeness == freezed
@@ -110,6 +115,16 @@ class _$BookInfoCopyWithImpl<$Res> implements $BookInfoCopyWith<$Res> {
       length: length == freezed ? _value.length : length as String,
     ));
   }
+
+  @override
+  $BookIndexCopyWith<$Res> get bookIndex {
+    if (_value.bookIndex == null) {
+      return null;
+    }
+    return $BookIndexCopyWith<$Res>(_value.bookIndex, (value) {
+      return _then(_value.copyWith(bookIndex: value));
+    });
+  }
 }
 
 /// @nodoc
@@ -118,15 +133,15 @@ abstract class _$BookInfoCopyWith<$Res> implements $BookInfoCopyWith<$Res> {
       __$BookInfoCopyWithImpl<$Res>;
   @override
   $Res call(
-      {Uri url,
-      Uri chapterListUrl,
-      String bookId,
-      String title,
+      {BookIndex bookIndex,
       String author,
       String genre,
       String completeness,
       String lastUpdated,
       String length});
+
+  @override
+  $BookIndexCopyWith<$Res> get bookIndex;
 }
 
 /// @nodoc
@@ -140,10 +155,7 @@ class __$BookInfoCopyWithImpl<$Res> extends _$BookInfoCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object url = freezed,
-    Object chapterListUrl = freezed,
-    Object bookId = freezed,
-    Object title = freezed,
+    Object bookIndex = freezed,
     Object author = freezed,
     Object genre = freezed,
     Object completeness = freezed,
@@ -151,12 +163,8 @@ class __$BookInfoCopyWithImpl<$Res> extends _$BookInfoCopyWithImpl<$Res>
     Object length = freezed,
   }) {
     return _then(_BookInfo(
-      url: url == freezed ? _value.url : url as Uri,
-      chapterListUrl: chapterListUrl == freezed
-          ? _value.chapterListUrl
-          : chapterListUrl as Uri,
-      bookId: bookId == freezed ? _value.bookId : bookId as String,
-      title: title == freezed ? _value.title : title as String,
+      bookIndex:
+          bookIndex == freezed ? _value.bookIndex : bookIndex as BookIndex,
       author: author == freezed ? _value.author : author as String,
       genre: genre == freezed ? _value.genre : genre as String,
       completeness: completeness == freezed
@@ -172,29 +180,17 @@ class __$BookInfoCopyWithImpl<$Res> extends _$BookInfoCopyWithImpl<$Res>
 /// @nodoc
 class _$_BookInfo extends _BookInfo {
   _$_BookInfo(
-      {@required this.url,
-      @required this.chapterListUrl,
-      @required this.bookId,
-      @required this.title,
+      {@required this.bookIndex,
       this.author,
       this.genre,
       this.completeness,
       this.lastUpdated,
       this.length})
-      : assert(url != null),
-        assert(chapterListUrl != null),
-        assert(bookId != null),
-        assert(title != null),
+      : assert(bookIndex != null),
         super._();
 
   @override
-  final Uri url;
-  @override
-  final Uri chapterListUrl;
-  @override
-  final String bookId;
-  @override
-  final String title;
+  final BookIndex bookIndex;
   @override
   final String author;
   @override
@@ -208,22 +204,16 @@ class _$_BookInfo extends _BookInfo {
 
   @override
   String toString() {
-    return 'BookInfo(url: $url, chapterListUrl: $chapterListUrl, bookId: $bookId, title: $title, author: $author, genre: $genre, completeness: $completeness, lastUpdated: $lastUpdated, length: $length)';
+    return 'BookInfo.fromBookIndex(bookIndex: $bookIndex, author: $author, genre: $genre, completeness: $completeness, lastUpdated: $lastUpdated, length: $length)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _BookInfo &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
-            (identical(other.chapterListUrl, chapterListUrl) ||
+            (identical(other.bookIndex, bookIndex) ||
                 const DeepCollectionEquality()
-                    .equals(other.chapterListUrl, chapterListUrl)) &&
-            (identical(other.bookId, bookId) ||
-                const DeepCollectionEquality().equals(other.bookId, bookId)) &&
-            (identical(other.title, title) ||
-                const DeepCollectionEquality().equals(other.title, title)) &&
+                    .equals(other.bookIndex, bookIndex)) &&
             (identical(other.author, author) ||
                 const DeepCollectionEquality().equals(other.author, author)) &&
             (identical(other.genre, genre) ||
@@ -241,10 +231,7 @@ class _$_BookInfo extends _BookInfo {
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(url) ^
-      const DeepCollectionEquality().hash(chapterListUrl) ^
-      const DeepCollectionEquality().hash(bookId) ^
-      const DeepCollectionEquality().hash(title) ^
+      const DeepCollectionEquality().hash(bookIndex) ^
       const DeepCollectionEquality().hash(author) ^
       const DeepCollectionEquality().hash(genre) ^
       const DeepCollectionEquality().hash(completeness) ^
@@ -254,15 +241,61 @@ class _$_BookInfo extends _BookInfo {
   @override
   _$BookInfoCopyWith<_BookInfo> get copyWith =>
       __$BookInfoCopyWithImpl<_BookInfo>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  Result when<Result extends Object>({
+    @required
+        Result fromBookIndex(BookIndex bookIndex, String author, String genre,
+            String completeness, String lastUpdated, String length),
+  }) {
+    assert(fromBookIndex != null);
+    return fromBookIndex(
+        bookIndex, author, genre, completeness, lastUpdated, length);
+  }
+
+  @override
+  @optionalTypeArgs
+  Result maybeWhen<Result extends Object>({
+    Result fromBookIndex(BookIndex bookIndex, String author, String genre,
+        String completeness, String lastUpdated, String length),
+    @required Result orElse(),
+  }) {
+    assert(orElse != null);
+    if (fromBookIndex != null) {
+      return fromBookIndex(
+          bookIndex, author, genre, completeness, lastUpdated, length);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  Result map<Result extends Object>({
+    @required Result fromBookIndex(_BookInfo value),
+  }) {
+    assert(fromBookIndex != null);
+    return fromBookIndex(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  Result maybeMap<Result extends Object>({
+    Result fromBookIndex(_BookInfo value),
+    @required Result orElse(),
+  }) {
+    assert(orElse != null);
+    if (fromBookIndex != null) {
+      return fromBookIndex(this);
+    }
+    return orElse();
+  }
 }
 
 abstract class _BookInfo extends BookInfo {
   _BookInfo._() : super._();
   factory _BookInfo(
-      {@required Uri url,
-      @required Uri chapterListUrl,
-      @required String bookId,
-      @required String title,
+      {@required BookIndex bookIndex,
       String author,
       String genre,
       String completeness,
@@ -270,13 +303,7 @@ abstract class _BookInfo extends BookInfo {
       String length}) = _$_BookInfo;
 
   @override
-  Uri get url;
-  @override
-  Uri get chapterListUrl;
-  @override
-  String get bookId;
-  @override
-  String get title;
+  BookIndex get bookIndex;
   @override
   String get author;
   @override
