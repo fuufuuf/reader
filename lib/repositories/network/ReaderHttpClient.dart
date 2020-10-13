@@ -2,21 +2,25 @@ import 'package:gbk2utf8/gbk2utf8.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' as htmlParser;
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:timnew_reader/features/App/UserException.dart';
 
 class ReaderHttpClient {
-  Future<Document> fetchDom(Uri url, {bool enforceGbk: false, String patchHtml(String html)}) =>
-      fetchHtml(url, enforceGbk: enforceGbk)
-          .then((html) => (patchHtml == null) ? html : patchHtml(html))
-          .then((html) => htmlParser.parse(html, encoding: 'utf8'));
-
-  Future<String> fetchHtml(Uri url, {bool enforceGbk: false}) async {
+  Future<Document> fetchDom(Uri url, {bool enforceGbk: false, String patchHtml(String html)}) async {
     final response = await http.get(url);
 
     if (response.statusCode != 200) {
       throw UserException("HTTP 錯誤 ${response.statusCode}");
     }
 
+    final html = decodeBody(response, enforceGbk: enforceGbk);
+
+    final patchedHtml = patchHtml != null ? patchHtml(html) : html;
+
+    return htmlParser.parse(patchedHtml, encoding: 'utf8');
+  }
+
+  String decodeBody(Response response, {bool enforceGbk}) {
     if (enforceGbk) {
       return gbk.decode(response.bodyBytes);
     } else {

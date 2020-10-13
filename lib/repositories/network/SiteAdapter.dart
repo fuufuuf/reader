@@ -1,5 +1,5 @@
 import 'package:meta/meta.dart';
-import 'package:timnew_reader/features/App/UserException.dart';
+import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/models/BookInfo.dart';
 import 'package:timnew_reader/models/ChapterContent.dart';
 import 'package:timnew_reader/models/ChapterList.dart';
@@ -10,41 +10,15 @@ abstract class SiteAdapter {
   @protected
   final ReaderHttpClient client;
 
+  bool canParse(Uri url);
+
   SiteAdapter(this.client);
 
-  Future<BookInfo> fetchBookInfo(Uri url);
+  Future<BookInfo> fetchBookInfo(BookIndex bookIndex);
 
-  Future<ChapterContent> fetchChapterContent(Uri url);
+  Future<ChapterList> fetchChapterList(BookIndex bookIndex);
 
-  Future<ChapterList> fetchChapterList(Uri url);
+  Future<ChapterContent> fetchChapterContent(BookIndex bookIndex, Uri url);
 
-  Future<Type> fetchResourceType(Uri url);
-
-  Future<NewBook> createBook(Uri url);
-
-  Future<Object> fetchFromUrl(Uri url) async {
-    switch (await fetchResourceType(url)) {
-      case BookInfo:
-        return fetchBookInfo(url);
-      case ChapterList:
-        return fetchChapterList(url);
-      case ChapterContent:
-        return fetchChapterContent(url);
-      default:
-        throw UserException("無法解析的 Url: $url");
-    }
-  }
-
-  @protected
-  void parseFailed(String message) {
-    throw UserException(message);
-  }
-
-  @protected
-  bool safeCompare(String goal, String expected) => goal?.toLowerCase() == expected;
-
-  @protected
-  void parseAssert(bool assertion, String message) {
-    if (!assertion) parseFailed(message);
-  }
+  Future<NewBook> parseNewBook(Uri url);
 }
