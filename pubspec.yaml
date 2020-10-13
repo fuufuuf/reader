@@ -29,6 +29,8 @@ dependencies:
   cupertino_icons:  ^1.0.0
   provider: ^4.3.2+2
   scrollable_positioned_list: ^0.1.7
+  freezed: ^0.12.2
+  kt_dart: ^0.8.0
 
 dev_dependencies:
   flutter_test:
