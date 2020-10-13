@@ -40,7 +40,5 @@ abstract class NewBook implements Built<NewBook, NewBookBuilder> {
 
   bool get hasCurrentChapterUrl => currentChapterUrl != null;
 
-  BookIndex toBookIndex() => bookIndex;
-
   NewBook markAsDuplicated() => rebuild((builder) => builder.isDuplicated = true);
 }

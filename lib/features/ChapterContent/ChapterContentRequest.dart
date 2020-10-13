@@ -6,6 +6,7 @@ import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/models/ChapterContent.dart';
 import 'package:timnew_reader/models/ChapterRef.dart';
 import 'package:timnew_reader/repositories/network/BookRepository.dart';
+import 'package:timnew_reader/repositories/settings/BookIndexRepository.dart';
 
 class ChapterContentRequest extends Request<ChapterContent> {
   final BookIndex bookIndex;
@@ -17,7 +18,7 @@ class ChapterContentRequest extends Request<ChapterContent> {
       ChapterContentRequest._(bookIndex, chapterRef.url);
 
   factory ChapterContentRequest.currentChapter(BookIndex bookIndex) {
-    final currentChapterUrl = bookIndex.currentChapter;
+    final currentChapterUrl = BookIndexRepository.loadCurrentChapter(bookIndex.bookId);
 
     if (currentChapterUrl == null) return null;
 
@@ -33,7 +34,7 @@ class ChapterContentRequest extends Request<ChapterContent> {
   Future<ChapterContent> load() async {
     final content = await BookRepository.fetchChapterContent(chapterUrl).timeout(Duration(seconds: 3));
 
-    await bookIndex.setCurrentChapter(chapterUrl);
+    await BookIndexRepository.saveCurrentChapter(bookIndex.bookId, chapterUrl);
 
     return content;
   }

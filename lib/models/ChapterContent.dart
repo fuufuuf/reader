@@ -29,8 +29,6 @@ abstract class ChapterContent implements Built<ChapterContent, ChapterContentBui
 
   Uri get url;
 
-  Future<ChapterContent> reload() => BookRepository.fetchChapterContent(url);
-
   String get title;
 
   BuiltList<String> get paragraphs;
@@ -46,12 +44,8 @@ abstract class ChapterContent implements Built<ChapterContent, ChapterContentBui
 
   bool get hasPrevious => previousChapterUrl != null;
 
-  Future<ChapterContent> fetchPreviousChapter() => BookRepository.fetchChapterContent(previousChapterUrl);
-
   @nullable
   Uri get nextChapterUrl;
 
   bool get hasNext => nextChapterUrl != null;
-
-  Future<ChapterContent> fetchNextChapter() => BookRepository.fetchChapterContent(nextChapterUrl);
 }

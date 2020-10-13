@@ -6,6 +6,7 @@ import 'package:timnew_reader/arch/Request.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/models/ChapterRef.dart';
 import 'package:timnew_reader/repositories/network/BookRepository.dart';
+import 'package:timnew_reader/repositories/settings/BookIndexRepository.dart';
 
 class ChapterListRequest extends Request<BuiltList<ChapterRef>> {
   final BookIndex bookIndex;
@@ -23,7 +24,7 @@ class ChapterListRequest extends Request<BuiltList<ChapterRef>> {
   }
 
   int findCurrentChapterIndex() {
-    final currentChapterUrl = bookIndex.currentChapter;
+    final currentChapterUrl = BookIndexRepository.loadCurrentChapter(bookIndex.bookId);
     if (currentChapterUrl == null) return null;
 
     final chapters = currentData;
