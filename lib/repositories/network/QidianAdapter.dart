@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:html/dom.dart';
 import 'package:timnew_reader/features/App/UserException.dart';
 
@@ -111,10 +112,9 @@ class QidianAdapter extends SiteAdapter {
     );
   }
 
-  Iterable<ChapterRef> _buildChapterList(Document document, Uri url) {
-    return safeList(
-        () => document.querySelectorAll('.volume ul.cf > li > a').map((element) => _buildChapterRef(url, element)));
-  }
+  BuiltList<ChapterRef> _buildChapterList(Document document, Uri url) => safeList(
+          () => document.querySelectorAll('.volume ul.cf > li > a').map((element) => _buildChapterRef(url, element)))
+      .toBuiltList();
 
   ChapterRef _buildChapterRef(Uri url, Element element) {
     return ChapterRef(
@@ -141,13 +141,13 @@ class QidianAdapter extends SiteAdapter {
         paragraphs: _buildParagraphs(document));
   }
 
-  Iterable<String> _buildParagraphs(Document document) {
+  BuiltList<String> _buildParagraphs(Document document) {
     return safeList(() => document
         .getElementById('content')
         .nodes
         .where((node) => node.nodeType == Node.TEXT_NODE)
         .map((node) => node.text.trim())
         .where((text) => text.isNotEmpty)
-        .map((text) => '    ' + text));
+        .map((text) => '    ' + text)).toBuiltList();
   }
 }

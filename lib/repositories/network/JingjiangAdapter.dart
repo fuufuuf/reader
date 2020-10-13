@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:html/dom.dart';
 import 'package:timnew_reader/models/BookInfo.dart';
 import 'package:timnew_reader/models/ChapterContent.dart';
@@ -83,9 +84,13 @@ class JingjiangAdapter extends SiteAdapter {
       url: url,
       bookInfoUrl: url,
       title: safeText(() => document.querySelector('[itemprop=articleSection]').text),
-      chapters: safeList(() => document.querySelectorAll('[itemprop=chapter]').map((e) => _buildChapterRef(url, e))),
+      chapters: _builtChapterList(document, url),
     );
   }
+
+  BuiltList<ChapterRef> _builtChapterList(Document document, Uri url) =>
+      safeList(() => document.querySelectorAll('[itemprop=chapter]').map((e) => _buildChapterRef(url, e)))
+          .toBuiltList();
 
   ChapterRef _buildChapterRef(Uri url, Element element) {
     final tds = element.querySelectorAll('td');
@@ -137,12 +142,12 @@ class JingjiangAdapter extends SiteAdapter {
     );
   }
 
-  Iterable<String> _buildParagraphs(Element contentText) {
+  BuiltList<String> _buildParagraphs(Element contentText) {
     return safeList(() => contentText.nodes
         .where((node) => node.nodeType == Node.TEXT_NODE)
         .map((node) => node.text.trim())
         .where((text) => text.isNotEmpty)
-        .map((text) => '    ' + text));
+        .map((text) => '    ' + text)).toBuiltList();
   }
 
   void _assertUrl(Uri url) {
