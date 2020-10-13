@@ -9,12 +9,16 @@ abstract class ChapterRef implements Built<ChapterRef, ChapterRefBuilder> {
   factory ChapterRef({
     @required String title,
     @required Uri url,
+    bool isLocked: false,
   }) =>
       _$ChapterRef((b) => b
         ..title = title
-        ..url = url);
+        ..url = url
+        ..isLocked = isLocked);
 
   Uri get url;
 
   String get title;
+
+  bool get isLocked;
 }
