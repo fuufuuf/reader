@@ -12,11 +12,6 @@ import 'package:timnew_reader/repositories/network/safeExtractors.dart';
 class JingjiangAdapter extends SiteAdapter {
   JingjiangAdapter(ReaderHttpClient client) : super(client);
 
-  static final bookUrlPattern = RegExp(r"http://www.jjwxc.net/onebook.php?novelid=(\d+)", caseSensitive: false);
-
-  static final chapterContentUrlPattern =
-      RegExp(r"http://www.jjwxc.net/onebook.php?novelid=(\d+)&chapterid=(\d+)", caseSensitive: false);
-
   @override
   Future<Type> fetchResourceType(Uri url) async {
     _assertUrl(url);
@@ -40,7 +35,7 @@ class JingjiangAdapter extends SiteAdapter {
       return _buildBookEntryFromChapterContent(content);
     }
 
-    assert(false);
+    throw AssertionError("Impossible");
   }
 
   NewBook _buildBookEntryFromChapterList(ChapterList list) => NewBook(
