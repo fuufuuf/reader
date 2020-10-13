@@ -62,16 +62,17 @@ class JingjiangAdapter extends SiteAdapter {
   Future<BookInfo> fetchBookInfo(Uri url) async {
     final document = await client.fetchDom(url, enforceGbk: true);
 
-    return BookInfo((b) => b
-      ..url = url
-      ..bookId = _bookId(url)
-      ..chapterListUrl = url
-      ..title = safeText(() => document.querySelector('[itemprop=articleSection]').text)
-      ..author = safeText(() => document.querySelector('[itemprop=author]').text)
-      ..genre = safeText(() => document.querySelector('[itemprop=genre]').text)
-      ..completeness = safeText(() => document.querySelector('[itemprop=updataStatus]').text)
-      ..lastUpdated = ""
-      ..length = safeText(() => document.querySelector('[itemprop=wordCount]').text));
+    return BookInfo(
+      url: url,
+      bookId: _bookId(url),
+      chapterListUrl: url,
+      title: safeText(() => document.querySelector('[itemprop=articleSection]').text),
+      author: safeText(() => document.querySelector('[itemprop=author]').text),
+      genre: safeText(() => document.querySelector('[itemprop=genre]').text),
+      completeness: safeText(() => document.querySelector('[itemprop=updataStatus]').text),
+      lastUpdated: "",
+      length: safeText(() => document.querySelector('[itemprop=wordCount]').text),
+    );
   }
 
   @override

@@ -85,16 +85,17 @@ class PiaotianAdapter extends SiteAdapter {
   Future<BookInfo> fetchBookInfo(Uri url) async {
     final document = await client.fetchDom(url, enforceGbk: true);
 
-    return BookInfo((b) => b
-      ..url = url
-      ..bookId = _extractBookId(url)
-      ..chapterListUrl = Uri.parse(url.toString().replaceFirst("/bookinfo/", "/html/").replaceFirst(".html", "/"))
-      ..title = document.querySelector('h1').text.trim()
-      ..author = safeText(() => _extractMeta(document, 3, '作    者：'))
-      ..genre = safeText(() => _extractMeta(document, 2, '类    别：'))
-      ..completeness = safeText(() => _extractMeta(document, 7, '文章状态：'))
-      ..lastUpdated = safeText(() => _extractMeta(document, 6, '最后更新：'))
-      ..length = safeText(() => _extractMeta(document, 5, '全文长度：')));
+    return BookInfo(
+      url: url,
+      bookId: _extractBookId(url),
+      chapterListUrl: Uri.parse(url.toString().replaceFirst("/bookinfo/", "/html/").replaceFirst(".html", "/")),
+      title: document.querySelector('h1').text.trim(),
+      author: safeText(() => _extractMeta(document, 3, '作    者：')),
+      genre: safeText(() => _extractMeta(document, 2, '类    别：')),
+      completeness: safeText(() => _extractMeta(document, 7, '文章状态：')),
+      lastUpdated: safeText(() => _extractMeta(document, 6, '最后更新：')),
+      length: safeText(() => _extractMeta(document, 5, '全文长度：')),
+    );
   }
 
   String _extractMeta(Document document, int index, String toRemove) => document

@@ -84,16 +84,17 @@ class QidianAdapter extends SiteAdapter {
   Future<BookInfo> fetchBookInfo(Uri url) async {
     final document = await client.fetchDom(url);
 
-    return BookInfo((b) => b
-      ..url = url
-      ..bookId = _extractBookId(url)
-      ..chapterListUrl = url.replace(fragment: 'Catalog')
-      ..title = safeText(() => document.querySelector('.book-info > h1 > em').text)
-      ..author = safeText(() => document.querySelector('.book-info .writer').text)
-      ..genre = safeText(() => document.querySelector('.book-info a.red').text)
-      ..completeness = safeText(() => document.querySelector('.book-info span.blue').text)
-      ..lastUpdated = ''
-      ..length = '');
+    return BookInfo(
+      url: url,
+      bookId: _extractBookId(url),
+      chapterListUrl: url.replace(fragment: 'Catalog'),
+      title: safeText(() => document.querySelector('.book-info > h1 > em').text),
+      author: safeText(() => document.querySelector('.book-info .writer').text),
+      genre: safeText(() => document.querySelector('.book-info a.red').text),
+      completeness: safeText(() => document.querySelector('.book-info span.blue').text),
+      lastUpdated: '',
+      length: '',
+    );
   }
 
   @override
