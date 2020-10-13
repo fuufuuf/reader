@@ -33,7 +33,8 @@ Uri safeUrlWithPattern(Uri base, RegExp pattern, UnsafeExtract<String> action) {
 
 Iterable<T> safeList<T>(UnsafeExtract<Iterable<T>> action) => safe(action) ?? <T>[];
 
-void userError(String message) {
+// ignore: sdk_version_never
+Never userError(String message) {
   throw UserException(message);
 }
 
