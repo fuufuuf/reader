@@ -10,7 +10,11 @@ class ThemeManager extends ValueNotifier<AppTheme> {
     final newBrightness = value.brightness == Brightness.light ? Brightness.dark : Brightness.light;
     final newReadingThemeData = ThemeRepository.getPalette(newBrightness);
 
-    value = AppTheme(brightness: newBrightness, readingThemeData: newReadingThemeData);
+    value = AppTheme(
+      brightness: newBrightness,
+      readingThemeData: newReadingThemeData,
+      transitionDuration: Duration(microseconds: 800),
+    );
   }
 
   Future updateTextScale(double newScaleFactor) async {

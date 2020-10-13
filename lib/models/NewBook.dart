@@ -9,6 +9,7 @@ abstract class NewBook implements _$NewBook {
   NewBook._();
 
   factory NewBook({
+    @required String adapter,
     @required String bookId,
     @required String bookName,
     @required Uri bookInfoUrl,
@@ -18,6 +19,7 @@ abstract class NewBook implements _$NewBook {
   }) =>
       NewBook.fromBookIndex(
         bookIndex: BookIndex(
+          adapter: adapter,
           bookId: bookId,
           bookName: bookName,
           bookInfoUrl: bookInfoUrl,

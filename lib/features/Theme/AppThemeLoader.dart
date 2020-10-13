@@ -16,7 +16,11 @@ class AppThemeLoader extends Loader<ThemeManager> {
 
     final readingThemeData = ThemeRepository.getPalette(Brightness.light);
 
-    final appTheme = AppTheme(brightness: Brightness.light, readingThemeData: readingThemeData);
+    final appTheme = AppTheme(
+      brightness: Brightness.light,
+      readingThemeData: readingThemeData,
+      transitionDuration: Duration(microseconds: 800),
+    );
     return ThemeManager(appTheme);
   }
 }

@@ -11,7 +11,7 @@ import 'package:timnew_reader/repositories/network/SiteAdapter.dart';
 import 'package:timnew_reader/repositories/network/safeExtractors.dart';
 
 class PiaotianAdapter extends SiteAdapter {
-  static const String name = "piaotian";
+  static const String adapterName = "piaotian";
 
   PiaotianAdapter(ReaderHttpClient client) : super(client);
 
@@ -101,7 +101,7 @@ class PiaotianAdapter extends SiteAdapter {
 
     // https://www.ptwxz.com/html/11/11014/7882142.html
 
-    if (url.pathSegments.first.safeEqual("bookInfo")) {
+    if (url.pathSegments.first.safeEqual("bookinfo")) {
       userAssert(url.pathSegments.length == 3, "無效的書目首頁鏈接 $url");
       return newBookFromBookInfo(url);
     }
@@ -110,7 +110,9 @@ class PiaotianAdapter extends SiteAdapter {
 
     userAssert(url.pathSegments.length == 3 || url.pathSegments.length == 4, "無效的書目鏈接 $url");
 
-    if (url.pathSegments.length == 3 || url.pathSegments.last.safeEqual("index.html")) {
+    if (url.pathSegments.length == 3 ||
+        url.pathSegments.last.safeEqual("index.html") ||
+        url.pathSegments.last.isEmpty) {
       return newBookFromChapterList(url);
     }
 
@@ -121,6 +123,7 @@ class PiaotianAdapter extends SiteAdapter {
     final document = await client.fetchDom(url, enforceGbk: true);
 
     return NewBook(
+      adapter: adapterName,
       bookId: _bookId(url),
       bookName: document.querySelector('h1').text.trim(),
       bookInfoUrl: url,
@@ -132,6 +135,7 @@ class PiaotianAdapter extends SiteAdapter {
     final document = await client.fetchDom(url, enforceGbk: true);
 
     return NewBook(
+      adapter: adapterName,
       bookId: _bookId(url),
       bookName: document.querySelector('.title h1')?.text?.trim()?.replaceAll("最新章节", ""),
       bookInfoUrl: "https://www.ptwxz.com/bookinfo/${_bookIdPath(url)}.html".asUri(),
@@ -145,6 +149,7 @@ class PiaotianAdapter extends SiteAdapter {
     final bookTitleAElement = document.querySelector('h1 > a');
 
     return NewBook(
+      adapter: adapterName,
       bookId: _bookId(url),
       bookName: bookTitleAElement.text.trim(),
       bookInfoUrl: bookTitleAElement.href().asUri().enforceHttps(),
@@ -153,7 +158,7 @@ class PiaotianAdapter extends SiteAdapter {
     );
   }
 
-  String _bookId(Uri url) => "${url.pathSegments[1]}-${url.pathSegments[2]}";
+  String _bookId(Uri url) => _bookIdPath(url).replaceAll("/", "-");
 
-  String _bookIdPath(Uri url) => "${url.pathSegments[1]}/${url.pathSegments[2]}";
+  String _bookIdPath(Uri url) => "${url.pathSegments[1]}/${url.pathSegments[2].replaceAll(".html", "")}";
 }

@@ -14,7 +14,7 @@ class _$ChapterContentTearOff {
   const _$ChapterContentTearOff();
 
 // ignore: unused_element
-  _ChapterContent fromBookIndex(
+  _ChapterContent call(
       {@required BookIndex bookIndex,
       @required Uri url,
       @required String title,
@@ -49,40 +49,6 @@ mixin _$ChapterContent {
   Uri get nextChapterUrl;
   bool get isLocked;
   BuiltList<String> get paragraphs;
-
-  @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required
-        Result fromBookIndex(
-            BookIndex bookIndex,
-            Uri url,
-            String title,
-            @nullable Uri previousChapterUrl,
-            @nullable Uri nextChapterUrl,
-            bool isLocked,
-            BuiltList<String> paragraphs),
-  });
-  @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result fromBookIndex(
-        BookIndex bookIndex,
-        Uri url,
-        String title,
-        @nullable Uri previousChapterUrl,
-        @nullable Uri nextChapterUrl,
-        bool isLocked,
-        BuiltList<String> paragraphs),
-    @required Result orElse(),
-  });
-  @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result fromBookIndex(_ChapterContent value),
-  });
-  @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result fromBookIndex(_ChapterContent value),
-    @required Result orElse(),
-  });
 
   $ChapterContentCopyWith<ChapterContent> get copyWith;
 }
@@ -249,7 +215,7 @@ class _$_ChapterContent extends _ChapterContent {
 
   @override
   String toString() {
-    return 'ChapterContent.fromBookIndex(bookIndex: $bookIndex, url: $url, title: $title, previousChapterUrl: $previousChapterUrl, nextChapterUrl: $nextChapterUrl, isLocked: $isLocked, paragraphs: $paragraphs)';
+    return 'ChapterContent(bookIndex: $bookIndex, url: $url, title: $title, previousChapterUrl: $previousChapterUrl, nextChapterUrl: $nextChapterUrl, isLocked: $isLocked, paragraphs: $paragraphs)';
   }
 
   @override
@@ -291,67 +257,6 @@ class _$_ChapterContent extends _ChapterContent {
   @override
   _$ChapterContentCopyWith<_ChapterContent> get copyWith =>
       __$ChapterContentCopyWithImpl<_ChapterContent>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required
-        Result fromBookIndex(
-            BookIndex bookIndex,
-            Uri url,
-            String title,
-            @nullable Uri previousChapterUrl,
-            @nullable Uri nextChapterUrl,
-            bool isLocked,
-            BuiltList<String> paragraphs),
-  }) {
-    assert(fromBookIndex != null);
-    return fromBookIndex(bookIndex, url, title, previousChapterUrl,
-        nextChapterUrl, isLocked, paragraphs);
-  }
-
-  @override
-  @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result fromBookIndex(
-        BookIndex bookIndex,
-        Uri url,
-        String title,
-        @nullable Uri previousChapterUrl,
-        @nullable Uri nextChapterUrl,
-        bool isLocked,
-        BuiltList<String> paragraphs),
-    @required Result orElse(),
-  }) {
-    assert(orElse != null);
-    if (fromBookIndex != null) {
-      return fromBookIndex(bookIndex, url, title, previousChapterUrl,
-          nextChapterUrl, isLocked, paragraphs);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result fromBookIndex(_ChapterContent value),
-  }) {
-    assert(fromBookIndex != null);
-    return fromBookIndex(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result fromBookIndex(_ChapterContent value),
-    @required Result orElse(),
-  }) {
-    assert(orElse != null);
-    if (fromBookIndex != null) {
-      return fromBookIndex(this);
-    }
-    return orElse();
-  }
 }
 
 abstract class _ChapterContent extends ChapterContent {

@@ -14,7 +14,7 @@ class _$BookInfoTearOff {
   const _$BookInfoTearOff();
 
 // ignore: unused_element
-  _BookInfo fromBookIndex(
+  _BookInfo call(
       {@required BookIndex bookIndex,
       String author,
       String genre,
@@ -44,28 +44,6 @@ mixin _$BookInfo {
   String get completeness;
   String get lastUpdated;
   String get length;
-
-  @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required
-        Result fromBookIndex(BookIndex bookIndex, String author, String genre,
-            String completeness, String lastUpdated, String length),
-  });
-  @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result fromBookIndex(BookIndex bookIndex, String author, String genre,
-        String completeness, String lastUpdated, String length),
-    @required Result orElse(),
-  });
-  @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result fromBookIndex(_BookInfo value),
-  });
-  @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result fromBookIndex(_BookInfo value),
-    @required Result orElse(),
-  });
 
   $BookInfoCopyWith<BookInfo> get copyWith;
 }
@@ -204,7 +182,7 @@ class _$_BookInfo extends _BookInfo {
 
   @override
   String toString() {
-    return 'BookInfo.fromBookIndex(bookIndex: $bookIndex, author: $author, genre: $genre, completeness: $completeness, lastUpdated: $lastUpdated, length: $length)';
+    return 'BookInfo(bookIndex: $bookIndex, author: $author, genre: $genre, completeness: $completeness, lastUpdated: $lastUpdated, length: $length)';
   }
 
   @override
@@ -241,55 +219,6 @@ class _$_BookInfo extends _BookInfo {
   @override
   _$BookInfoCopyWith<_BookInfo> get copyWith =>
       __$BookInfoCopyWithImpl<_BookInfo>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required
-        Result fromBookIndex(BookIndex bookIndex, String author, String genre,
-            String completeness, String lastUpdated, String length),
-  }) {
-    assert(fromBookIndex != null);
-    return fromBookIndex(
-        bookIndex, author, genre, completeness, lastUpdated, length);
-  }
-
-  @override
-  @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result fromBookIndex(BookIndex bookIndex, String author, String genre,
-        String completeness, String lastUpdated, String length),
-    @required Result orElse(),
-  }) {
-    assert(orElse != null);
-    if (fromBookIndex != null) {
-      return fromBookIndex(
-          bookIndex, author, genre, completeness, lastUpdated, length);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result fromBookIndex(_BookInfo value),
-  }) {
-    assert(fromBookIndex != null);
-    return fromBookIndex(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result fromBookIndex(_BookInfo value),
-    @required Result orElse(),
-  }) {
-    assert(orElse != null);
-    if (fromBookIndex != null) {
-      return fromBookIndex(this);
-    }
-    return orElse();
-  }
 }
 
 abstract class _BookInfo extends BookInfo {

@@ -14,7 +14,7 @@ class _$ChapterListTearOff {
   const _$ChapterListTearOff();
 
 // ignore: unused_element
-  _ChapterList fromBookIndex(
+  _ChapterList call(
       {@required BookIndex bookIndex,
       @required BuiltList<ChapterRef> chapters}) {
     return _ChapterList(
@@ -32,27 +32,6 @@ const $ChapterList = _$ChapterListTearOff();
 mixin _$ChapterList {
   BookIndex get bookIndex;
   BuiltList<ChapterRef> get chapters;
-
-  @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required
-        Result fromBookIndex(
-            BookIndex bookIndex, BuiltList<ChapterRef> chapters),
-  });
-  @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result fromBookIndex(BookIndex bookIndex, BuiltList<ChapterRef> chapters),
-    @required Result orElse(),
-  });
-  @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result fromBookIndex(_ChapterList value),
-  });
-  @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result fromBookIndex(_ChapterList value),
-    @required Result orElse(),
-  });
 
   $ChapterListCopyWith<ChapterList> get copyWith;
 }
@@ -152,7 +131,7 @@ class _$_ChapterList extends _ChapterList {
 
   @override
   String toString() {
-    return 'ChapterList.fromBookIndex(bookIndex: $bookIndex, chapters: $chapters)';
+    return 'ChapterList(bookIndex: $bookIndex, chapters: $chapters)';
   }
 
   @override
@@ -176,52 +155,6 @@ class _$_ChapterList extends _ChapterList {
   @override
   _$ChapterListCopyWith<_ChapterList> get copyWith =>
       __$ChapterListCopyWithImpl<_ChapterList>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required
-        Result fromBookIndex(
-            BookIndex bookIndex, BuiltList<ChapterRef> chapters),
-  }) {
-    assert(fromBookIndex != null);
-    return fromBookIndex(bookIndex, chapters);
-  }
-
-  @override
-  @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result fromBookIndex(BookIndex bookIndex, BuiltList<ChapterRef> chapters),
-    @required Result orElse(),
-  }) {
-    assert(orElse != null);
-    if (fromBookIndex != null) {
-      return fromBookIndex(bookIndex, chapters);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result fromBookIndex(_ChapterList value),
-  }) {
-    assert(fromBookIndex != null);
-    return fromBookIndex(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result fromBookIndex(_ChapterList value),
-    @required Result orElse(),
-  }) {
-    assert(orElse != null);
-    if (fromBookIndex != null) {
-      return fromBookIndex(this);
-    }
-    return orElse();
-  }
 }
 
 abstract class _ChapterList extends ChapterList {

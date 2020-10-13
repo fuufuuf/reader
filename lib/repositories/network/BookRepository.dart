@@ -16,7 +16,7 @@ class BookRepository {
   static ReaderHttpClient client = ReaderHttpClient();
 
   static Map<String, SiteAdapter> adapters = {
-    PiaotianAdapter.name: PiaotianAdapter(client),
+    PiaotianAdapter.adapterName: PiaotianAdapter(client),
     // JingjiangAdapter.name: JingjiangAdapter(client),
     // QidianAdapter.name: QidianAdapter(client)
   };
@@ -25,7 +25,7 @@ class BookRepository {
     final url = urlString.asUri();
 
     final SiteAdapter adapter =
-        adapters.values.firstWhere((adapter) => adapter.canParse(url)) ?? {throw UserException("不支持的網站鏈接: $urlString")};
+        adapters.values.firstWhere((adapter) => adapter.canParse(url), orElse: () => userError("不支持的網站鏈接: $urlString"));
 
     return await adapter.parseNewBook(url);
   }
