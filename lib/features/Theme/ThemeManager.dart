@@ -14,7 +14,7 @@ class ThemeManager extends ValueNotifier<AppTheme> {
   }
 
   Future updateTextScale(double newScaleFactor) async {
-    value = value.putAppThemeData((b) => b.fontScaleFactor = newScaleFactor);
+    value = value.copyWith.readingThemeData(fontScaleFactor: newScaleFactor);
 
     await ThemeRepository.saveFontScaleFactor(newScaleFactor);
   }

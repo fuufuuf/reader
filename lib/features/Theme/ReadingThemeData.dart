@@ -1,32 +1,16 @@
-import 'package:built_value/built_value.dart';
 import 'package:flutter/painting.dart';
 
-part 'ReadingThemeData.g.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-abstract class ReadingThemeData implements Built<ReadingThemeData, ReadingThemeDataBuilder> {
-  ReadingThemeData._();
+part 'ReadingThemeData.freezed.dart';
 
+@freezed
+abstract class ReadingThemeData with _$ReadingThemeData {
   factory ReadingThemeData({
-    Color textColor,
-    Color backgroundColor,
-    double fontScaleFactor,
-    Color popUpTextColor,
-    Color popUpBackgroundColor,
-  }) =>
-      _$ReadingThemeData((b) => b
-        ..textColor = textColor
-        ..backgroundColor = backgroundColor
-        ..fontScaleFactor = fontScaleFactor
-        ..popUpTextColor = popUpTextColor
-        ..popUpBackgroundColor = popUpBackgroundColor);
-
-  Color get textColor;
-
-  Color get backgroundColor;
-
-  double get fontScaleFactor;
-
-  Color get popUpBackgroundColor;
-
-  Color get popUpTextColor;
+    @required Color textColor,
+    @required Color backgroundColor,
+    @Default(1.0) double fontScaleFactor,
+    @required Color popUpTextColor,
+    @required Color popUpBackgroundColor,
+  }) = _ReadingThemeData;
 }

@@ -1,22 +1,15 @@
-import 'package:built_value/built_value.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/services.dart';
 
 import 'ReadingThemeData.dart';
 
-part 'AppTheme.g.dart';
+part 'AppTheme.freezed.dart';
 
-abstract class AppTheme implements Built<AppTheme, AppThemeBuilder> {
-  AppTheme._();
-
-  factory AppTheme({Brightness brightness, ReadingThemeData readingThemeData}) => _$AppTheme((b) => b
-    ..readingThemeData.replace(readingThemeData)
-    ..brightness = brightness);
-
-  ReadingThemeData get readingThemeData;
-
-  Brightness get brightness;
-
-  Duration get transitionDuration => Duration(milliseconds: 500);
-
-  AppTheme putAppThemeData(Function(ReadingThemeDataBuilder) builder) => rebuild((b) => builder(b.readingThemeData));
+@freezed
+abstract class AppTheme with _$AppTheme {
+  factory AppTheme({
+    @required Brightness brightness,
+    @required Duration transitionDuration,
+    @required ReadingThemeData readingThemeData,
+  }) = _AppTheme;
 }
