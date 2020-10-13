@@ -1,6 +1,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:html/dom.dart';
 import 'package:timnew_reader/features/App/UserException.dart';
+import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/models/BookInfo.dart';
 import 'package:timnew_reader/models/ChapterContent.dart';
 import 'package:timnew_reader/models/ChapterList.dart';
@@ -59,20 +60,20 @@ class PiaotianAdapter extends SiteAdapter {
     throw UserException("無法解析的 Url: $url");
   }
 
-  NewBook _buildBookEntryFromBookInfo(BookInfo bookInfo) => NewBook(
+  BookIndex _buildBookEntryFromBookInfo(BookInfo bookInfo) => BookIndex(
       bookId: _extractBookId(bookInfo.url),
       bookName: bookInfo.title,
       bookInfoUrl: bookInfo.url,
       chapterListUrl: bookInfo.chapterListUrl);
 
-  NewBook _buildBookEntryFromChapterList(ChapterList list) => NewBook(
+  BookIndex _buildBookEntryFromChapterList(ChapterList list) => BookIndex(
       bookId: _extractBookId(list.bookInfoUrl),
       bookName: list.title,
       bookInfoUrl: list.bookInfoUrl,
       chapterListUrl: list.url);
 
   Future<NewBook> _buildBookEntryFromChapterContent(ChapterContent content) async {
-    return _buildBookEntryFromChapterList(await content.fetchChapterList())
+    return _buildBookEntryFromChapterList(await fetchChapterList(content.chapterListUrl))
         .rebuild((b) => b..currentChapterUrl = content.url);
   }
 

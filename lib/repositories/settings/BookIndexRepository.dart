@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
-import 'package:timnew_reader/models/serializers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BookIndexRepository {
@@ -28,7 +27,7 @@ class BookIndexRepository {
     final entryJson = _prefs.getString(key);
     final entryData = jsonDecode(entryJson);
 
-    return serializers.deserializeWith(BookIndex.serializer, entryData);
+    return BookIndex.fromJson(entryData);
   }
 
   static bool isBookExists(String bookId) {
@@ -38,7 +37,7 @@ class BookIndexRepository {
   static Future<void> save(BookIndex index) async {
     final key = _bookIndexKey(index.bookId);
 
-    final rawData = serializers.serializeWith(BookIndex.serializer, index);
+    final rawData = index.toJson();
     final json = jsonEncode(rawData);
 
     await _prefs.setString(key, json);

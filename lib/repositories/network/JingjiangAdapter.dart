@@ -46,7 +46,7 @@ class JingjiangAdapter extends SiteAdapter {
       );
 
   Future<NewBook> _buildBookEntryFromChapterContent(ChapterContent content) async {
-    return _buildBookEntryFromChapterList(await content.fetchChapterList())
+    return _buildBookEntryFromChapterList(await fetchChapterList(content.chapterListUrl))
         .rebuild((b) => b..currentChapterUrl = content.url);
   }
 

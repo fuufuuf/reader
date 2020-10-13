@@ -71,7 +71,7 @@ class QidianAdapter extends SiteAdapter {
       chapterListUrl: list.url);
 
   Future<NewBook> _buildBookEntryFromChapterContent(ChapterContent content) async {
-    return _buildBookEntryFromChapterList(await content.fetchChapterList())
+    return _buildBookEntryFromChapterList(await fetchChapterList(content.chapterListUrl))
         .rebuild((b) => b..currentChapterUrl = content.url);
   }
 

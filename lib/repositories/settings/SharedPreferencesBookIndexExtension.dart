@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:timnew_reader/models/BookIndex.dart';
-import 'package:timnew_reader/models/serializers.dart';
 
 extension SharedPreferencesBookIndexExtension on SharedPreferences {
   static const String _bookIdsKey = 'bookIds';
@@ -20,13 +19,13 @@ extension SharedPreferencesBookIndexExtension on SharedPreferences {
     final entryJson = getString(key);
     final entryData = jsonDecode(entryJson);
 
-    return serializers.deserializeWith(BookIndex.serializer, entryData);
+    return BookIndex.fromJson(entryData);
   }
 
   Future<BookIndex> saveBookIndex(BookIndex index) async {
     final key = _bookIndexKey(index.bookId);
 
-    final rawData = serializers.serializeWith(BookIndex.serializer, index);
+    final rawData = index.toJson();
     final json = jsonEncode(rawData);
 
     await setString(key, json);

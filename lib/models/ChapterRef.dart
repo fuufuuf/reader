@@ -1,24 +1,12 @@
-import 'package:built_value/built_value.dart';
-import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'ChapterRef.g.dart';
+part 'ChapterRef.freezed.dart';
 
-abstract class ChapterRef implements Built<ChapterRef, ChapterRefBuilder> {
-  ChapterRef._();
-
+@freezed
+abstract class ChapterRef with _$ChapterRef {
   factory ChapterRef({
     @required String title,
     @required Uri url,
-    bool isLocked: false,
-  }) =>
-      _$ChapterRef((b) => b
-        ..title = title
-        ..url = url
-        ..isLocked = isLocked);
-
-  Uri get url;
-
-  String get title;
-
-  bool get isLocked;
+    @Default(false) bool isLocked,
+  }) = _ChapterRef;
 }

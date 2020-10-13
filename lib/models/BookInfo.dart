@@ -1,11 +1,9 @@
-import 'package:built_value/built_value.dart';
-import 'package:flutter/foundation.dart';
-import 'package:timnew_reader/models/ChapterList.dart';
-import 'package:timnew_reader/repositories/network/BookRepository.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'BookInfo.g.dart';
+part 'BookInfo.freezed.dart';
 
-abstract class BookInfo implements Built<BookInfo, BookInfoBuilder> {
+@freezed
+abstract class BookInfo implements _$BookInfo {
   BookInfo._();
 
   factory BookInfo({
@@ -18,44 +16,7 @@ abstract class BookInfo implements Built<BookInfo, BookInfoBuilder> {
     String completeness,
     String lastUpdated,
     String length,
-  }) =>
-      _$BookInfo((b) => b
-        ..url = url
-        ..chapterListUrl = chapterListUrl
-        ..bookId = bookId
-        ..title = title
-        ..author = author
-        ..genre = genre
-        ..completeness = completeness
-        ..lastUpdated = lastUpdated
-        ..length = length);
-
-  Uri get url;
-
-  Future<BookInfo> reload() => BookRepository.fetchBookInfo(url);
-
-  Uri get chapterListUrl;
-
-  Future<ChapterList> fetchChapterList() => BookRepository.fetchChapterList(chapterListUrl);
-
-  String get bookId;
-
-  String get title;
-
-  @nullable
-  String get author;
-
-  @nullable
-  String get genre;
-
-  @nullable
-  String get completeness;
-
-  @nullable
-  String get lastUpdated;
-
-  @nullable
-  String get length;
+  }) = _BookInfo;
 
   bool get hasAuthor => author != null;
 

@@ -1,10 +1,11 @@
-import 'package:built_value/built_value.dart';
-import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 import 'package:timnew_reader/models/BookIndex.dart';
 
-part 'NewBook.g.dart';
+part 'NewBook.freezed.dart';
 
-abstract class NewBook implements Built<NewBook, NewBookBuilder> {
+@freezed
+abstract class NewBook implements _$NewBook {
   NewBook._();
 
   factory NewBook({
@@ -13,22 +14,20 @@ abstract class NewBook implements Built<NewBook, NewBookBuilder> {
     @required Uri bookInfoUrl,
     @required Uri chapterListUrl,
   }) =>
-      _$NewBook((b) {
-        b.bookIndex
-          ..bookId = bookId
-          ..bookName = bookName
-          ..bookInfoUrl = bookInfoUrl
-          ..chapterListUrl = chapterListUrl;
+      NewBook.fromBookIndex(
+        bookIndex: BookIndex(
+          bookId: bookId,
+          bookName: bookName,
+          bookInfoUrl: bookInfoUrl,
+          chapterListUrl: chapterListUrl,
+        ),
+      );
 
-        b.isDuplicated = false;
-      });
-
-  BookIndex get bookIndex;
-
-  bool get isDuplicated;
-
-  @nullable
-  Uri get currentChapterUrl;
+  factory NewBook.fromBookIndex({
+    @required BookIndex bookIndex,
+    @nullable Uri currentChapterUrl,
+    @Default(false) bool isDuplicated,
+  }) = _NewBook;
 
   String get bookId => bookIndex.bookId;
 
@@ -40,5 +39,5 @@ abstract class NewBook implements Built<NewBook, NewBookBuilder> {
 
   bool get hasCurrentChapterUrl => currentChapterUrl != null;
 
-  NewBook markAsDuplicated() => rebuild((builder) => builder.isDuplicated = true);
+  NewBook markAsDuplicated() => copyWith(isDuplicated: true);
 }
