@@ -118,10 +118,13 @@ class PiaotianAdapter extends SiteAdapter {
     );
   }
 
-  Iterable<ChapterRef> _buildChapters(Document document, Uri url) =>
-      safeList(() => document.querySelectorAll('.mainbody .centent ul li a').map((element) => ChapterRef((crb) => crb
-        ..url = url.resolve(element.attributes['href'])
-        ..title = element.text)));
+  Iterable<ChapterRef> _buildChapters(Document document, Uri url) => safeList(
+      () => document.querySelectorAll('.mainbody .centent ul li a').map((element) => _buildChapterRef(url, element)));
+
+  ChapterRef _buildChapterRef(Uri url, Element element) => ChapterRef(
+        url: url.resolve(element.attributes['href']),
+        title: element.text,
+      );
 
   @override
   Future<ChapterContent> fetchChapterContent(Uri url) async {

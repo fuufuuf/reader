@@ -87,18 +87,23 @@ class JingjiangAdapter extends SiteAdapter {
     );
   }
 
-  ChapterRef _buildChapterRef(Uri url, Element element) => ChapterRef((crb) {
-        final tds = element.querySelectorAll('td');
+  ChapterRef _buildChapterRef(Uri url, Element element) {
+    final tds = element.querySelectorAll('td');
 
-        final chapterIndex = safeText(() => tds[1].text);
-        final chapterAbstract = safeText(() => tds[2].text);
+    final chapterIndex = safeText(() => tds[1].text);
+    final chapterAbstract = safeText(() => tds[2].text);
 
-        crb.title = "$chapterIndex $chapterAbstract";
+    final title = "$chapterIndex $chapterAbstract";
 
-        final normalUrl = safeUrl(url, () => element.querySelector('[itemprop=url]').attributes['href']);
+    final normalUrl = safeUrl(url, () => element.querySelector('[itemprop=url]').attributes['href']);
 
-        crb.url = normalUrl ?? safeUrl(url, () => element.querySelector('[itemprop=url]').attributes['rel']);
-      });
+    final chapterUrl = normalUrl ?? safeUrl(url, () => element.querySelector('[itemprop=url]').attributes['rel']);
+
+    return ChapterRef(
+      title: title,
+      url: chapterUrl,
+    );
+  }
 
   @override
   Future<ChapterContent> fetchChapterContent(Uri url) async {

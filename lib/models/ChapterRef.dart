@@ -5,7 +5,9 @@ part 'ChapterRef.g.dart';
 abstract class ChapterRef implements Built<ChapterRef, ChapterRefBuilder> {
   ChapterRef._();
 
-  factory ChapterRef([updates(ChapterRefBuilder b)]) = _$ChapterRef;
+  factory ChapterRef({Uri url, String title}) => _$ChapterRef((b) => b
+    ..url = url
+    ..title = title);
 
   Uri get url;
 

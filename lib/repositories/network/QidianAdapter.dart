@@ -101,14 +101,25 @@ class QidianAdapter extends SiteAdapter {
   Future<ChapterList> fetchChapterList(Uri url) async {
     final document = await client.fetchDom(url);
 
+    var title = safeText(() => document.querySelector('.book-info > h1 > em').text);
+
     return ChapterList(
       url: url,
-      title: safeText(() => document.querySelector('.book-info > h1 > em').text),
+      title: title,
       bookInfoUrl: url.replace(fragment: ''),
-      chapters:
-          safeList(() => document.querySelectorAll('.volume ul.cf > li > a').map((element) => ChapterRef((crb) => crb
-            ..url = url.resolve(element.attributes['href'])
-            ..title = element.text))),
+      chapters: _buildChapterList(document, url),
+    );
+  }
+
+  Iterable<ChapterRef> _buildChapterList(Document document, Uri url) {
+    return safeList(
+        () => document.querySelectorAll('.volume ul.cf > li > a').map((element) => _buildChapterRef(url, element)));
+  }
+
+  ChapterRef _buildChapterRef(Uri url, Element element) {
+    return ChapterRef(
+      url: url.resolve(element.attributes['href']),
+      title: element.text,
     );
   }
 
@@ -133,6 +144,6 @@ class QidianAdapter extends SiteAdapter {
           .map((node) => node.text.trim())
           .where((text) => text.isNotEmpty)
           .map((text) => '    ' + text)))
-      ..isLocked = document.querySelector('.vip-limit-wrap') != null);
+      ..isLocked = document.querySelector('.vip - limit - wrap') != null);
   }
 }
