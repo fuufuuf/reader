@@ -10,7 +10,7 @@ class ReaderHttpClient {
     final response = await http.get(url);
 
     if (response.statusCode != 200) {
-      throw UserException("HTTP 錯誤 ${response.statusCode}");
+      throw UserException("HTTP 錯誤 ${response.statusCode}\n$url");
     }
 
     final html = decodeBody(response, enforceGbk: enforceGbk);
