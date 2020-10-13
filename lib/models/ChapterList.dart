@@ -7,7 +7,17 @@ part 'ChapterList.g.dart';
 abstract class ChapterList implements Built<ChapterList, ChapterListBuilder> {
   ChapterList._();
 
-  factory ChapterList([updates(ChapterListBuilder b)]) = _$ChapterList;
+  factory ChapterList({
+    Uri url,
+    String title,
+    Uri bookInfoUrl,
+    BuiltList<ChapterRef> chapters,
+  }) =>
+      _$ChapterList((b) => b
+        ..url = url
+        ..title = title
+        ..bookInfoUrl = bookInfoUrl
+        ..chapters.replace(chapters));
 
   Uri get url;
 

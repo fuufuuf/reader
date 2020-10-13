@@ -79,16 +79,12 @@ class JingjiangAdapter extends SiteAdapter {
   Future<ChapterList> fetchChapterList(Uri url) async {
     final document = await client.fetchDom(url, enforceGbk: true);
 
-    return ChapterList((result) {
-      result
-        ..url = url
-        ..bookInfoUrl = url
-        ..title = safeText(() => document.querySelector('[itemprop=articleSection]').text);
-
-      result
-        ..chapters.addAll(
-            safeList(() => document.querySelectorAll('[itemprop=chapter]').map((e) => _buildChapterRef(url, e))));
-    });
+    return ChapterList(
+      url: url,
+      bookInfoUrl: url,
+      title: safeText(() => document.querySelector('[itemprop=articleSection]').text),
+      chapters: safeList(() => document.querySelectorAll('[itemprop=chapter]').map((e) => _buildChapterRef(url, e))),
+    );
   }
 
   ChapterRef _buildChapterRef(Uri url, Element element) => ChapterRef((crb) {

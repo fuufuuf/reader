@@ -101,14 +101,15 @@ class QidianAdapter extends SiteAdapter {
   Future<ChapterList> fetchChapterList(Uri url) async {
     final document = await client.fetchDom(url);
 
-    return ChapterList((b) => b
-      ..url = url
-      ..title = safeText(() => document.querySelector('.book-info > h1 > em').text)
-      ..bookInfoUrl = url.replace(fragment: '')
-      ..chapters.addAll(
+    return ChapterList(
+      url: url,
+      title: safeText(() => document.querySelector('.book-info > h1 > em').text),
+      bookInfoUrl: url.replace(fragment: ''),
+      chapters:
           safeList(() => document.querySelectorAll('.volume ul.cf > li > a').map((element) => ChapterRef((crb) => crb
             ..url = url.resolve(element.attributes['href'])
-            ..title = element.text)))));
+            ..title = element.text))),
+    );
   }
 
   @override

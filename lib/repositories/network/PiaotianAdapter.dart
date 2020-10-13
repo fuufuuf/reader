@@ -110,15 +110,18 @@ class PiaotianAdapter extends SiteAdapter {
   Future<ChapterList> fetchChapterList(Uri url) async {
     final document = await client.fetchDom(url, enforceGbk: true);
 
-    return ChapterList((b) => b
-      ..url = url
-      ..title = safeText(() => document.querySelector('.title h1')?.text?.trim()?.replaceAll("最新章节", ""))
-      ..bookInfoUrl = safeUrl(url, () => document.querySelectorAll('#tl > a')[1].attributes['href'])
-      ..chapters.addAll(safeList(
-          () => document.querySelectorAll('.mainbody .centent ul li a').map((element) => ChapterRef((crb) => crb
-            ..url = url.resolve(element.attributes['href'])
-            ..title = element.text)))));
+    return ChapterList(
+      url: url,
+      title: safeText(() => document.querySelector('.title h1')?.text?.trim()?.replaceAll("最新章节", "")),
+      bookInfoUrl: safeUrl(url, () => document.querySelectorAll('#tl > a')[1].attributes['href']),
+      chapters: _buildChapters(document, url),
+    );
   }
+
+  Iterable<ChapterRef> _buildChapters(Document document, Uri url) =>
+      safeList(() => document.querySelectorAll('.mainbody .centent ul li a').map((element) => ChapterRef((crb) => crb
+        ..url = url.resolve(element.attributes['href'])
+        ..title = element.text)));
 
   @override
   Future<ChapterContent> fetchChapterContent(Uri url) async {
