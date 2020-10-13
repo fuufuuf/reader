@@ -107,8 +107,8 @@ class _ChapterEntry extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(Icons.bookmark_border),
-      title: _addLockIcon(child: Text(chapter.title)),
+      leading: _buildIcon(context),
+      title: Text(chapter.title),
       onTap: () async {
         await AppRouter.of(context).gotoChapterContent(request.bookIndex, chapter);
         context.read<ItemScrollController>().scrollToCurrentChapter(context, request);
@@ -116,19 +116,8 @@ class _ChapterEntry extends StatelessWidget {
     );
   }
 
-  Widget _addLockIcon({Widget child}) {
-    if (!chapter.isLocked) return child;
-
-    return Row(
-      children: <Widget>[
-        child,
-        Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: Icon(Icons.lock),
-        ),
-      ],
-    );
-  }
+  Widget _buildIcon(BuildContext context) =>
+      chapter.isLocked ? Icon(Icons.lock, color: Theme.of(context).errorColor) : Icon(Icons.bookmark_border);
 }
 
 extension ScrollToChapterExtension on ItemScrollController {

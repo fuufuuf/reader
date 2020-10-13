@@ -14,7 +14,7 @@ abstract class ChapterContent implements Built<ChapterContent, ChapterContentBui
     Uri previousChapterUrl,
     Uri nextChapterUrl,
     bool isLocked: false,
-    BuiltList<String>  paragraphs,
+    BuiltList<String> paragraphs,
   }) =>
       _$ChapterContent((b) => b
         ..url = url
@@ -22,7 +22,8 @@ abstract class ChapterContent implements Built<ChapterContent, ChapterContentBui
         ..chapterListUrl = chapterListUrl
         ..previousChapterUrl = previousChapterUrl
         ..nextChapterUrl = nextChapterUrl
-        ..isLocked = isLocked);
+        ..isLocked = isLocked
+        ..paragraphs.replace(paragraphs));
 
   ChapterContent._();
 

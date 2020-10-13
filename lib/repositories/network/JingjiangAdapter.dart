@@ -107,7 +107,7 @@ class JingjiangAdapter extends SiteAdapter {
     return ChapterRef(
       title: title,
       url: chapterUrl,
-      isLocked: normalUrl != null,
+      isLocked: normalUrl == null,
     );
   }
 
