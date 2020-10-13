@@ -18,6 +18,7 @@ class Message extends StatelessWidget {
     }
 
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
           padding: const EdgeInsets.only(right: 8.0),
@@ -33,9 +34,11 @@ class Message extends StatelessWidget {
         color: _iconColor(),
       );
 
-  Widget _text() => Text(
-        content,
-        style: TextStyle(color: _textColor()),
+  Widget _text() => Flexible(
+        child: Text(
+          content,
+          style: TextStyle(color: _textColor()),
+        ),
       );
 
   IconData _iconData() {
