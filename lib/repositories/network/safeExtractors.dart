@@ -40,11 +40,12 @@ extension ElementParseExtension on Element {
 
   String rel() => attributes['rel'];
 
-  Iterable<String> textNodesAsParagraphs() => nodes
-      .where((node) => node.nodeType == Node.TEXT_NODE)
-      .map((node) => node.text.trim())
-      .where((text) => text.isNotEmpty)
-      .map((text) => '    ' + text);
+  Iterable<String> textNodesAsParagraphs() => nodes.where((node) => node.nodeType == Node.TEXT_NODE).asParagraphs();
+}
+
+extension NodeListParseExtension on Iterable<Node> {
+  Iterable<String> asParagraphs() =>
+      this.map((node) => node.text.trim()).where((text) => text.isNotEmpty).map((text) => '    ' + text);
 }
 
 extension UriParseExtension on Uri {
@@ -57,6 +58,18 @@ extension IntParseExtension on int {
   int checkInRange(int low, int high, String message) {
     satisfy(this >= low && this <= high) ?? userError(message);
 
+    return this;
+  }
+}
+
+extension ObjectParseExtension<T> on T {
+  T nullIf(bool Function(T) criteria) {
+    if (criteria(this)) return null;
+    return this;
+  }
+
+  T nullIfNot(bool Function(T) criteria) {
+    if (!criteria(this)) return null;
     return this;
   }
 }

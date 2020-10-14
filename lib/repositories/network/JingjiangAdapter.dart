@@ -145,13 +145,13 @@ class JingjiangAdapter extends SiteAdapter {
     _extractBookId(url) ?? userError("沒有數目 ID");
 
     final chapterId = _extractChapterId(url);
-    if (chapterId == null) return _newBookFromBookInfo(url);
-    return _newBookFromChapterContent(url);
+    if (chapterId == null) return newBookFromBookInfo(url);
+    return newBookFromChapterContent(url);
   }
 
   String _buildBookId(Uri url) => "${adapterName}-${_extractBookId(url)}";
 
-  Future<NewBook> _newBookFromBookInfo(Uri url) async {
+  Future<NewBook> newBookFromBookInfo(Uri url) async {
     final document = await client.fetchDom(url);
 
     return NewBook(
@@ -163,7 +163,7 @@ class JingjiangAdapter extends SiteAdapter {
     );
   }
 
-  Future<NewBook> _newBookFromChapterContent(Uri url) async {
+  Future<NewBook> newBookFromChapterContent(Uri url) async {
     final document = await client.fetchDom(url);
 
     final titleElement = document.querySelector('.noveltitle a');

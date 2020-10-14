@@ -45,3 +45,4 @@ class PersistentStorage {
     return await prefs.saveBookIds(bookIndexes.map((e) => e.bookId));
   }
 }
+
