@@ -37,15 +37,12 @@ class _ChapterListScreenState extends State<ChapterListScreen> with RenderAsyncS
 
   @override
   Widget build(BuildContext context) => ScreenScaffold(
-      titleWidget: Row(
-        children: [
-          Text(request.bookName),
-          IconButton(icon: Icon(Icons.info_outline), onPressed: _openBookInfo),
-        ],
-      ),
+      title: Text(request.bookName, overflow: TextOverflow.ellipsis),
       appBarActions: <Widget>[
-        IconButton(icon: Icon(Icons.refresh), onPressed: _reload),
-        IconButton(icon: Icon(Icons.bookmark_border), onPressed: _scrollToCurrent),
+        IconButton(
+          icon: Icon(Icons.more_horiz),
+          onPressed: _showBottomSheet,
+        ),
       ],
       body: Provider.value(
         value: scrollController,
@@ -57,16 +54,77 @@ class _ChapterListScreenState extends State<ChapterListScreen> with RenderAsyncS
     return _ChapterListView(request, chapters, scrollController, positionListener);
   }
 
-  void _openBookInfo() {
+  void openBookInfo() {
     AppRouter.of(context).gotoBookInfo(request.bookIndex);
   }
 
-  void _reload() {
+  void reload() {
     request.reload();
   }
 
-  void _scrollToCurrent() {
+  void onShowCurrentChapter() {
     scrollController.scrollToCurrentChapter(context, request);
+  }
+
+  Future _showBottomSheet() => showModalBottomSheet(
+        context: context,
+        builder: (_) => ChapterListBottomSheet(
+          onBookInfo: openBookInfo,
+          onReload: reload,
+          onShowCurrentChapter: onShowCurrentChapter,
+        ),
+      );
+}
+
+class ChapterListBottomSheet extends StatelessWidget {
+  final VoidCallback onBookInfo;
+  final VoidCallback onReload;
+  final VoidCallback onShowCurrentChapter;
+
+  const ChapterListBottomSheet({
+    Key key,
+    this.onBookInfo,
+    this.onReload,
+    this.onShowCurrentChapter,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.only(bottom: 24.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            InkWell(
+              child: ListTile(
+                leading: Icon(Icons.info),
+                title: Text("書目信息"),
+                onTap: () => dismiss(context, onBookInfo),
+              ),
+            ),
+            InkWell(
+              child: ListTile(
+                leading: Icon(Icons.refresh),
+                title: Text("刷新"),
+                onTap: () => dismiss(context, onReload),
+              ),
+            ),
+            InkWell(
+              child: ListTile(
+                leading: Icon(Icons.bookmark_border),
+                title: Text("滾動到當前章節"),
+                onTap: () => dismiss(context, onShowCurrentChapter),
+              ),
+            ),
+          ],
+        ),
+      );
+
+  void dismiss(BuildContext context, [VoidCallback onDismissed]) {
+    Navigator.of(context).pop();
+
+    if (onDismissed != null) {
+      onDismissed();
+    }
   }
 }
 

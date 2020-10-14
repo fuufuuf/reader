@@ -23,7 +23,7 @@ class BookInfoScreen extends StatelessWidget with RenderAsyncSnapshot<BookInfo> 
 
   @override
   Widget build(BuildContext context) => ScreenScaffold(
-        title: request.bookName,
+        title: Text(request.bookName),
         appBarActions: <Widget>[
           IconButton(
             icon: Icon(Icons.refresh),

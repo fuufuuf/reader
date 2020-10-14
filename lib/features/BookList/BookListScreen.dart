@@ -39,7 +39,7 @@ class BookListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ScreenScaffold(
-        title: '米良追书',
+        title: Text('米良追书'),
         appBarActions: [Builder(builder: _buildMenuButton)],
         body: _BookIndexList(request),
       );

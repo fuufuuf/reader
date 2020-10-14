@@ -40,7 +40,7 @@ class _AddNewBookDialogState extends State<AddNewBookDialog> {
   @override
   Widget build(BuildContext context) {
     return ScreenScaffold(
-      title: '添加新書',
+      title: Text('添加新書'),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         child: Form(
