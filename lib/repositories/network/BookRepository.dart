@@ -5,7 +5,7 @@ import 'package:timnew_reader/models/BookInfo.dart';
 import 'package:timnew_reader/models/ChapterContent.dart';
 import 'package:timnew_reader/models/ChapterList.dart';
 import 'package:timnew_reader/models/NewBook.dart';
-import 'package:timnew_reader/repositories/network/safeExtractors.dart';
+import 'package:timnew_reader/repositories/network/ParseExtensions.dart';
 
 import 'SiteAdapter.dart';
 import 'JingjiangAdapter.dart';

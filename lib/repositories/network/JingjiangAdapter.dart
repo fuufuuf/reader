@@ -8,7 +8,7 @@ import 'package:timnew_reader/models/ChapterRef.dart';
 import 'package:timnew_reader/models/NewBook.dart';
 import 'package:timnew_reader/repositories/network/ReaderHttpClient.dart';
 import 'package:timnew_reader/repositories/network/SiteAdapter.dart';
-import 'package:timnew_reader/repositories/network/safeExtractors.dart';
+import 'package:timnew_reader/repositories/network/ParseExtensions.dart';
 
 class JingjiangAdapter extends SiteAdapter {
   static const String adapterName = "jingjiang";

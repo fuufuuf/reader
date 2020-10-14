@@ -10,7 +10,7 @@ import 'package:timnew_reader/models/NewBook.dart';
 
 import 'package:timnew_reader/repositories/network/ReaderHttpClient.dart';
 import 'package:timnew_reader/repositories/network/SiteAdapter.dart';
-import 'package:timnew_reader/repositories/network/safeExtractors.dart';
+import 'package:timnew_reader/repositories/network/ParseExtensions.dart';
 
 class QidianAdapter extends SiteAdapter {
   static const String adapterName = "qidian";
