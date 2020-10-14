@@ -1,6 +1,11 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:html/dom.dart';
 
+import 'package:timnew_reader/features/App/UserException.dart';
+import 'package:timnew_reader/repositories/network/ReaderHttpClient.dart';
+import 'package:timnew_reader/repositories/network/SiteAdapter.dart';
+import 'package:timnew_reader/repositories/network/ParseExtensions.dart';
+
 import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/models/BookInfo.dart';
 import 'package:timnew_reader/models/ChapterContent.dart';
@@ -8,14 +13,14 @@ import 'package:timnew_reader/models/ChapterList.dart';
 import 'package:timnew_reader/models/ChapterRef.dart';
 import 'package:timnew_reader/models/NewBook.dart';
 
-import 'package:timnew_reader/repositories/network/ReaderHttpClient.dart';
-import 'package:timnew_reader/repositories/network/SiteAdapter.dart';
-import 'package:timnew_reader/repositories/network/ParseExtensions.dart';
 
 class QidianAdapter extends SiteAdapter {
   static const String adapterName = "qidian";
 
   QidianAdapter(ReaderHttpClient client) : super(client);
+
+  // Qidian is extremely slow
+  Duration get defaultLoadTimeout => Duration(seconds: 10);
 
   // https://book.qidian.com/info/1016572786
   // https://book.qidian.com/info/1016572786#Catalog

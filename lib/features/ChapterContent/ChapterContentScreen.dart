@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:screen/screen.dart';
+import 'package:timnew_reader/arch/Request.dart';
 import 'package:timnew_reader/features/App/UserException.dart';
 import 'package:timnew_reader/arch/RenderMixin.dart';
 import 'package:timnew_reader/models/ChapterContent.dart';
@@ -71,9 +72,25 @@ class _ChapterContentScreenState extends State<ChapterContentScreen> with Render
     );
   }
 
-  Widget buildWaiting(BuildContext context) => Center(
-        child: Text("加載中..."),
-      );
+  Widget buildWaiting(BuildContext context) {
+    var theme = Theme.of(context);
+
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              "加載中...",
+              style: theme.textTheme.bodyText2,
+            ),
+          ),
+          RefreshButton(request: request),
+        ],
+      ),
+    );
+  }
 
   Widget buildError(BuildContext context, Object error) {
     final errorMessage = error is UserException ? error.message : error.toString();
@@ -96,15 +113,7 @@ class _ChapterContentScreenState extends State<ChapterContentScreen> with Render
                 style: theme.textTheme.bodyText2,
               ),
             ),
-            OutlineButton(
-                onPressed: () => request.reload(),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.refresh),
-                    Text("重新加載"),
-                  ],
-                )),
+            RefreshButton(request: request),
           ],
         ),
       ),
@@ -137,4 +146,24 @@ class _ChapterContentScreenState extends State<ChapterContentScreen> with Render
   void _navigateDown() {
     request.loadNextChapter();
   }
+}
+
+class RefreshButton extends StatelessWidget {
+  final Request request;
+
+  const RefreshButton({Key key, @required this.request})
+      : assert(request != null),
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) => OutlineButton(
+        onPressed: () => request.reload(),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.refresh),
+            Text("重新加載"),
+          ],
+        ),
+      );
 }

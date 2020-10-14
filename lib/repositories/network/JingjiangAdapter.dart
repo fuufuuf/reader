@@ -1,14 +1,17 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:html/dom.dart';
+
+import 'package:timnew_reader/features/App/UserException.dart';
+import 'package:timnew_reader/repositories/network/ReaderHttpClient.dart';
+import 'package:timnew_reader/repositories/network/SiteAdapter.dart';
+import 'package:timnew_reader/repositories/network/ParseExtensions.dart';
+
 import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/models/BookInfo.dart';
 import 'package:timnew_reader/models/ChapterContent.dart';
 import 'package:timnew_reader/models/ChapterList.dart';
 import 'package:timnew_reader/models/ChapterRef.dart';
 import 'package:timnew_reader/models/NewBook.dart';
-import 'package:timnew_reader/repositories/network/ReaderHttpClient.dart';
-import 'package:timnew_reader/repositories/network/SiteAdapter.dart';
-import 'package:timnew_reader/repositories/network/ParseExtensions.dart';
 
 class JingjiangAdapter extends SiteAdapter {
   static const String adapterName = "jingjiang";

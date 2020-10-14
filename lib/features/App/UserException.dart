@@ -44,3 +44,18 @@ class UserException implements Exception {
     );
   }
 }
+
+// ignore: sdk_version_never
+Never userError(String message) {
+  throw UserException(message);
+}
+
+dynamic satisfy(bool assertion) {
+  if (!assertion) return null;
+  return assertion;
+}
+
+extension FutrureUserErrorExtension<T> on Future<T> {
+  Future<T> userTimeout(Duration duration, String message) =>
+      timeout(duration, onTimeout: () async => userError(message));
+}

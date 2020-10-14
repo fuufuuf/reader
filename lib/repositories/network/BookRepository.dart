@@ -29,16 +29,28 @@ class BookRepository {
     final SiteAdapter adapter =
         adapters.values.firstWhere((adapter) => adapter.canParse(url), orElse: () => userError("不支持的網站鏈接: $urlString"));
 
-    return await adapter.parseNewBook(url);
+    return adapter.parseNewBook(url).userTimeout(adapter.defaultLoadTimeout, "頁面加載超時");
   }
 }
 
 extension BookIndexNetworkExtension on BookIndex {
-  SiteAdapter findAdapter() => BookRepository.adapters[adapter] ?? {throw UserException("應用版本異常，找不到網站適配器: $adapter")};
+  SiteAdapter findAdapter() => BookRepository.adapters[adapter] ?? userError("應用版本異常，找不到網站適配器: $adapter");
 
-  Future<ChapterList> fetchChapterList() async => findAdapter().fetchChapterList(this);
+  Future<ChapterList> fetchChapterList() async {
+    final adapter = findAdapter();
 
-  Future<BookInfo> fetchBookInfo() async => findAdapter().fetchBookInfo(this);
+    return adapter.fetchChapterList(this).userTimeout(adapter.defaultLoadTimeout, "頁面加載超時");
+  }
 
-  Future<ChapterContent> fetchChapterContent(Uri url) async => findAdapter().fetchChapterContent(this, url);
+  Future<BookInfo> fetchBookInfo() async {
+    final adapter = findAdapter();
+
+    return adapter.fetchBookInfo(this).userTimeout(adapter.defaultLoadTimeout, "頁面加載超時");
+  }
+
+  Future<ChapterContent> fetchChapterContent(Uri url) async {
+    final adapter = findAdapter();
+
+    return adapter.fetchChapterContent(this, url).userTimeout(adapter.defaultLoadTimeout, "頁面加載超時");
+  }
 }

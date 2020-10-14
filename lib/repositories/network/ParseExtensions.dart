@@ -2,16 +2,6 @@ import 'package:built_collection/built_collection.dart';
 import 'package:html/dom.dart';
 import 'package:timnew_reader/features/App/UserException.dart';
 
-// ignore: sdk_version_never
-Never userError(String message) {
-  throw UserException(message);
-}
-
-dynamic satisfy(bool assertion) {
-  if (!assertion) return null;
-  return assertion;
-}
-
 extension StringParseExtension on String {
   // ignore: missing_return
   Uri asUri() {
