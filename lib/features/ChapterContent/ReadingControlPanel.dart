@@ -66,7 +66,13 @@ class ReadingControlPanel extends StatelessWidget {
                       () => themeManager
                           .updateAppTheme((t) => t.copyWith.settings(readingTextScaleFactor: newScaleFactor)))(),
                 ),
-                PanelSpacer(widthFactor: 2),
+                PanelSelect(
+                  options: Map.fromEntries(Iterable.generate(appTheme.palette.contentForegroundColors.length)
+                      .map((e) => MapEntry(e, "對比度 $e"))),
+                  value: appTheme.contentForegroundColorIndex,
+                  onValueChanged: (newIndex) => dismissThen(
+                      context, () => themeManager.updateAppTheme((t) => t.putContentForegroundColorIndex(newIndex)))(),
+                ),
                 PanelButton(
                   icon: Icons.menu,
                   text: "章節目錄",
