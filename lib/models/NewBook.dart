@@ -5,7 +5,7 @@ import 'package:timnew_reader/models/BookIndex.dart';
 part 'NewBook.freezed.dart';
 
 @freezed
-abstract class NewBook implements _$NewBook {
+abstract class NewBook with HasBookIndex implements _$NewBook {
   NewBook._();
 
   factory NewBook({
@@ -34,14 +34,6 @@ abstract class NewBook implements _$NewBook {
     @nullable Uri currentChapterUrl,
     @Default(false) bool isDuplicated,
   }) = _NewBook;
-
-  String get bookId => bookIndex.bookId;
-
-  String get bookName => bookIndex.bookName;
-
-  Uri get bookInfoUrl => bookIndex.bookInfoUrl;
-
-  Uri get chapterListUrl => bookIndex.chapterListUrl;
 
   bool get hasCurrentChapterUrl => currentChapterUrl != null;
 

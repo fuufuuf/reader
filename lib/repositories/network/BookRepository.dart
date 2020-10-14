@@ -10,6 +10,7 @@ import 'package:timnew_reader/repositories/network/ParseExtensions.dart';
 import 'SiteAdapter.dart';
 import 'JingjiangAdapter.dart';
 import 'PiaotianAdapter.dart';
+import 'QidianAdapter.dart';
 
 import 'ReaderHttpClient.dart';
 
@@ -19,7 +20,7 @@ class BookRepository {
   static Map<String, SiteAdapter> adapters = {
     PiaotianAdapter.adapterName: PiaotianAdapter(client),
     JingjiangAdapter.adapterName: JingjiangAdapter(client),
-    // QidianAdapter.name: QidianAdapter(client)
+    QidianAdapter.adapterName: QidianAdapter(client)
   };
 
   static Future<NewBook> parseNewBook(String urlString) async {

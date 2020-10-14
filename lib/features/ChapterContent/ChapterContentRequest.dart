@@ -32,7 +32,7 @@ class ChapterContentRequest extends Request<ChapterContent> {
 
   @override
   Future<ChapterContent> load() async {
-    final content = await bookIndex.fetchChapterContent(chapterUrl).timeout(Duration(seconds: 3));
+    final content = await bookIndex.fetchChapterContent(chapterUrl).timeout(Duration(seconds: 5));
 
     await BookIndexRepository.saveCurrentChapter(bookIndex.bookId, chapterUrl);
 

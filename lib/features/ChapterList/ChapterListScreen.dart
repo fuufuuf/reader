@@ -96,7 +96,7 @@ class ChapterListBottomSheet extends StatelessWidget {
           children: <Widget>[
             InkWell(
               child: ListTile(
-                leading: Icon(Icons.info),
+                leading: Icon(Icons.info_outline),
                 title: Text("書目信息"),
                 onTap: () => dismiss(context, onBookInfo),
               ),
@@ -140,8 +140,10 @@ class _ChapterListView extends StatelessWidget {
   Widget build(BuildContext context) {
     scheduleJumpToCurrentPage(context);
 
+    final scrollController = context.watch<ItemScrollController>();
+
     return ScrollablePositionedList.builder(
-      itemBuilder: (context, index) => _ChapterEntry(request, index, chapters[index]),
+      itemBuilder: (context, index) => _ChapterEntry(request, index, chapters[index], scrollController),
       itemCount: chapters.length,
       itemScrollController: scrollController,
       itemPositionsListener: scrollListener,
@@ -159,8 +161,9 @@ class _ChapterEntry extends StatelessWidget {
   final ChapterListRequest request;
   final ChapterRef chapter;
   final int index;
+  final ItemScrollController scrollController;
 
-  _ChapterEntry(this.request, this.index, this.chapter);
+  _ChapterEntry(this.request, this.index, this.chapter, this.scrollController);
 
   @override
   Widget build(BuildContext context) {
@@ -169,7 +172,7 @@ class _ChapterEntry extends StatelessWidget {
       title: Text(chapter.title),
       onTap: () async {
         await AppRouter.of(context).gotoChapterContent(request.bookIndex, chapter);
-        context.read<ItemScrollController>().scrollToCurrentChapter(context, request);
+        scrollController.scrollToCurrentChapter(context, request);
       },
     );
   }

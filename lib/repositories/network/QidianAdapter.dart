@@ -27,19 +27,19 @@ class QidianAdapter extends SiteAdapter {
 
   @override
   Future<BookInfo> fetchBookInfo(BookIndex bookIndex) async {
-    final document = await client.fetchDom(bookIndex.bookInfoUrl);
+    final document = await client.fetchDom(bookIndex.bookInfoUrl, enforceGbk: false);
 
     return BookInfo(
       bookIndex: bookIndex,
-      author: document.querySelector('.book-info .writer').text?.trim(),
-      genre: document.querySelector('.book-info a.red').text?.trim(),
-      completeness: document.querySelector('.book-info span.blue').text?.trim(),
+      author: document.querySelector('.book-info .writer')?.text?.trim(),
+      genre: document.querySelector('.book-info a.red')?.text?.trim(),
+      completeness: document.querySelector('.book-info span.blue')?.text?.trim(),
     );
   }
 
   @override
   Future<ChapterList> fetchChapterList(BookIndex bookIndex) async {
-    final document = await client.fetchDom(bookIndex.chapterListUrl);
+    final document = await client.fetchDom(bookIndex.chapterListUrl, enforceGbk: false);
 
     final chapterListElements = document.querySelectorAll('.volume ul.cf > li > a') ?? userError("頁面結構錯誤，無法獲取章節清單");
 
@@ -50,35 +50,39 @@ class QidianAdapter extends SiteAdapter {
   }
 
   ChapterRef _buildChapterRef(BookIndex bookIndex, Element element) {
+    final url = element.href()?.asUri()?.enforceHttps() ?? userError("無法獲取章節鏈接 $element");
+
     return ChapterRef(
       bookIndex: bookIndex,
-      url: element.href()?.asUri() ?? userError("無法獲取章節鏈接 $element"),
+      url: url,
       title: element.text?.trim() ?? userError("無法獲取章節名字 $element"),
+      isLocked: _isVipChapter(url),
     );
   }
 
   @override
   Future<ChapterContent> fetchChapterContent(BookIndex bookIndex, Uri url) async {
-    final document = await client.fetchDom(url);
+    final document = await client.fetchDom(url, enforceGbk: false);
 
     final chapterTitle = document.querySelector('.j_chapterName').text.trim() ?? userError("頁面結構錯誤，無法獲取章節標題");
 
     // Element always exists, but with no href on first page.
-    final previousChapterUrl = document.getElementById('j_chapterPrev').href()?.asAbsoluteUri(url)?.enforceHttps();
+    final previousChapterUrl = document
+        .getElementById('j_chapterPrev')
+        .href()
+        .asUri()
+        .nullIf((u) => u.scheme.safeEqual("javascript"))
+        ?.enforceHttps();
 
     // Element and href always exists, but link to different url on last page
     //read.qidian.com/chapter/ZrTmoA_1aYDdjrstIrF5-w2/cMN5gBOw6662uJcMpdsVgA2
     //read.qidian.com/lastpage/1023335251
     final nextChapterUrl = document
-        .getElementById('j_chapterPrev')
+        .getElementById('j_chapterNext')
         .href()
-        ?.asAbsoluteUri(url)
-        ?.enforceHttps()
-        ?.nullIf((u) => u.pathSegments.first.safeEqual("lastpage"));
-
-    final paragraphs = document.querySelectorAll('.read-content .content-wrap').asParagraphs();
-
-    final isLocked = url.host.safeEqual("vipreader.qidian.com");
+        .asAbsoluteUri(url)
+        .enforceHttps()
+        .nullIf((u) => u.pathSegments.first.safeEqual("lastpage"));
 
     return ChapterContent(
       bookIndex: bookIndex,
@@ -86,10 +90,12 @@ class QidianAdapter extends SiteAdapter {
       title: chapterTitle,
       previousChapterUrl: previousChapterUrl,
       nextChapterUrl: nextChapterUrl,
-      isLocked: isLocked,
-      paragraphs: paragraphs,
+      isLocked: _isVipChapter(url),
+      paragraphs: document.querySelector('.read-content').notEmptyChildrenTextAsParagraphs(),
     );
   }
+
+  bool _isVipChapter(Uri url) => url.host.safeEqual("vipreader.qidian.com");
 
   @override
   Future<NewBook> parseNewBook(Uri url) async {
@@ -101,10 +107,12 @@ class QidianAdapter extends SiteAdapter {
     if (url.host.safeEqual("book.qidian.com")) {
       return newBookFromBookInfo(url);
     }
+
+    return newBookFromChapterContent(url);
   }
 
   Future<NewBook> newBookFromBookInfo(Uri url) async {
-    final document = await client.fetchDom(url);
+    final document = await client.fetchDom(url, enforceGbk: false);
 
     return NewBook(
       adapter: adapterName,
@@ -116,16 +124,17 @@ class QidianAdapter extends SiteAdapter {
   }
 
   Future<NewBook> newBookFromChapterContent(Uri url) async {
-    final document = await client.fetchDom(url);
+    final document = await client.fetchDom(url, enforceGbk: false);
 
     final bookInfoElement = document.querySelector('.info.fl > a') ?? userError("頁面結構錯誤，無法找到書目首頁鏈接");
+    final bookName = bookInfoElement.firstNotEmptyChildText() ?? userError("頁面結構錯, 無法解析書名");
     final bookInfoUrl =
         bookInfoElement.href()?.asUri()?.enforceHttps() ?? userError("頁面結構錯誤，無法獲取書目首頁鏈接 $bookInfoElement");
 
     return NewBook(
       adapter: adapterName,
       bookId: _buildBookId(bookInfoUrl),
-      bookName: bookInfoElement?.text?.trim() ?? userError("頁面結構錯, 無法解析書名"),
+      bookName: bookName,
       bookInfoUrl: bookInfoUrl,
       chapterListUrl: bookInfoUrl,
       currentChapterUrl: url,

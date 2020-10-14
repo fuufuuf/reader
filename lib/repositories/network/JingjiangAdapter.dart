@@ -125,7 +125,7 @@ class JingjiangAdapter extends SiteAdapter {
       previousChapterUrl: previousChapterUrl,
       nextChapterUrl: nextChapterUrl,
       isLocked: false,
-      paragraphs: contentText.textNodesAsParagraphs().toBuiltList(),
+      paragraphs: contentText.notEmptyTextChildrenAsParagraphs(),
     );
   }
 

@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:html/dom.dart';
 import 'package:timnew_reader/features/App/UserException.dart';
 
@@ -30,7 +31,7 @@ extension StringParseExtension on String {
     }
   }
 
-  bool safeEqual(String expected) => this?.toLowerCase() == expected;
+  bool safeEqual(String expected) => this?.toLowerCase() == expected ?? false;
 
   String remove(String toBeRemoved) => replaceAll(toBeRemoved, "");
 }
@@ -40,12 +41,21 @@ extension ElementParseExtension on Element {
 
   String rel() => attributes['rel'];
 
-  Iterable<String> textNodesAsParagraphs() => nodes.where((node) => node.nodeType == Node.TEXT_NODE).asParagraphs();
+  String firstNotEmptyChildText() => nodes.notEmptyTexts().first;
+
+  BuiltList<String> notEmptyTextChildrenAsParagraphs() => nodes.textChildren().notEmptyTexts().asParagraphs();
+
+  BuiltList<String> notEmptyChildrenTextAsParagraphs() => nodes.notEmptyTexts().asParagraphs();
 }
 
 extension NodeListParseExtension on Iterable<Node> {
-  Iterable<String> asParagraphs() =>
-      this.map((node) => node.text.trim()).where((text) => text.isNotEmpty).map((text) => '    ' + text);
+  Iterable<Node> textChildren() => where((node) => node.nodeType == Node.TEXT_NODE);
+
+  Iterable<String> notEmptyTexts() => map((node) => node.text.trim()).where((text) => text.isNotEmpty);
+}
+
+extension StringIterableExtension on Iterable<String> {
+  BuiltList<String> asParagraphs() => map((text) => '    ' + text).toBuiltList();
 }
 
 extension UriParseExtension on Uri {

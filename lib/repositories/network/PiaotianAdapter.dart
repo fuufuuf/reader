@@ -86,7 +86,7 @@ class PiaotianAdapter extends SiteAdapter {
           ?.asAbsoluteUri(url)
           ?.enforceHttps()
           ?.nullIfPathNotMatch(chapterContentPathPattern),
-      paragraphs: document.getElementById('content').textNodesAsParagraphs().toBuiltList(),
+      paragraphs: document.getElementById('content').notEmptyTextChildrenAsParagraphs(),
     );
   }
 
