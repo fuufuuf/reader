@@ -50,8 +50,21 @@ class ReadingControlPanel extends StatelessWidget {
                   onTap: dismissThen(context, () => request.reload()),
                 ),
                 PanelSpacer(),
-                PanelSelect(),
-                PanelSelect(),
+                PanelSelect(
+                  options: {
+                    0.8: "0.8x",
+                    1.0: "標準",
+                    1.2: "1.2x",
+                    1.4: "1.4x",
+                    1.6: "1.6x",
+                    1.8: "1.8x",
+                    2.0: "2.0x",
+                  },
+                  value: context.watch<AppTheme>().readingThemeData.fontScaleFactor ?? 1.0,
+                  onValueChanged: (newScaleFactor) =>
+                      dismissThen(context, () => themeManager.updateTextScale(newScaleFactor))(),
+                ),
+                PanelSpacer(widthFactor: 2),
                 PanelButton(
                   icon: Icons.menu,
                   text: "章節目錄",
@@ -86,8 +99,12 @@ class ReadingControlPanel extends StatelessWidget {
     );
   }
 
+  void dismiss(BuildContext context) {
+    Navigator.pop(context);
+  }
+
   VoidCallback dismissThen(BuildContext context, void Function() nextAction) => () {
-        Navigator.pop(context);
+        dismiss(context);
         nextAction();
       };
 }
@@ -180,17 +197,46 @@ class PanelToggleButton extends StatelessWidget {
       );
 }
 
-class PanelSelect extends StatelessWidget {
+class PanelSelect<T> extends StatelessWidget {
+  final Map<T, String> options;
+  final T value;
+  final Function(T) onValueChanged;
+  final List<T> values;
+
+  PanelSelect({
+    Key key,
+    @required this.options,
+    @required this.value,
+    @required this.onValueChanged,
+  })  : assert(options != null),
+        assert(value != null),
+        assert(options[value] != null),
+        assert(onValueChanged != null),
+        values = options.keys.toList(growable: false),
+        super(key: key);
+
   @override
-  Widget build(BuildContext context) => PanelWidgetContainer(
-        widthFactor: 2,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            IconButton(icon: Icon(Icons.remove_circle_outline), onPressed: () {}),
-            Text("測試"),
-            IconButton(icon: Icon(Icons.add_circle_outline), onPressed: () {}),
-          ],
-        ),
-      );
+  Widget build(BuildContext context) {
+    final text = options[value];
+    final index = values.indexOf(value);
+
+    return PanelWidgetContainer(
+      widthFactor: 2,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          IconButton(icon: Icon(Icons.remove_circle_outline), onPressed: () => _updateIndex(index - 1)),
+          Text(text),
+          IconButton(icon: Icon(Icons.add_circle_outline), onPressed: () => _updateIndex(index + 1)),
+        ],
+      ),
+    );
+  }
+
+  void _updateIndex(int newIndex) {
+    final regulatedIndex = newIndex % values.length;
+    final newValue = values[regulatedIndex];
+
+    onValueChanged(newValue);
+  }
 }
