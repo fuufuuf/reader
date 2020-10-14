@@ -7,8 +7,9 @@ import 'package:timnew_reader/models/ChapterList.dart';
 import 'package:timnew_reader/models/NewBook.dart';
 import 'package:timnew_reader/repositories/network/safeExtractors.dart';
 
-import 'PiaotianAdapter.dart';
 import 'SiteAdapter.dart';
+import 'JingjiangAdapter.dart';
+import 'PiaotianAdapter.dart';
 
 import 'ReaderHttpClient.dart';
 
@@ -17,7 +18,7 @@ class BookRepository {
 
   static Map<String, SiteAdapter> adapters = {
     PiaotianAdapter.adapterName: PiaotianAdapter(client),
-    // JingjiangAdapter.name: JingjiangAdapter(client),
+    JingjiangAdapter.adapterName: JingjiangAdapter(client),
     // QidianAdapter.name: QidianAdapter(client)
   };
 

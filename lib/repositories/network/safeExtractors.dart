@@ -69,6 +69,8 @@ extension StringParseExtension on String {
 extension ElementParseExtension on Element {
   String href() => attributes['href'];
 
+  String rel() => attributes['rel'];
+
   Iterable<String> textNodesAsParagraphs() => nodes
       .where((node) => node.nodeType == Node.TEXT_NODE)
       .map((node) => node.text.trim())

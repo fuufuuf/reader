@@ -124,10 +124,10 @@ class PiaotianAdapter extends SiteAdapter {
 
     return NewBook(
       adapter: adapterName,
-      bookId: _bookId(url),
+      bookId: _extractBookId(url),
       bookName: document.querySelector('h1').text.trim(),
       bookInfoUrl: url,
-      chapterListUrl: "https://www.ptwxz.com/html/${_bookIdPath(url)}/".asUri(),
+      chapterListUrl: "https://www.ptwxz.com/html/${_extractBookIdPath(url)}/".asUri(),
     );
   }
 
@@ -136,9 +136,9 @@ class PiaotianAdapter extends SiteAdapter {
 
     return NewBook(
       adapter: adapterName,
-      bookId: _bookId(url),
+      bookId: _extractBookId(url),
       bookName: document.querySelector('.title h1')?.text?.trim()?.replaceAll("最新章节", ""),
-      bookInfoUrl: "https://www.ptwxz.com/bookinfo/${_bookIdPath(url)}.html".asUri(),
+      bookInfoUrl: "https://www.ptwxz.com/bookinfo/${_extractBookIdPath(url)}.html".asUri(),
       chapterListUrl: url,
     );
   }
@@ -150,15 +150,15 @@ class PiaotianAdapter extends SiteAdapter {
 
     return NewBook(
       adapter: adapterName,
-      bookId: _bookId(url),
+      bookId: _extractBookId(url),
       bookName: bookTitleAElement.text.trim(),
       bookInfoUrl: bookTitleAElement.href().asUri().enforceHttps(),
-      chapterListUrl: "https://www.ptwxz.com/html/${_bookIdPath(url)}/".asUri(),
+      chapterListUrl: "https://www.ptwxz.com/html/${_extractBookIdPath(url)}/".asUri(),
       currentChapterUrl: url,
     );
   }
 
-  String _bookId(Uri url) => _bookIdPath(url).replaceAll("/", "-");
+  String _extractBookId(Uri url) => _extractBookIdPath(url).replaceAll("/", "-");
 
-  String _bookIdPath(Uri url) => "${url.pathSegments[1]}/${url.pathSegments[2].replaceAll(".html", "")}";
+  String _extractBookIdPath(Uri url) => "${url.pathSegments[1]}/${url.pathSegments[2].replaceAll(".html", "")}";
 }
