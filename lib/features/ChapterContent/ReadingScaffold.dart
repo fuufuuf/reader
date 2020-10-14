@@ -20,8 +20,8 @@ class ReadingScaffold extends StatelessWidget {
     return Scaffold(
         key: Key('ReaderScaffold'),
         body: AnimatedContainer(
-          color: appTheme.readingThemeData.backgroundColor,
-          duration: appTheme.transitionDuration,
+          color: appTheme.palette.contentBackgroundColor,
+          duration: appTheme.defaultTransitionDuration,
           child: Builder(
             builder: (childContext) => builder(
               childContext,

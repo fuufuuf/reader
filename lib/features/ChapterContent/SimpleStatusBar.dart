@@ -14,7 +14,7 @@ class SimpleStatusBar extends StatefulWidget {
 class _SimpleStatusBarState extends State<SimpleStatusBar> {
   @override
   Widget build(BuildContext context) => ApplyTextColor(
-        textColor: context.watch<AppTheme>().readingThemeData.textColor,
+        textColor: context.watch<AppTheme>().contentForegroundColor,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Row(

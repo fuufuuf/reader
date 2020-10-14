@@ -4,7 +4,7 @@ import 'package:timnew_reader/arch/Loader.dart';
 import 'package:timnew_reader/features/BookList/BookListScreen.dart';
 import 'package:timnew_reader/features/Theme/AppTheme.dart';
 import 'package:timnew_reader/features/Theme/AppThemeLoader.dart';
-import 'package:timnew_reader/features/Theme/ThemeManager.dart';
+import 'package:timnew_reader/features/Theme/AppThemeManager.dart';
 
 import 'PersistentStorageInitializer.dart';
 
@@ -27,7 +27,7 @@ class ReaderApp extends StatelessWidget {
 
   Widget buildAppThemeProvider(BuildContext context, Widget child) {
     return ValueListenableProvider(
-      create: (context) => context.read<ThemeManager>(),
+      create: (context) => context.read<AppThemeManager>(),
       builder: buildTheme,
       child: child,
     );
@@ -37,8 +37,8 @@ class ReaderApp extends StatelessWidget {
     final appTheme = context.watch<AppTheme>();
 
     return AnimatedTheme(
-      duration: appTheme.transitionDuration,
-      data: ThemeData(brightness: appTheme.brightness),
+      duration: appTheme.defaultTransitionDuration,
+      data: ThemeData(brightness: appTheme.palette.brightness),
       child: child,
     );
   }

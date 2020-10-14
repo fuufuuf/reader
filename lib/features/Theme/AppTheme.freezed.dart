@@ -15,13 +15,11 @@ class _$AppThemeTearOff {
 
 // ignore: unused_element
   _AppTheme call(
-      {@required Brightness brightness,
-      @required Duration transitionDuration,
-      @required ReadingThemeData readingThemeData}) {
+      {@required ReadingColorPalette palette,
+      @required ReadingSettings settings}) {
     return _AppTheme(
-      brightness: brightness,
-      transitionDuration: transitionDuration,
-      readingThemeData: readingThemeData,
+      palette: palette,
+      settings: settings,
     );
   }
 }
@@ -32,9 +30,8 @@ const $AppTheme = _$AppThemeTearOff();
 
 /// @nodoc
 mixin _$AppTheme {
-  Brightness get brightness;
-  Duration get transitionDuration;
-  ReadingThemeData get readingThemeData;
+  ReadingColorPalette get palette;
+  ReadingSettings get settings;
 
   $AppThemeCopyWith<AppTheme> get copyWith;
 }
@@ -43,12 +40,10 @@ mixin _$AppTheme {
 abstract class $AppThemeCopyWith<$Res> {
   factory $AppThemeCopyWith(AppTheme value, $Res Function(AppTheme) then) =
       _$AppThemeCopyWithImpl<$Res>;
-  $Res call(
-      {Brightness brightness,
-      Duration transitionDuration,
-      ReadingThemeData readingThemeData});
+  $Res call({ReadingColorPalette palette, ReadingSettings settings});
 
-  $ReadingThemeDataCopyWith<$Res> get readingThemeData;
+  $ReadingColorPaletteCopyWith<$Res> get palette;
+  $ReadingSettingsCopyWith<$Res> get settings;
 }
 
 /// @nodoc
@@ -61,29 +56,34 @@ class _$AppThemeCopyWithImpl<$Res> implements $AppThemeCopyWith<$Res> {
 
   @override
   $Res call({
-    Object brightness = freezed,
-    Object transitionDuration = freezed,
-    Object readingThemeData = freezed,
+    Object palette = freezed,
+    Object settings = freezed,
   }) {
     return _then(_value.copyWith(
-      brightness:
-          brightness == freezed ? _value.brightness : brightness as Brightness,
-      transitionDuration: transitionDuration == freezed
-          ? _value.transitionDuration
-          : transitionDuration as Duration,
-      readingThemeData: readingThemeData == freezed
-          ? _value.readingThemeData
-          : readingThemeData as ReadingThemeData,
+      palette:
+          palette == freezed ? _value.palette : palette as ReadingColorPalette,
+      settings:
+          settings == freezed ? _value.settings : settings as ReadingSettings,
     ));
   }
 
   @override
-  $ReadingThemeDataCopyWith<$Res> get readingThemeData {
-    if (_value.readingThemeData == null) {
+  $ReadingColorPaletteCopyWith<$Res> get palette {
+    if (_value.palette == null) {
       return null;
     }
-    return $ReadingThemeDataCopyWith<$Res>(_value.readingThemeData, (value) {
-      return _then(_value.copyWith(readingThemeData: value));
+    return $ReadingColorPaletteCopyWith<$Res>(_value.palette, (value) {
+      return _then(_value.copyWith(palette: value));
+    });
+  }
+
+  @override
+  $ReadingSettingsCopyWith<$Res> get settings {
+    if (_value.settings == null) {
+      return null;
+    }
+    return $ReadingSettingsCopyWith<$Res>(_value.settings, (value) {
+      return _then(_value.copyWith(settings: value));
     });
   }
 }
@@ -93,13 +93,12 @@ abstract class _$AppThemeCopyWith<$Res> implements $AppThemeCopyWith<$Res> {
   factory _$AppThemeCopyWith(_AppTheme value, $Res Function(_AppTheme) then) =
       __$AppThemeCopyWithImpl<$Res>;
   @override
-  $Res call(
-      {Brightness brightness,
-      Duration transitionDuration,
-      ReadingThemeData readingThemeData});
+  $Res call({ReadingColorPalette palette, ReadingSettings settings});
 
   @override
-  $ReadingThemeDataCopyWith<$Res> get readingThemeData;
+  $ReadingColorPaletteCopyWith<$Res> get palette;
+  @override
+  $ReadingSettingsCopyWith<$Res> get settings;
 }
 
 /// @nodoc
@@ -113,84 +112,68 @@ class __$AppThemeCopyWithImpl<$Res> extends _$AppThemeCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object brightness = freezed,
-    Object transitionDuration = freezed,
-    Object readingThemeData = freezed,
+    Object palette = freezed,
+    Object settings = freezed,
   }) {
     return _then(_AppTheme(
-      brightness:
-          brightness == freezed ? _value.brightness : brightness as Brightness,
-      transitionDuration: transitionDuration == freezed
-          ? _value.transitionDuration
-          : transitionDuration as Duration,
-      readingThemeData: readingThemeData == freezed
-          ? _value.readingThemeData
-          : readingThemeData as ReadingThemeData,
+      palette:
+          palette == freezed ? _value.palette : palette as ReadingColorPalette,
+      settings:
+          settings == freezed ? _value.settings : settings as ReadingSettings,
     ));
   }
 }
 
 /// @nodoc
-class _$_AppTheme implements _AppTheme {
-  _$_AppTheme(
-      {@required this.brightness,
-      @required this.transitionDuration,
-      @required this.readingThemeData})
-      : assert(brightness != null),
-        assert(transitionDuration != null),
-        assert(readingThemeData != null);
+class _$_AppTheme extends _AppTheme {
+  _$_AppTheme({@required this.palette, @required this.settings})
+      : assert(palette != null),
+        assert(settings != null),
+        super._();
 
   @override
-  final Brightness brightness;
+  final ReadingColorPalette palette;
   @override
-  final Duration transitionDuration;
-  @override
-  final ReadingThemeData readingThemeData;
+  final ReadingSettings settings;
 
   @override
   String toString() {
-    return 'AppTheme(brightness: $brightness, transitionDuration: $transitionDuration, readingThemeData: $readingThemeData)';
+    return 'AppTheme(palette: $palette, settings: $settings)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _AppTheme &&
-            (identical(other.brightness, brightness) ||
+            (identical(other.palette, palette) ||
                 const DeepCollectionEquality()
-                    .equals(other.brightness, brightness)) &&
-            (identical(other.transitionDuration, transitionDuration) ||
+                    .equals(other.palette, palette)) &&
+            (identical(other.settings, settings) ||
                 const DeepCollectionEquality()
-                    .equals(other.transitionDuration, transitionDuration)) &&
-            (identical(other.readingThemeData, readingThemeData) ||
-                const DeepCollectionEquality()
-                    .equals(other.readingThemeData, readingThemeData)));
+                    .equals(other.settings, settings)));
   }
 
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(brightness) ^
-      const DeepCollectionEquality().hash(transitionDuration) ^
-      const DeepCollectionEquality().hash(readingThemeData);
+      const DeepCollectionEquality().hash(palette) ^
+      const DeepCollectionEquality().hash(settings);
 
   @override
   _$AppThemeCopyWith<_AppTheme> get copyWith =>
       __$AppThemeCopyWithImpl<_AppTheme>(this, _$identity);
 }
 
-abstract class _AppTheme implements AppTheme {
+abstract class _AppTheme extends AppTheme {
+  _AppTheme._() : super._();
   factory _AppTheme(
-      {@required Brightness brightness,
-      @required Duration transitionDuration,
-      @required ReadingThemeData readingThemeData}) = _$_AppTheme;
+      {@required ReadingColorPalette palette,
+      @required ReadingSettings settings}) = _$_AppTheme;
 
   @override
-  Brightness get brightness;
+  ReadingColorPalette get palette;
   @override
-  Duration get transitionDuration;
-  @override
-  ReadingThemeData get readingThemeData;
+  ReadingSettings get settings;
   @override
   _$AppThemeCopyWith<_AppTheme> get copyWith;
 }

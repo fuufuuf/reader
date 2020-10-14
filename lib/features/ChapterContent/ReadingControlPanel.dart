@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:timnew_reader/features/ChapterList/ChapterListScreen.dart';
 import 'package:timnew_reader/features/Theme/AppTheme.dart';
-import 'package:timnew_reader/features/Theme/ThemeManager.dart';
-import 'package:timnew_reader/widgets/DefaultTextIconColor.dart';
+import 'package:timnew_reader/features/Theme/ApplyTextColor.dart';
+import 'package:timnew_reader/features/Theme/AppThemeManager.dart';
 
 import 'ChapterContentRequest.dart';
 
@@ -16,17 +16,17 @@ class ReadingControlPanel extends StatelessWidget {
     final appTheme = context.read<AppTheme>();
     return showModalBottomSheet(
       context: context,
-      backgroundColor: appTheme.readingThemeData.popUpBackgroundColor,
+      backgroundColor: appTheme.palette.controlPanelBackgroundColor,
       builder: (context) => ReadingControlPanel(request: request),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final themeManager = context.watch<ThemeManager>();
+    final themeManager = context.watch<AppThemeManager>();
     final appTheme = context.watch<AppTheme>();
-    return DefaultTextIconColor(
-      color: appTheme.readingThemeData.popUpTextColor,
+    return ApplyTextColor(
+      textColor: appTheme.palette.controlPanelForegroundColor,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: Column(
@@ -60,9 +60,11 @@ class ReadingControlPanel extends StatelessWidget {
                     1.8: "1.8x",
                     2.0: "2.0x",
                   },
-                  value: context.watch<AppTheme>().readingThemeData.fontScaleFactor ?? 1.0,
-                  onValueChanged: (newScaleFactor) =>
-                      dismissThen(context, () => themeManager.updateTextScale(newScaleFactor))(),
+                  value: appTheme.settings.readingTextScaleFactor ?? 1.0,
+                  onValueChanged: (newScaleFactor) => dismissThen(
+                      context,
+                      () => themeManager
+                          .updateAppTheme((t) => t.copyWith.settings(readingTextScaleFactor: newScaleFactor)))(),
                 ),
                 PanelSpacer(widthFactor: 2),
                 PanelButton(
@@ -78,8 +80,8 @@ class ReadingControlPanel extends StatelessWidget {
                   onText: "熄燈",
                   offIcon: Icons.wb_sunny_outlined,
                   offText: "開燈",
-                  value: appTheme.brightness == Brightness.light,
-                  onTap: dismissThen(context, () => themeManager.invertBrightness()),
+                  value: appTheme.palette.brightness == Brightness.light,
+                  onTap: dismissThen(context, () => themeManager.updateAppTheme((t) => t.invertBrightness())),
                 ),
                 PanelButton(
                   icon: Icons.arrow_back,

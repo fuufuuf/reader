@@ -1,26 +1,16 @@
-import 'dart:ui';
-
 import 'package:flutter/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timnew_reader/arch/Loader.dart';
-import 'package:timnew_reader/repositories/settings/ThemeRepository.dart';
 
-import 'AppTheme.dart';
-import 'ThemeManager.dart';
+import 'AppThemeManager.dart';
 
-class AppThemeLoader extends Loader<ThemeManager> {
+class AppThemeLoader extends Loader<AppThemeManager> {
   AppThemeLoader({Key key, Widget child}) : super(key: key, child: child);
 
   @override
-  Future<ThemeManager> initialize() async {
-    await ThemeRepository.init();
+  Future<AppThemeManager> initialize() async {
+    final prefs = await SharedPreferences.getInstance();
 
-    final readingThemeData = ThemeRepository.getPalette(Brightness.light);
-
-    final appTheme = AppTheme(
-      brightness: Brightness.light,
-      readingThemeData: readingThemeData,
-      transitionDuration: Duration(microseconds: 800),
-    );
-    return ThemeManager(appTheme);
+    return AppThemeManager.fromSharedPreferences(prefs);
   }
 }
