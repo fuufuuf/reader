@@ -78,12 +78,12 @@ class JingjiangAdapter extends SiteAdapter {
      */
     final tds = element.querySelectorAll('td');
 
-    userAssert(tds.length > 3, "章節節點元素數異常: $element");
+    satisfy(tds.length > 3) ?? userError("章節節點元素數異常: $element");
 
     // tds[1] and tds[2] which contains chapter name varies from book to book
     final title = tds.sublist(1, 2).map((e) => e.text?.trim()).where((e) => e != null).join(" ");
 
-    final aElement = notNull(element.querySelector('[itemprop=url]'), "章節節點獲取失敗: $element");
+    final aElement = element.querySelector('[itemprop=url]') ?? userError("章節節點獲取失敗: $element");
 
     final normalUrl = aElement?.href()?.asAbsoluteUri(bookIndex.chapterListUrl)?.enforceHttps();
 
@@ -103,26 +103,25 @@ class JingjiangAdapter extends SiteAdapter {
 
     final document = await client.fetchDom(url);
 
-    final contentTable = document.getElementById('oneboolt');
-    final rows = contentTable.querySelectorAll('tr');
+    final contentTable = document.getElementById('oneboolt') ?? userError("頁面結構錯誤, 無法找到內容");
 
-    final pagingLinks = rows.last.querySelectorAll('a');
+    final pagingLinks =
+        contentTable.querySelectorAll('tr')?.last?.querySelectorAll('a') ?? userError("頁面結構錯誤, 無法找到導航條");
+
     final pageLinksCount = pagingLinks.length;
+    pageLinksCount.checkInRange(1, 2, "導航條解析錯誤：異常的導航鏈接數 $pageLinksCount");
 
-    userAssert(pageLinksCount == 1 || pageLinksCount == 2, "導航條解析錯誤：異常的導航鏈接數 $pageLinksCount");
+    final previousChapterUrl = pageLinksCount == 1 ? null : pagingLinks.first.href().asAbsoluteUri(url).enforceHttps();
 
-    final previousChapterUrl = (pageLinksCount == 1) ? null : safeUrl(url, () => pagingLinks.first.attributes['href']);
-
-    final nextUrl = url.resolve(pagingLinks.last.attributes['href']);
-
+    final nextUrl = pagingLinks.last.href().asAbsoluteUri(url).enforceHttps();
     final nextChapterUrl = nextUrl.path.safeEqual("/onebook.php") ? nextUrl : null;
 
-    final contentText = contentTable.querySelector('.noveltext');
+    final contentText = contentTable.querySelector('.noveltext') ?? userError("無法找到章節內容");
 
     return ChapterContent(
       bookIndex: bookIndex,
       url: url,
-      title: contentText.querySelector('h2').text?.trim(),
+      title: contentText.querySelector('h2')?.text?.trim() ?? userError("無法找到章節標題"),
       previousChapterUrl: previousChapterUrl,
       nextChapterUrl: nextChapterUrl,
       isLocked: false,
@@ -140,10 +139,10 @@ class JingjiangAdapter extends SiteAdapter {
 
   @override
   Future<NewBook> parseNewBook(Uri url) {
-    userAssert(url.host.safeEqual('www.jjwxc.net'), "不支持的網站: ${url.host}");
-    userAssert(url.path.safeEqual('/onebook.php'), "不支持的路徑: ${url.path}");
-    userAssert(url.hasQuery, "沒有 QueryString: ${url.toString()}");
-    userAssert(_extractBookId(url) != null, "沒有數目 ID");
+    satisfy(url.host.safeEqual('www.jjwxc.net')) ?? userError("不支持的網站: ${url.host}");
+    satisfy(url.path.safeEqual('/onebook.php')) ?? userError("不支持的路徑: ${url.path}");
+    satisfy(url.hasQuery) ?? userError("沒有 QueryString: ${url.toString()}");
+    _extractBookId(url) ?? userError("沒有數目 ID");
 
     final chapterId = _extractChapterId(url);
     if (chapterId == null) return _newBookFromBookInfo(url);

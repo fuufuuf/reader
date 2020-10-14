@@ -6,7 +6,7 @@ import 'package:http/http.dart';
 import 'package:timnew_reader/features/App/UserException.dart';
 
 class ReaderHttpClient {
-  Future<Document> fetchDom(Uri url, {bool enforceGbk: false, String patchHtml(String html)}) async {
+  Future<Document> fetchDom(Uri url, {bool enforceGbk: true, String patchHtml(String html)}) async {
     final response = await http.get(url);
 
     if (response.statusCode != 200) {

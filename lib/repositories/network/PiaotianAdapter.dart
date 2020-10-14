@@ -24,40 +24,41 @@ class PiaotianAdapter extends SiteAdapter {
 
   @override
   Future<BookInfo> fetchBookInfo(BookIndex bookIndex) async {
-    final document = await client.fetchDom(bookIndex.bookInfoUrl, enforceGbk: true);
+    final document = await client.fetchDom(bookIndex.bookInfoUrl);
+
+    final metaCells = document
+            .querySelectorAll('#content > table > tbody > tr > td > table[cellpadding="3"]')
+            ?.first
+            ?.querySelectorAll('tr > td') ??
+        {userError("頁面結構錯，無法找到書籍信息")};
 
     return BookInfo(
       bookIndex: bookIndex,
-      author: _extractMeta(document, 3, '作    者：'),
-      genre: _extractMeta(document, 2, '类    别：'),
-      completeness: _extractMeta(document, 7, '文章状态：'),
-      lastUpdated: _extractMeta(document, 6, '最后更新：'),
-      length: _extractMeta(document, 5, '全文长度：'),
+      genre: _extractMeta(metaCells, 2, '类    别：'),
+      author: _extractMeta(metaCells, 3, '作    者：'),
+      length: _extractMeta(metaCells, 5, '全文长度：'),
+      lastUpdated: _extractMeta(metaCells, 6, '最后更新：'),
+      completeness: _extractMeta(metaCells, 7, '文章状态：'),
     );
   }
 
-  String _extractMeta(Document document, int index, String toRemove) => document
-      .querySelectorAll('#content > table > tbody > tr > td > table[cellpadding="3"]')
-      .first
-      .querySelectorAll('tr > td')[index]
-      .text
-      .replaceAll(toRemove, '')
-      .trim();
+  String _extractMeta(List<Element> metaCells, int index, String toBeRemoved) =>
+      metaCells[index]?.text?.remove(toBeRemoved)?.trim();
 
   @override
   Future<ChapterList> fetchChapterList(BookIndex bookIndex) async {
-    final document = await client.fetchDom(bookIndex.chapterListUrl, enforceGbk: true);
+    final document = await client.fetchDom(bookIndex.chapterListUrl);
+
+    final List<Element> chapterListElements =
+        document.querySelectorAll('.mainbody .centent ul li a') ?? {userError("頁面結構錯誤, 無法找到章節信息容器")};
 
     return ChapterList(
       bookIndex: bookIndex,
-      chapters: _buildChapters(bookIndex, document, bookIndex.chapterListUrl),
+      chapters: chapterListElements
+          .map((element) => _buildChapterRef(bookIndex, bookIndex.chapterListUrl, element))
+          .toBuiltList(),
     );
   }
-
-  BuiltList<ChapterRef> _buildChapters(BookIndex bookIndex, Document document, Uri url) => document
-      .querySelectorAll('.mainbody .centent ul li a')
-      .map((element) => _buildChapterRef(bookIndex, url, element))
-      .toBuiltList();
 
   ChapterRef _buildChapterRef(BookIndex bookIndex, Uri base, Element element) => ChapterRef(
         bookIndex: bookIndex,
@@ -67,12 +68,12 @@ class PiaotianAdapter extends SiteAdapter {
 
   @override
   Future<ChapterContent> fetchChapterContent(BookIndex bookIndex, Uri url) async {
-    final document = await client.fetchDom(url, enforceGbk: true, patchHtml: _bypassAntiScrape);
+    final document = await client.fetchDom(url, patchHtml: _bypassAntiScrape);
 
     return ChapterContent(
       bookIndex: bookIndex,
       url: url,
-      title: document.querySelector('h1').text.trim() ?? "",
+      title: document.querySelector('h1').text.trim() ?? {userError("頁面結構錯誤，無法找到標題")},
       previousChapterUrl: document
           .querySelectorAll('.toplink > a')[0]
           ?.href()
@@ -102,13 +103,13 @@ class PiaotianAdapter extends SiteAdapter {
     // https://www.ptwxz.com/html/11/11014/7882142.html
 
     if (url.pathSegments.first.safeEqual("bookinfo")) {
-      userAssert(url.pathSegments.length == 3, "無效的書目首頁鏈接 $url");
+      satisfy(url.pathSegments.length == 3) ?? userError("無效的書目首頁鏈接 $url");
       return newBookFromBookInfo(url);
     }
 
-    userAssert(url.pathSegments.first.safeEqual("html"), "無效的書目鏈接 $url");
+    satisfy(url.pathSegments.first.safeEqual("html")) ?? userError("無效的書目鏈接 $url");
 
-    userAssert(url.pathSegments.length == 3 || url.pathSegments.length == 4, "無效的書目鏈接 $url");
+    satisfy(url.pathSegments.length == 3 || url.pathSegments.length == 4) ?? userError("無效的書目鏈接 $url");
 
     if (url.pathSegments.length == 3 ||
         url.pathSegments.last.safeEqual("index.html") ||
@@ -120,33 +121,33 @@ class PiaotianAdapter extends SiteAdapter {
   }
 
   Future<NewBook> newBookFromBookInfo(Uri url) async {
-    final document = await client.fetchDom(url, enforceGbk: true);
+    final document = await client.fetchDom(url);
 
     return NewBook(
       adapter: adapterName,
       bookId: _extractBookId(url),
-      bookName: document.querySelector('h1').text.trim(),
+      bookName: document.querySelector('h1')?.text?.trim() ?? userError("頁面結構錯誤，無法找到書名"),
       bookInfoUrl: url,
       chapterListUrl: "https://www.ptwxz.com/html/${_extractBookIdPath(url)}/".asUri(),
     );
   }
 
   Future<NewBook> newBookFromChapterList(Uri url) async {
-    final document = await client.fetchDom(url, enforceGbk: true);
+    final document = await client.fetchDom(url);
 
     return NewBook(
       adapter: adapterName,
       bookId: _extractBookId(url),
-      bookName: document.querySelector('.title h1')?.text?.trim()?.replaceAll("最新章节", ""),
+      bookName: document.querySelector('.title h1')?.text?.trim()?.remove("最新章节") ?? userError("頁面結構錯誤，無法找到書名"),
       bookInfoUrl: "https://www.ptwxz.com/bookinfo/${_extractBookIdPath(url)}.html".asUri(),
       chapterListUrl: url,
     );
   }
 
   Future<NewBook> newBookFromChapterContent(Uri url) async {
-    final document = await client.fetchDom(url, enforceGbk: true, patchHtml: _bypassAntiScrape);
+    final document = await client.fetchDom(url, patchHtml: _bypassAntiScrape);
 
-    final bookTitleAElement = document.querySelector('h1 > a');
+    final Element bookTitleAElement = document.querySelector('h1 > a') ?? {userError("頁面結構錯誤, 無法找到標題信息")};
 
     return NewBook(
       adapter: adapterName,
@@ -160,5 +161,5 @@ class PiaotianAdapter extends SiteAdapter {
 
   String _extractBookId(Uri url) => _extractBookIdPath(url).replaceAll("/", "-");
 
-  String _extractBookIdPath(Uri url) => "${url.pathSegments[1]}/${url.pathSegments[2].replaceAll(".html", "")}";
+  String _extractBookIdPath(Uri url) => "${url.pathSegments[1]}/${url.pathSegments[2].remove(".html")}";
 }
