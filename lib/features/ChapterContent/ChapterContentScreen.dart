@@ -9,6 +9,7 @@ import 'package:timnew_reader/models/ChapterContent.dart';
 import 'ChapterContentRequest.dart';
 import 'ChapterContentView.dart';
 import 'OverscrollDetector.dart';
+import 'ReadingControlPanel.dart';
 import 'ReadingPopUpMenu.dart';
 import 'ReadingScaffold.dart';
 
@@ -56,21 +57,15 @@ class _ChapterContentScreenState extends State<ChapterContentScreen> with Render
   @override
   Widget build(BuildContext context) {
     return ReadingScaffold(
-      onDoubleTap: _onDoubleTap,
+      builder: _buildGestureDetector,
       content: buildStream(request.valueStream),
     );
   }
 
-  Widget _buildContainer({Widget child}) {
-    return OverscrollDetector(
-      key: Key("NavigateContainer"),
-      allowUpwardOverscroll: request.hasPreviousChapter,
-      allowDownwardOverscroll: request.hasNextChapter,
-      onUpwardNavigate: _navigateUp,
-      onDownwardNavigate: _navigateDown,
-      child: child,
-    );
-  }
+  Widget _buildGestureDetector(BuildContext context, Widget child) => GestureDetector(
+        onDoubleTap: () => _onDoubleTap(context),
+        child: child,
+      );
 
   Widget buildWaiting(BuildContext context) {
     var theme = Theme.of(context);
@@ -122,28 +117,39 @@ class _ChapterContentScreenState extends State<ChapterContentScreen> with Render
 
   @override
   Widget buildData(BuildContext context, ChapterContent content) {
-    return _buildContainer(
+    return OverscrollDetector(
+      allowUpwardOverscroll: request.hasPreviousChapter,
+      allowDownwardOverscroll: request.hasNextChapter,
+      onUpwardNavigate: loadPreviousChapter,
+      onDownwardNavigate: loadNextChapter,
       child: ReadingContent(chapter: content),
     );
   }
 
   void _onDoubleTap(BuildContext context) {
+    // showPopUpDialog(context);
+    showReadingControl(context);
+  }
+
+  void showPopUpDialog(BuildContext context) {
     showDialog(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext dialogContext) => ReadingPopUpMenu(
         request: request,
-        navigateUp: _navigateUp,
-        navigateDown: _navigateDown,
+        navigateUp: loadPreviousChapter,
+        navigateDown: loadNextChapter,
       ),
     );
   }
 
-  void _navigateUp() {
+  Future showReadingControl(BuildContext context) => ReadingControlPanel.show(context: context, request: request);
+
+  void loadPreviousChapter() {
     request.loadPreviousChapter();
   }
 
-  void _navigateDown() {
+  void loadNextChapter() {
     request.loadNextChapter();
   }
 }

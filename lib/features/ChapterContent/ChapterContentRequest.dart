@@ -7,6 +7,7 @@ import 'package:timnew_reader/models/ChapterContent.dart';
 import 'package:timnew_reader/models/ChapterRef.dart';
 import 'package:timnew_reader/repositories/network/BookRepository.dart';
 import 'package:timnew_reader/repositories/settings/BookIndexRepository.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ChapterContentRequest extends Request<ChapterContent> {
   final BookIndex bookIndex;
@@ -51,11 +52,21 @@ class ChapterContentRequest extends Request<ChapterContent> {
 
   bool get hasPreviousChapter => currentData?.hasPrevious ?? false;
 
-  Future<Result<ChapterContent>> loadNextChapter() {
-    return _updateUrl(currentData?.nextChapterUrl);
-  }
+  Future<Result<ChapterContent>> loadNextChapter() async => _updateUrl(currentData?.nextChapterUrl);
 
-  Future<Result<ChapterContent>> loadPreviousChapter() {
-    return _updateUrl(currentData?.previousChapterUrl);
+  Future<Result<ChapterContent>> loadPreviousChapter() async => _updateUrl(currentData?.previousChapterUrl);
+
+  void openCurrentChapterInExternalBrowser() async {
+    final chapterContent = currentData;
+
+    if (chapterContent == null) {
+      return;
+    }
+
+    final urlString = chapterContent.url.toString();
+
+    if (await canLaunch(urlString)) {
+      await launch(urlString, forceSafariVC: false, forceWebView: false);
+    }
   }
 }
