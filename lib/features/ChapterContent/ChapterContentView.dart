@@ -2,16 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:timnew_reader/models/ChapterContent.dart';
 
+import 'ReadingTheme.dart';
+
 class ReadingContent extends StatelessWidget {
   final ChapterContent chapter;
 
   const ReadingContent({Key key, this.chapter}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => ListView.builder(
-        physics: const BouncingScrollPhysics(),
-        itemBuilder: _renderParagraph,
-        itemCount: chapter.paragraphs.length + 1,
+  Widget build(BuildContext context) => ReadingTheme(
+        child: ListView.builder(
+          physics: const BouncingScrollPhysics(),
+          itemBuilder: _renderParagraph,
+          itemCount: chapter.paragraphs.length + 1,
+        ),
       );
 
   Widget _renderParagraph(BuildContext context, int index) {
@@ -46,9 +50,10 @@ class _Paragraph extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-      padding: EdgeInsets.all(8),
-      child: Text(
-        content,
-        style: Theme.of(context).textTheme.bodyText1,
-      ));
+        padding: EdgeInsets.all(8),
+        child: Text(
+          content,
+          style: Theme.of(context).textTheme.bodyText1,
+        ),
+      );
 }

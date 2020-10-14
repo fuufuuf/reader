@@ -38,7 +38,6 @@ class ReadingControlPanel extends StatelessWidget {
             ),
             Wrap(
               children: [
-                PanelSpacer(),
                 PanelButton(
                   icon: Icons.open_in_browser,
                   text: "瀏覽器中打開",
@@ -49,7 +48,20 @@ class ReadingControlPanel extends StatelessWidget {
                   text: "重新加載",
                   onTap: dismissThen(context, () => request.reload()),
                 ),
-                PanelSpacer(),
+                PanelSelect(
+                  options: {
+                    1.2: "20% 行距",
+                    1.4: "40% 行距",
+                    1.6: "60% 行距",
+                    1.8: "80% 行距",
+                    2.0: "單倍行距",
+                    2.2: "120%行距",
+                    2.4: "140%行距",
+                  },
+                  value: appTheme.settings.readingLineSpaceScaleFactor,
+                  onValueChanged: (newScaleFactor) => themeManager
+                      .updateAppTheme((t) => t.copyWith.settings(readingLineSpaceScaleFactor: newScaleFactor)),
+                ),
                 PanelSelect(
                   options: {
                     0.8: "0.8x",
@@ -60,11 +72,9 @@ class ReadingControlPanel extends StatelessWidget {
                     1.8: "1.8x",
                     2.0: "2.0x",
                   },
-                  value: appTheme.settings.readingTextScaleFactor ?? 1.0,
-                  onValueChanged: (newScaleFactor) => dismissThen(
-                      context,
-                      () => themeManager
-                          .updateAppTheme((t) => t.copyWith.settings(readingTextScaleFactor: newScaleFactor)))(),
+                  value: appTheme.settings.readingTextScaleFactor,
+                  onValueChanged: (newScaleFactor) =>
+                      themeManager.updateAppTheme((t) => t.copyWith.settings(readingTextScaleFactor: newScaleFactor)),
                 ),
                 PanelSelect(
                   options: Map.fromEntries(Iterable.generate(appTheme.palette.contentForegroundColors.length)

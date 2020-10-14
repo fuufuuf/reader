@@ -10,7 +10,7 @@ abstract class ReadingSettings with _$ReadingSettings {
 
   factory ReadingSettings({
     @Default(1.0) double readingTextScaleFactor,
-    @Default(1.0) double readingLineSpaceScaleFactor,
+    @Default(1.4) double readingLineSpaceScaleFactor,
     @nullable int lightContentForegroundColorIndex,
     @nullable int darkContentForegroundColorIndex,
   }) = _ReadingSettings;

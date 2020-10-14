@@ -3,8 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:timnew_reader/features/ChapterContent/SimpleStatusBar.dart';
 import 'package:timnew_reader/features/Theme/AppTheme.dart';
 
-import 'ReadingTheme.dart';
-
 typedef void GestureCallback(BuildContext context);
 
 class ReadingScaffold extends StatelessWidget {
@@ -30,7 +28,7 @@ class ReadingScaffold extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     SimpleStatusBar(),
-                    Expanded(child: ReadingTheme(child: content)),
+                    Expanded(child: content),
                   ],
                 ),
               ),
