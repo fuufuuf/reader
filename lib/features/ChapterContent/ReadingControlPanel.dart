@@ -40,7 +40,7 @@ class ReadingControlPanel extends StatelessWidget {
               children: [
                 PanelButton(
                   icon: Icons.open_in_browser,
-                  text: "瀏覽器中打開",
+                  text: "外部打開",
                   onTap: dismissThen(context, () => request.openCurrentChapterInExternalBrowser()),
                 ),
                 PanelButton(
@@ -49,20 +49,22 @@ class ReadingControlPanel extends StatelessWidget {
                   onTap: dismissThen(context, () => request.reload()),
                 ),
                 PanelSelect(
+                  label: "行距",
                   options: {
-                    1.2: "20% 行距",
-                    1.4: "40% 行距",
-                    1.6: "60% 行距",
-                    1.8: "80% 行距",
-                    2.0: "單倍行距",
-                    2.2: "120%行距",
-                    2.4: "140%行距",
+                    1.2: "20%",
+                    1.4: "40%",
+                    1.6: "60%",
+                    1.8: "80%",
+                    2.0: "100%",
+                    2.2: "120%",
+                    2.4: "140%",
                   },
                   value: appTheme.settings.readingLineSpaceScaleFactor,
                   onValueChanged: (newScaleFactor) => themeManager
                       .updateAppTheme((t) => t.copyWith.settings(readingLineSpaceScaleFactor: newScaleFactor)),
                 ),
                 PanelSelect(
+                  label: "字號",
                   options: {
                     0.8: "0.8x",
                     1.0: "標準",
@@ -77,8 +79,9 @@ class ReadingControlPanel extends StatelessWidget {
                       themeManager.updateAppTheme((t) => t.copyWith.settings(readingTextScaleFactor: newScaleFactor)),
                 ),
                 PanelSelect(
-                  options: Map.fromEntries(Iterable.generate(appTheme.palette.contentForegroundColors.length)
-                      .map((e) => MapEntry(e, "對比度 $e"))),
+                  label: "對比度",
+                  options: Map.fromEntries(
+                      Iterable.generate(appTheme.palette.contentForegroundColors.length).map((e) => MapEntry(e, "$e"))),
                   value: appTheme.contentForegroundColorIndex,
                   onValueChanged: (newIndex) => dismissThen(
                       context, () => themeManager.updateAppTheme((t) => t.putContentForegroundColorIndex(newIndex)))(),
@@ -216,6 +219,7 @@ class PanelToggleButton extends StatelessWidget {
 }
 
 class PanelSelect<T> extends StatelessWidget {
+  final String label;
   final Map<T, String> options;
   final T value;
   final Function(T) onValueChanged;
@@ -223,6 +227,7 @@ class PanelSelect<T> extends StatelessWidget {
 
   PanelSelect({
     Key key,
+    @required this.label,
     @required this.options,
     @required this.value,
     @required this.onValueChanged,
@@ -242,9 +247,19 @@ class PanelSelect<T> extends StatelessWidget {
       widthFactor: 2,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           IconButton(icon: Icon(Icons.remove_circle_outline), onPressed: () => _updateIndex(index - 1)),
-          Text(text),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(label),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(text),
+              ),
+            ],
+          ),
           IconButton(icon: Icon(Icons.add_circle_outline), onPressed: () => _updateIndex(index + 1)),
         ],
       ),

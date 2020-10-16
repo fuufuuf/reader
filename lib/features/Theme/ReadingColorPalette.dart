@@ -31,7 +31,7 @@ abstract class ReadingColorPalette with _$ReadingColorPalette {
         contentForegroundColorDefaultIndex: 5,
         contentBackgroundColor: const Color.fromARGB(255, 210, 180, 140),
         controlPanelForegroundColor: Colors.white70,
-        controlPanelBackgroundColor: const Color.fromARGB(80, 0, 0, 0),
+        controlPanelBackgroundColor: const Color.fromARGB(130, 0, 0, 0),
       );
 
   factory ReadingColorPalette.dark() => ReadingColorPalette(
@@ -45,8 +45,8 @@ abstract class ReadingColorPalette with _$ReadingColorPalette {
         ]),
         contentForegroundColorDefaultIndex: 2,
         contentBackgroundColor: Colors.black,
-        controlPanelForegroundColor: Colors.white24,
-        controlPanelBackgroundColor: const Color.fromARGB(80, 0, 0, 0),
+        controlPanelForegroundColor: Colors.white38,
+        controlPanelBackgroundColor: const Color.fromARGB(200, 10, 10, 10),
       );
 
   factory ReadingColorPalette.fromBrightness(Brightness brightness) {
