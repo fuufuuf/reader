@@ -4,8 +4,8 @@ import 'package:async/async.dart';
 import 'package:timnew_reader/arch/Request.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/models/ChapterRef.dart';
+import 'package:timnew_reader/repositories/PersistentStorage.dart';
 import 'package:timnew_reader/repositories/network/BookRepository.dart';
-import 'package:timnew_reader/repositories/settings/BookIndexRepository.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'ChapterContentWithScroll.dart';
@@ -22,11 +22,9 @@ class ChapterContentRequest extends Request<ChapterContentWithScroll> {
       ChapterContentRequest._(bookIndex, chapterRef.url, ScrollTarget.top());
 
   factory ChapterContentRequest.currentChapter(BookIndex bookIndex) {
-    final currentChapterUrl = BookIndexRepository.loadCurrentChapter(bookIndex.bookId);
+    if (!bookIndex.hasCurrentChapter) return null;
 
-    if (currentChapterUrl == null) return null;
-
-    return ChapterContentRequest._(bookIndex, currentChapterUrl, ScrollTarget.paragraph(0));
+    return ChapterContentRequest._(bookIndex, bookIndex.currentChapterUrl, bookIndex.currentParagraph);
   }
 
   ChapterContentRequest._(this.bookIndex, Uri chapterUrl, ScrollTarget scrollTarget)
@@ -40,7 +38,7 @@ class ChapterContentRequest extends Request<ChapterContentWithScroll> {
   Future<ChapterContentWithScroll> load() async {
     final content = await bookIndex.fetchChapterContent(chapterUrl).timeout(Duration(seconds: 5));
 
-    await BookIndexRepository.saveCurrentChapter(bookIndex.bookId, chapterUrl);
+    await bookIndex.saveCurrentChapter(chapterUrl);
 
     return ChapterContentWithScroll(
       chapter: content,

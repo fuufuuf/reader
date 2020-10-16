@@ -1,10 +1,19 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timnew_reader/arch/SIngletonRegistry.dart';
+import 'package:timnew_reader/features/ChapterContent/ScrollTarget.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/models/NewBook.dart';
 import 'package:timnew_reader/repositories/settings/SharedPreferencesBookIndexExtension.dart';
 
 class PersistentStorage {
+  static PersistentStorage get instance => SingletonRegistry.get();
+
+  static Future<PersistentStorage> initialize() async {
+    final prefs = await SharedPreferences.getInstance();
+    return SingletonRegistry.register(PersistentStorage(prefs));
+  }
+
   final SharedPreferences prefs;
 
   PersistentStorage(this.prefs);
@@ -23,8 +32,20 @@ class PersistentStorage {
     }
   }
 
-  Future saveCurrentChapter(String bookId, Uri url) async {
-    await prefs.saveCurrentChapter(bookId, url);
+  bool hasCurrentChapter(BookIndex bookIndex) => prefs.hasCurrentChapterUrl(bookIndex.bookId);
+
+  Uri getCurrentChapterUrl(BookIndex bookIndex) => prefs.loadCurrentChapterUrl(bookIndex.bookId);
+
+  ScrollTarget getCurrentParagraphIndex(BookIndex bookIndex) =>
+      ScrollTarget.paragraph(prefs.loadCurrentParagraphIndex(bookIndex.bookId));
+
+  Future saveCurrentChapter(BookIndex bookIndex, Uri url) async {
+    await prefs.saveCurrentChapterUrl(bookIndex.bookId, url);
+    await prefs.removeBookCurrentParagraphIndex(bookIndex.bookId);
+  }
+
+  Future saveCurrentParagraph(BookIndex bookIndex, int paragraphIndex) async {
+    await prefs.saveCurrentParagraphIndex(bookIndex.bookId, paragraphIndex);
   }
 
   Future saveBookIndex(BookIndex bookIndex) async {
@@ -35,7 +56,7 @@ class PersistentStorage {
     await saveBookIndex(newBook.bookIndex);
 
     if (newBook.hasCurrentChapterUrl) {
-      await saveCurrentChapter(newBook.bookId, newBook.currentChapterUrl);
+      await saveCurrentChapter(newBook.bookIndex, newBook.currentChapterUrl);
     }
 
     return newBook;
@@ -46,3 +67,16 @@ class PersistentStorage {
   }
 }
 
+extension BookIndexStorageExtension on BookIndex {
+  bool get hasCurrentChapter => PersistentStorage.instance.hasCurrentChapter(this);
+
+  Uri get currentChapterUrl => PersistentStorage.instance.getCurrentChapterUrl(this);
+
+  ScrollTarget get currentParagraph => PersistentStorage.instance.getCurrentParagraphIndex(this);
+
+  Future saveCurrentChapter(Uri currentChapterUrl) =>
+      PersistentStorage.instance.saveCurrentChapter(this, currentChapterUrl);
+
+  Future saveCurrentParagraph(int currentParagraphIndex) =>
+      PersistentStorage.instance.saveCurrentParagraph(this, currentParagraphIndex);
+}

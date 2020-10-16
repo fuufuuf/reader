@@ -7,9 +7,11 @@ import 'package:timnew_reader/models/BookIndex.dart';
 extension SharedPreferencesBookIndexExtension on SharedPreferences {
   static const String _bookIdsKey = 'bookIds';
 
-  static String _bookIndexKey(String bookId) => "$bookId.bookIndex";
+  List<String> loadBookIds() => getStringList(_bookIdsKey) ?? List.empty(growable: false);
 
-  static String _currentChapterKey(String bookId) => "$bookId.currentChapter";
+  Future saveBookIds(Iterable<String> ids) => setStringList(_bookIdsKey, ids.toList());
+
+  static String _bookIndexKey(String bookId) => "$bookId.bookIndex";
 
   Iterable<BookIndex> loadBookIndexList(Iterable<String> ids) => ids.map((e) => loadBookIndex(e));
 
@@ -37,22 +39,32 @@ extension SharedPreferencesBookIndexExtension on SharedPreferences {
     return await remove(_bookIndexKey(bookId));
   }
 
-  Uri loadCurrentChapter(String bookId) {
-    final urlString = getString(_currentChapterKey(bookId));
+  static String _currentChapterUrlKey(String bookId) => "$bookId.currentChapter";
+
+  Uri loadCurrentChapterUrl(String bookId) {
+    final urlString = getString(_currentChapterUrlKey(bookId));
     return urlString == null ? null : Uri.parse(urlString);
   }
 
-  Future<void> saveCurrentChapter(String bookId, Uri url) async {
-    await setString(_currentChapterKey(bookId), url.toString());
+  Future<void> saveCurrentChapterUrl(String bookId, Uri url) async {
+    await setString(_currentChapterUrlKey(bookId), url.toString());
   }
 
-  bool hasCurrentChapterUrl(String bookId) => getString(_currentChapterKey(bookId)) != null;
+  bool hasCurrentChapterUrl(String bookId) => getString(_currentChapterUrlKey(bookId)) != null;
 
-  Future removeBookCurrentChapter(String bookId) async {
-    await remove(_currentChapterKey(bookId));
+  Future removeBookCurrentChapterUrl(String bookId) async {
+    await remove(_currentChapterUrlKey(bookId));
   }
 
-  List<String> loadBookIds() => getStringList(_bookIdsKey) ?? List.empty(growable: false);
+  static String _currentParagraphIndex(String bookId) => "$bookId.currentParagraph";
 
-  Future saveBookIds(Iterable<String> ids) => setStringList(_bookIdsKey, ids.toList());
+  int loadCurrentParagraphIndex(String bookId) => getInt(_currentParagraphIndex(bookId)) ?? 0;
+
+  Future<void> saveCurrentParagraphIndex(String bookId, int index) async {
+    await setInt(_currentParagraphIndex(bookId), index);
+  }
+
+  Future removeBookCurrentParagraphIndex(String bookId) async {
+    await remove(_currentParagraphIndex(bookId));
+  }
 }

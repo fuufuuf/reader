@@ -119,3 +119,13 @@ mixin RenderResultListenable<T> implements RenderResult<T> {
         },
       );
 }
+
+mixin BuildWithBuilder {
+  Widget buildWithBuilder(BuildContext context, TransitionBuilder builder, Widget child) =>
+      builder == null ? child : builder(context, child);
+}
+
+mixin BuilderWitBuilderInLocalContext {
+  Widget buildWithBuilder(TransitionBuilder builder, Widget child) =>
+      builder == null ? child : Builder(builder: (context) => builder(context, child));
+}

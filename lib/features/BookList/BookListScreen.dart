@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:timnew_reader/features/AddNewBooks/AddNewBookDialog.dart';
 
 import 'package:timnew_reader/features/Routing/AppRouter.dart';
@@ -23,18 +22,13 @@ class BookListScreen extends StatelessWidget {
 
   BookListScreen(this.request);
 
+  factory BookListScreen.create() => BookListScreen(BookListRequest(PersistentStorage.instance));
+
   static const String routeName = "BookList";
-
-  static Widget initialRoute() => Builder(builder: fromContext);
-
-  static Widget fromContext(BuildContext context) {
-    final storage = context.watch<PersistentStorage>();
-    return BookListScreen(BookListRequest(storage));
-  }
 
   static MaterialPageRoute buildRoute(BookIndex bookIndex) => MaterialPageRoute(
         settings: RouteSettings(name: routeName, arguments: bookIndex),
-        builder: BookListScreen.fromContext,
+        builder: (_) => BookListScreen.create(),
       );
 
   @override

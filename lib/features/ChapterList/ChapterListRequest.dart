@@ -6,8 +6,8 @@ import 'package:timnew_reader/features/App/common.dart';
 import 'package:timnew_reader/arch/Request.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
 import 'package:timnew_reader/models/ChapterRef.dart';
+import 'package:timnew_reader/repositories/PersistentStorage.dart';
 import 'package:timnew_reader/repositories/network/BookRepository.dart';
-import 'package:timnew_reader/repositories/settings/BookIndexRepository.dart';
 
 class ChapterListRequest extends Request<BuiltList<ChapterRef>> {
   final BookIndex bookIndex;
@@ -25,13 +25,12 @@ class ChapterListRequest extends Request<BuiltList<ChapterRef>> {
   }
 
   int findCurrentChapterIndex() {
-    final currentChapterUrl = BookIndexRepository.loadCurrentChapter(bookIndex.bookId);
-    if (currentChapterUrl == null) return null;
+    if (!bookIndex.hasCurrentChapter) return null;
 
     final chapters = currentData;
     if (chapters == null) return null;
 
-    final index = chapters.indexWhere((c) => c.url == currentChapterUrl);
+    final index = chapters.indexWhere((c) => c.url == bookIndex.currentChapterUrl);
 
     if (index == -1) throw UserException("未找到當前章節");
 

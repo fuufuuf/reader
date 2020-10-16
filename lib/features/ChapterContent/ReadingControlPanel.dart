@@ -23,7 +23,7 @@ class ReadingControlPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeManager = context.watch<AppThemeManager>();
+    final themeManager = AppThemeManager.instance;
     final appTheme = context.watch<AppTheme>();
     return ApplyTextColor(
       textColor: appTheme.palette.controlPanelForegroundColor,
