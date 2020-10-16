@@ -5,8 +5,13 @@ class TextFormFieldWithClearButton extends StatefulWidget {
   final String labelText;
   final ValueChanged<String> onFieldSubmitted;
 
-  const TextFormFieldWithClearButton({Key key, this.controller, this.labelText, this.onFieldSubmitted})
-      : super(key: key);
+  const TextFormFieldWithClearButton({
+    Key key,
+    @required this.controller,
+    this.labelText,
+    this.onFieldSubmitted,
+  })  : assert(controller != null),
+        super(key: key);
 
   @override
   _TextFormFieldWithClearButtonState createState() => _TextFormFieldWithClearButtonState();
@@ -45,10 +50,14 @@ class _TextFormFieldWithClearButtonState extends State<TextFormFieldWithClearBut
 
   @override
   Widget build(BuildContext context) => TextFormField(
-      decoration: InputDecoration(labelText: widget.labelText, suffixIcon: _buildClearButton()),
-      controller: widget.controller,
-      onChanged: _textChanged,
-      onFieldSubmitted: widget.onFieldSubmitted);
+        decoration: InputDecoration(
+          labelText: widget.labelText,
+          suffixIcon: _buildClearButton(),
+        ),
+        controller: widget.controller,
+        onChanged: _textChanged,
+        onFieldSubmitted: widget.onFieldSubmitted,
+      );
 
   Widget _buildClearButton() {
     if (!_showClearButton) return null;

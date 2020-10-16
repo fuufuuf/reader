@@ -59,3 +59,11 @@ extension FutrureUserErrorExtension<T> on Future<T> {
   Future<T> userTimeout(Duration duration, String message) =>
       timeout(duration, onTimeout: () async => userError(message));
 }
+
+extension IntExtensions on int {
+  int regulateAmong(int min, int max) => this <= min
+      ? min
+      : this >= max
+          ? max
+          : this;
+}

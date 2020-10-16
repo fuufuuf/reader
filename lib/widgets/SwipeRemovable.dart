@@ -4,7 +4,11 @@ class SwipeRemovable extends StatelessWidget {
   final Widget child;
   final VoidCallback onRemoved;
 
-  SwipeRemovable({@required Key key, @required this.child, @required this.onRemoved}) : super(key: key);
+  SwipeRemovable({
+    @required Key key,
+    @required this.child,
+    @required this.onRemoved,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Dismissible(

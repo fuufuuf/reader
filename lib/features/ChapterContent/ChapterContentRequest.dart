@@ -3,47 +3,56 @@ import 'dart:async';
 import 'package:async/async.dart';
 import 'package:timnew_reader/arch/Request.dart';
 import 'package:timnew_reader/models/BookIndex.dart';
-import 'package:timnew_reader/models/ChapterContent.dart';
 import 'package:timnew_reader/models/ChapterRef.dart';
 import 'package:timnew_reader/repositories/network/BookRepository.dart';
 import 'package:timnew_reader/repositories/settings/BookIndexRepository.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ChapterContentRequest extends Request<ChapterContent> {
+import 'ChapterContentWithScroll.dart';
+import 'ScrollTarget.dart';
+
+class ChapterContentRequest extends Request<ChapterContentWithScroll> {
   final BookIndex bookIndex;
   Uri _chapterUrl;
+  ScrollTarget _scrollTarget;
 
   Uri get chapterUrl => _chapterUrl;
 
   factory ChapterContentRequest.fromChapterRef(BookIndex bookIndex, ChapterRef chapterRef) =>
-      ChapterContentRequest._(bookIndex, chapterRef.url);
+      ChapterContentRequest._(bookIndex, chapterRef.url, ScrollTarget.top());
 
   factory ChapterContentRequest.currentChapter(BookIndex bookIndex) {
     final currentChapterUrl = BookIndexRepository.loadCurrentChapter(bookIndex.bookId);
 
     if (currentChapterUrl == null) return null;
 
-    return ChapterContentRequest._(bookIndex, currentChapterUrl);
+    return ChapterContentRequest._(bookIndex, currentChapterUrl, ScrollTarget.paragraph(0));
   }
 
-  ChapterContentRequest._(this.bookIndex, Uri chapterUrl)
+  ChapterContentRequest._(this.bookIndex, Uri chapterUrl, ScrollTarget scrollTarget)
       : assert(bookIndex != null),
         assert(chapterUrl != null),
-        _chapterUrl = chapterUrl;
+        assert(scrollTarget != null),
+        _chapterUrl = chapterUrl,
+        _scrollTarget = scrollTarget;
 
   @override
-  Future<ChapterContent> load() async {
+  Future<ChapterContentWithScroll> load() async {
     final content = await bookIndex.fetchChapterContent(chapterUrl).timeout(Duration(seconds: 5));
 
     await BookIndexRepository.saveCurrentChapter(bookIndex.bookId, chapterUrl);
 
-    return content;
+    return ChapterContentWithScroll(
+      chapter: content,
+      scrollTarget: _scrollTarget,
+    );
   }
 
-  Future<Result<ChapterContent>> _updateUrl(Uri newUrl) {
+  Future<Result<ChapterContentWithScroll>> _updateUrl(Uri newUrl, ScrollTarget scrollTarget) {
     if (newUrl == null) return null;
 
     _chapterUrl = newUrl;
+    _scrollTarget = scrollTarget;
 
     return reload();
   }
@@ -52,18 +61,18 @@ class ChapterContentRequest extends Request<ChapterContent> {
 
   bool get hasPreviousChapter => currentData?.hasPrevious ?? false;
 
-  Future<Result<ChapterContent>> loadNextChapter() async => _updateUrl(currentData?.nextChapterUrl);
+  Future<Result<ChapterContentWithScroll>> loadNextChapter() async =>
+      _updateUrl(currentData?.nextChapterUrl, ScrollTarget.top());
 
-  Future<Result<ChapterContent>> loadPreviousChapter() async => _updateUrl(currentData?.previousChapterUrl);
+  Future<Result<ChapterContentWithScroll>> loadPreviousChapter() async =>
+      _updateUrl(currentData?.previousChapterUrl, ScrollTarget.bottom());
 
   void openCurrentChapterInExternalBrowser() async {
-    final chapterContent = currentData;
-
-    if (chapterContent == null) {
+    if (currentData == null) {
       return;
     }
 
-    final urlString = chapterContent.url.toString();
+    final urlString = currentData.chapter.url.toString();
 
     if (await canLaunch(urlString)) {
       await launch(urlString, forceSafariVC: false, forceWebView: false);

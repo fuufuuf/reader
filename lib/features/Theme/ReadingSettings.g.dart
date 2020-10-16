@@ -11,7 +11,7 @@ _$_ReadingSettings _$_$_ReadingSettingsFromJson(Map<String, dynamic> json) {
     readingTextScaleFactor:
         (json['readingTextScaleFactor'] as num)?.toDouble() ?? 1.0,
     readingLineSpaceScaleFactor:
-        (json['readingLineSpaceScaleFactor'] as num)?.toDouble() ?? 1.0,
+        (json['readingLineSpaceScaleFactor'] as num)?.toDouble() ?? 1.4,
     lightContentForegroundColorIndex:
         json['lightContentForegroundColorIndex'] as int,
     darkContentForegroundColorIndex:

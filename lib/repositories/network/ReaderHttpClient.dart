@@ -1,9 +1,9 @@
-import 'package:gbk2utf8/gbk2utf8.dart';
-import 'package:html/dom.dart';
-import 'package:html/parser.dart' as htmlParser;
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
-import 'package:timnew_reader/features/App/UserException.dart';
+import 'package:html/parser.dart' as htmlParser;
+import 'package:html/dom.dart';
+import 'package:gbk2utf8/gbk2utf8.dart';
+
+import 'package:timnew_reader/features/App/common.dart';
 
 class ReaderHttpClient {
   Future<Document> fetchDom(Uri url, {bool enforceGbk: true, String patchHtml(String html)}) async {
@@ -20,7 +20,7 @@ class ReaderHttpClient {
     return htmlParser.parse(patchedHtml, encoding: 'utf8');
   }
 
-  String decodeBody(Response response, {bool enforceGbk}) {
+  String decodeBody(http.Response response, {bool enforceGbk}) {
     if (enforceGbk) {
       return gbk.decode(response.bodyBytes);
     } else {

@@ -19,7 +19,7 @@ class _$ReadingSettingsTearOff {
 // ignore: unused_element
   _ReadingSettings call(
       {double readingTextScaleFactor = 1.0,
-      double readingLineSpaceScaleFactor = 1.0,
+      double readingLineSpaceScaleFactor = 1.4,
       @nullable int lightContentForegroundColorIndex,
       @nullable int darkContentForegroundColorIndex}) {
     return _ReadingSettings(
@@ -157,7 +157,7 @@ class __$ReadingSettingsCopyWithImpl<$Res>
 class _$_ReadingSettings implements _ReadingSettings {
   _$_ReadingSettings(
       {this.readingTextScaleFactor = 1.0,
-      this.readingLineSpaceScaleFactor = 1.0,
+      this.readingLineSpaceScaleFactor = 1.4,
       @nullable this.lightContentForegroundColorIndex,
       @nullable this.darkContentForegroundColorIndex})
       : assert(readingTextScaleFactor != null),
@@ -169,7 +169,7 @@ class _$_ReadingSettings implements _ReadingSettings {
   @JsonKey(defaultValue: 1.0)
   @override
   final double readingTextScaleFactor;
-  @JsonKey(defaultValue: 1.0)
+  @JsonKey(defaultValue: 1.4)
   @override
   final double readingLineSpaceScaleFactor;
   @override

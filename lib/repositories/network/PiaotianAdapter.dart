@@ -1,7 +1,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:html/dom.dart';
 
-import 'package:timnew_reader/features/App/UserException.dart';
+import 'package:timnew_reader/features/App/common.dart';
 import 'package:timnew_reader/repositories/network/ReaderHttpClient.dart';
 import 'package:timnew_reader/repositories/network/SiteAdapter.dart';
 import 'package:timnew_reader/repositories/network/ParseExtensions.dart';

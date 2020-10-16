@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:screen/screen.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:timnew_reader/arch/Request.dart';
-import 'package:timnew_reader/features/App/UserException.dart';
+import 'package:timnew_reader/features/App/common.dart';
 import 'package:timnew_reader/arch/RenderMixin.dart';
-import 'package:timnew_reader/models/ChapterContent.dart';
+import 'package:timnew_reader/features/ChapterContent/ChapterContentWithScroll.dart';
 
 import 'ChapterContentRequest.dart';
 import 'ChapterContentView.dart';
@@ -28,12 +29,18 @@ class ChapterContentScreen extends StatefulWidget {
   State<StatefulWidget> createState() => _ChapterContentScreenState();
 }
 
-class _ChapterContentScreenState extends State<ChapterContentScreen> with RenderAsyncSnapshot<ChapterContent> {
+class _ChapterContentScreenState extends State<ChapterContentScreen>
+    with RenderAsyncSnapshot<ChapterContentWithScroll> {
   ChapterContentRequest get request => widget.request;
+
+  ItemScrollController _scrollController;
+  ItemPositionsListener _scrollListener;
 
   @override
   void initState() {
     super.initState();
+    _scrollController = ItemScrollController();
+    _scrollListener = ItemPositionsListener.create();
     _enableReadingMode();
   }
 
@@ -115,13 +122,17 @@ class _ChapterContentScreenState extends State<ChapterContentScreen> with Render
   }
 
   @override
-  Widget buildData(BuildContext context, ChapterContent content) {
+  Widget buildData(BuildContext context, ChapterContentWithScroll content) {
     return OverscrollDetector(
       allowUpwardOverscroll: request.hasPreviousChapter,
       allowDownwardOverscroll: request.hasNextChapter,
       onUpwardNavigate: loadPreviousChapter,
       onDownwardNavigate: loadNextChapter,
-      child: ReadingContent(chapter: content),
+      child: ReadingContent(
+        scrollController: _scrollController,
+        scrollListener: _scrollListener,
+        content: content,
+      ),
     );
   }
 
