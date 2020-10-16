@@ -6,6 +6,7 @@ import 'package:timnew_reader/arch/Request.dart';
 import 'package:timnew_reader/features/App/common.dart';
 import 'package:timnew_reader/arch/RenderMixin.dart';
 import 'package:timnew_reader/features/ChapterContent/ChapterContentWithScroll.dart';
+import 'package:timnew_reader/repositories/PersistentStorage.dart';
 
 import 'ChapterContentRequest.dart';
 import 'ChapterContentView.dart';
@@ -41,7 +42,16 @@ class _ChapterContentScreenState extends State<ChapterContentScreen>
     super.initState();
     _scrollController = ItemScrollController();
     _scrollListener = ItemPositionsListener.create();
+
     _enableReadingMode();
+    _scrollListener.itemPositions.addListener(_saveCurrentParagraph);
+  }
+
+  @override
+  void dispose() {
+    _scrollListener.itemPositions.removeListener(_saveCurrentParagraph);
+    _disableReadingMode();
+    super.dispose();
   }
 
   void _enableReadingMode() {
@@ -49,15 +59,19 @@ class _ChapterContentScreenState extends State<ChapterContentScreen>
     SystemChrome.setEnabledSystemUIOverlays([]);
   }
 
-  @override
-  void dispose() {
-    _disableReadingMode();
-    super.dispose();
-  }
-
   void _disableReadingMode() {
     Screen.keepOn(false);
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+  }
+
+  void _saveCurrentParagraph() async {
+    if (!request.hasData) return;
+
+    final itemPositions = _scrollListener.itemPositions.value;
+    if (itemPositions == null || itemPositions.isEmpty) return null;
+
+
+    await request.bookIndex.saveCurrentParagraph(itemPositions.first.index);
   }
 
   @override
