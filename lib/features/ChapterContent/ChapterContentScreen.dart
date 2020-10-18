@@ -6,6 +6,7 @@ import 'package:timnew_reader/arch/Request.dart';
 import 'package:timnew_reader/features/App/common.dart';
 import 'package:timnew_reader/arch/RenderMixin.dart';
 import 'package:timnew_reader/features/ChapterContent/ChapterContentWithScroll.dart';
+import 'package:timnew_reader/features/ChapterContent/ReadingTheme.dart';
 import 'package:timnew_reader/repositories/PersistentStorage.dart';
 
 import 'ChapterContentRequest.dart';
@@ -70,7 +71,6 @@ class _ChapterContentScreenState extends State<ChapterContentScreen>
     final itemPositions = _scrollListener.itemPositions.value;
     if (itemPositions == null || itemPositions.isEmpty) return null;
 
-
     await request.bookIndex.saveCurrentParagraph(itemPositions.first.index);
   }
 
@@ -90,19 +90,21 @@ class _ChapterContentScreenState extends State<ChapterContentScreen>
   Widget buildWaiting(BuildContext context) {
     var theme = Theme.of(context);
 
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              "加載中...",
-              style: theme.textTheme.bodyText2,
+    return ReadingTheme(
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                "加載中...",
+                style: theme.textTheme.bodyText2,
+              ),
             ),
-          ),
-          RefreshButton(request: request),
-        ],
+            RefreshButton(request: request),
+          ],
+        ),
       ),
     );
   }
@@ -110,26 +112,28 @@ class _ChapterContentScreenState extends State<ChapterContentScreen>
   Widget buildError(BuildContext context, Object error) {
     final errorMessage = error is UserException ? error.message : error.toString();
     var theme = Theme.of(context);
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 30),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Icon(
-              Icons.sentiment_very_dissatisfied,
-              color: theme.errorColor,
-              size: theme.textTheme.headline3.fontSize,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0, bottom: 24.0),
-              child: Text(
-                errorMessage,
-                style: theme.textTheme.bodyText2,
+    return ReadingTheme(
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 30),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Icon(
+                Icons.sentiment_very_dissatisfied,
+                color: theme.errorColor,
+                size: theme.textTheme.headline3.fontSize,
               ),
-            ),
-            RefreshButton(request: request),
-          ],
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0, bottom: 24.0),
+                child: Text(
+                  errorMessage,
+                  style: theme.textTheme.bodyText2,
+                ),
+              ),
+              RefreshButton(request: request),
+            ],
+          ),
         ),
       ),
     );
