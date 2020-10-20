@@ -13,6 +13,7 @@ import 'ChapterContentRequest.dart';
 import 'ChapterContentView.dart';
 import 'OverscrollDetector.dart';
 import 'ReadingControlPanel.dart';
+import 'ReadingGestureDetector.dart';
 import 'ReadingScaffold.dart';
 
 class ChapterContentScreen extends StatefulWidget {
@@ -82,8 +83,10 @@ class _ChapterContentScreenState extends State<ChapterContentScreen>
     );
   }
 
-  Widget _buildGestureDetector(BuildContext context, Widget child) => GestureDetector(
-        onDoubleTap: () => ReadingControlPanel.show(context: context, request: request),
+  Widget _buildGestureDetector(BuildContext context, Widget child) => ReadingGestureDetector(
+        onPageUp: loadPreviousChapter,
+        onPageDown: loadNextChapter,
+        onControlPanel: () => ReadingControlPanel.show(context: context, request: request),
         child: child,
       );
 
@@ -155,10 +158,12 @@ class _ChapterContentScreenState extends State<ChapterContentScreen>
   }
 
   void loadPreviousChapter() {
+    if (!request.hasPreviousChapter) return;
     request.loadPreviousChapter();
   }
 
   void loadNextChapter() {
+    if (!request.hasNextChapter) return;
     request.loadNextChapter();
   }
 }

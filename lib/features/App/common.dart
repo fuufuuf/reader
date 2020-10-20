@@ -67,3 +67,9 @@ extension IntExtensions on int {
           ? max
           : this;
 }
+
+extension VoidCallbackSafeInvoke on VoidCallback {
+  void invokeIfNotNull() {
+    if (this != null) this();
+  }
+}
