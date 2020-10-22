@@ -20,7 +20,8 @@ abstract class AppTheme implements _$AppTheme {
   factory AppTheme.fromSettings(ReadingSettings settings) =>
       AppTheme(palette: ReadingColorPalette.light(), settings: settings);
 
-  Duration get defaultTransitionDuration => const Duration(microseconds: 800);
+  Duration get defaultTransitionDuration => const Duration(milliseconds: 300);
+  Duration get pagingDuration => const Duration(milliseconds: 300);
 
   Color get contentForegroundColor => palette.contentForegroundColors[contentForegroundColorIndex];
 

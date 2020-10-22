@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:screen/screen.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:timnew_reader/arch/Request.dart';
 import 'package:timnew_reader/features/App/common.dart';
 import 'package:timnew_reader/arch/RenderMixin.dart';
+import 'package:timnew_reader/features/ChapterContent/IndexedTrackingScrollController.dart';
 import 'package:timnew_reader/features/ChapterContent/ChapterContentWithScroll.dart';
 import 'package:timnew_reader/features/ChapterContent/ReadingTheme.dart';
+import 'package:timnew_reader/features/Theme/AppTheme.dart';
 import 'package:timnew_reader/repositories/PersistentStorage.dart';
 
 import 'ChapterContentRequest.dart';
@@ -34,24 +37,24 @@ class ChapterContentScreen extends StatefulWidget {
 
 class _ChapterContentScreenState extends State<ChapterContentScreen>
     with RenderAsyncSnapshot<ChapterContentWithScroll> {
+  final GlobalKey contentKey = GlobalKey();
+
   ChapterContentRequest get request => widget.request;
 
-  ItemScrollController _scrollController;
-  ItemPositionsListener _scrollListener;
+  IndexedTrackingScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
-    _scrollController = ItemScrollController();
-    _scrollListener = ItemPositionsListener.create();
+    _scrollController = IndexedTrackingScrollController();
 
     _enableReadingMode();
-    _scrollListener.itemPositions.addListener(_saveCurrentParagraph);
+    _scrollController.addListener(_saveCurrentParagraph);
   }
 
   @override
   void dispose() {
-    _scrollListener.itemPositions.removeListener(_saveCurrentParagraph);
+    _scrollController.removeListener(_saveCurrentParagraph);
     _disableReadingMode();
     super.dispose();
   }
@@ -69,23 +72,22 @@ class _ChapterContentScreenState extends State<ChapterContentScreen>
   void _saveCurrentParagraph() async {
     if (!request.hasData) return;
 
-    final itemPositions = _scrollListener.itemPositions.value;
-    if (itemPositions == null || itemPositions.isEmpty) return null;
+    final itemIndex = _scrollController.findFirstVisibleIndex();
 
-    await request.bookIndex.saveCurrentParagraph(itemPositions.first.index);
+    await request.bookIndex.saveCurrentParagraph(itemIndex);
   }
 
   @override
   Widget build(BuildContext context) {
     return ReadingScaffold(
       builder: _buildGestureDetector,
-      content: buildStream(request.valueStream),
+      content: buildStream(request.valueStream, key: contentKey),
     );
   }
 
   Widget _buildGestureDetector(BuildContext context, Widget child) => ReadingGestureDetector(
-        onPageUp: loadPreviousChapter,
-        onPageDown: loadNextChapter,
+        onPageUp: pageUp,
+        onPageDown: pageDown,
         onControlPanel: () => ReadingControlPanel.show(context: context, request: request),
         child: child,
       );
@@ -143,28 +145,35 @@ class _ChapterContentScreenState extends State<ChapterContentScreen>
   }
 
   @override
-  Widget buildData(BuildContext context, ChapterContentWithScroll content) {
-    return OverscrollDetector(
-      allowUpwardOverscroll: request.hasPreviousChapter,
-      allowDownwardOverscroll: request.hasNextChapter,
-      onUpwardNavigate: loadPreviousChapter,
-      onDownwardNavigate: loadNextChapter,
-      child: ReadingContent(
-        scrollController: _scrollController,
-        scrollListener: _scrollListener,
-        content: content,
-      ),
-    );
-  }
+  Widget buildData(BuildContext context, ChapterContentWithScroll content) => OverscrollDetector(
+        allowUpwardOverscroll: request.hasPreviousChapter,
+        allowDownwardOverscroll: request.hasNextChapter,
+        onUpwardNavigate: loadPreviousChapter,
+        onDownwardNavigate: loadNextChapter,
+        child: ChapterContentView(
+          scrollController: _scrollController,
+          content: content,
+        ),
+      );
 
   void loadPreviousChapter() {
-    if (!request.hasPreviousChapter) return;
     request.loadPreviousChapter();
   }
 
   void loadNextChapter() {
-    if (!request.hasNextChapter) return;
     request.loadNextChapter();
+  }
+
+  void pageUp() async {
+    final appTheme = context.read<AppTheme>();
+
+    _scrollController.moveToPreviousScreen(duration: appTheme.pagingDuration);
+  }
+
+  void pageDown() async {
+    final appTheme = context.read<AppTheme>();
+
+    _scrollController.moveToNextScreen(duration: appTheme.pagingDuration);
   }
 }
 

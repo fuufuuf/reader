@@ -61,11 +61,29 @@ extension FutrureUserErrorExtension<T> on Future<T> {
 }
 
 extension IntExtensions on int {
-  int regulateAmong(int min, int max) => this <= min
+  bool isWithIn(int min, int max) => min <= this && this <= max;
+
+  int ensureWithInRange(int min, int max) => this <= min
       ? min
       : this >= max
           ? max
           : this;
+
+  int ensureMinimum(int min) => this <= min ? min : this;
+
+  int ensureMaximum(int max) => this >= max ? max : this;
+}
+
+extension DoubleExtensions on double {
+  double ensureWithInRange(double min, double max) => this <= min
+      ? min
+      : this >= max
+          ? max
+          : this;
+
+  double ensureMinimum(double min) => this <= min ? min : this;
+
+  double ensureMaximum(double max) => this >= max ? max : this;
 }
 
 extension VoidCallbackSafeInvoke on VoidCallback {

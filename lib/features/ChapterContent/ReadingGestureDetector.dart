@@ -30,7 +30,7 @@ class _ReadingGestureDetectorState extends State<ReadingGestureDetector> {
   Widget build(BuildContext context) => _isAreaGuideVisible ? _buildAreaGuide(context) : _buildGestureDetector();
 
   Widget _buildGestureDetector() => GestureDetector(
-        onLongPress: showAreaGuide,
+        onLongPress: null, //showAreaGuide,
         onDoubleTapDown: _onDoubleTapDown,
         onDoubleTap: _onDoubleTap,
         child: widget.child,

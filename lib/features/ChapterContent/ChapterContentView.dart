@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:timnew_reader/features/App/common.dart';
+import 'package:timnew_reader/features/ChapterContent/IndexedTrackingScrollController.dart';
 import 'package:timnew_reader/features/ChapterContent/ScrollTarget.dart';
 import 'package:timnew_reader/models/ChapterContent.dart';
 import 'ChapterContentWithScroll.dart';
 import 'ReadingTheme.dart';
 
-class ReadingContent extends StatelessWidget {
+class ChapterContentView extends StatelessWidget {
   final ChapterContentWithScroll content;
-  final ItemScrollController scrollController;
-  final ItemPositionsListener scrollListener;
+  final IndexedTrackingScrollController scrollController;
 
-  const ReadingContent({
-    Key key,
-    @required this.content,
-    this.scrollController,
-    this.scrollListener,
-  })  : assert(content != null),
+  ChapterContentView({Key key, @required this.content, @required this.scrollController})
+      : assert(content != null),
+        assert(scrollController != null),
         super(key: key);
 
   ChapterContent get chapter => content.chapter;
@@ -28,32 +24,34 @@ class ReadingContent extends StatelessWidget {
   Widget build(BuildContext context) {
     SchedulerBinding.instance.addPostFrameCallback((_) => _updateScroll());
     return ReadingTheme(
-      child: ScrollablePositionedList.builder(
+      child: CustomScrollView(
         physics: const BouncingScrollPhysics(),
-        itemScrollController: scrollController,
-        itemPositionsListener: scrollListener,
-        itemBuilder: _renderParagraph,
-        itemCount: chapter.paragraphs.length + 1,
+        controller: scrollController,
+        slivers: [
+          SliverList(
+            key: scrollController.sliverListKey,
+            delegate: SliverChildBuilderDelegate(
+              _buildChild,
+              childCount: chapter.paragraphs.length + 1,
+            ),
+          )
+        ],
       ),
     );
   }
 
-  Widget _renderParagraph(BuildContext context, int index) {
-    if (index == 0) {
-      return _ChapterTitle(chapter.title);
-    } else {
-      return _Paragraph(chapter.paragraphs[index - 1]);
-    }
+  Widget _buildChild(BuildContext context, int index) {
+    if (index == 0) return _ChapterTitle(chapter.title);
+
+    return _Paragraph(chapter.paragraphs[index - 1]);
   }
 
   _updateScroll() {
-    final index = scrollTarget.map(
-      top: (_) => 0,
-      bottom: (_) => chapter.paragraphs.length - 1,
-      paragraph: (s) => s.index.regulateAmong(0, chapter.paragraphs.length - 1),
+    scrollTarget.when(
+      top: () => scrollController.moveToTop(),
+      bottom: () => scrollController.moveToBottom(),
+      paragraph: (index) => scrollController.jumpToIndex(index.ensureWithInRange(0, chapter.paragraphs.length)),
     );
-
-    scrollController.jumpTo(index: index);
   }
 }
 
