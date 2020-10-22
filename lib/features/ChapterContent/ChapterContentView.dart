@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:timnew_reader/features/App/common.dart';
-import 'package:timnew_reader/features/ChapterContent/IndexedTrackingScrollController.dart';
+import 'package:timnew_reader/widgets/IndexedTrackingScrollController.dart';
 import 'package:timnew_reader/features/ChapterContent/ScrollTarget.dart';
 import 'package:timnew_reader/models/ChapterContent.dart';
 import 'ChapterContentWithScroll.dart';

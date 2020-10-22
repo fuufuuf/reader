@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:timnew_reader/features/App/common.dart';
 import 'package:timnew_reader/features/Theme/AppTheme.dart';
 
+enum TapSection { PageUp, ControlPanel, PageDown }
+
 typedef void ReadingControlTapCallback(TapSection section);
 
 class ReadingGestureDetector extends StatefulWidget {
@@ -24,13 +26,9 @@ class ReadingGestureDetector extends StatefulWidget {
 }
 
 class _ReadingGestureDetectorState extends State<ReadingGestureDetector> {
-  bool _isAreaGuideVisible = false;
-
   @override
-  Widget build(BuildContext context) => _isAreaGuideVisible ? _buildAreaGuide(context) : _buildGestureDetector();
-
-  Widget _buildGestureDetector() => GestureDetector(
-        onLongPress: null, //showAreaGuide,
+  Widget build(BuildContext context) => GestureDetector(
+        onLongPress: () => ControlAreaGuide.showAreaGuide(context, widget.pagingAreaSizePercentage),
         onDoubleTapDown: _onDoubleTapDown,
         onDoubleTap: _onDoubleTap,
         child: widget.child,
@@ -55,66 +53,61 @@ class _ReadingGestureDetectorState extends State<ReadingGestureDetector> {
       widget.onControlPanel.invokeIfNotNull();
     }
   }
+}
 
-  Widget _buildAreaGuide(BuildContext context) {
+class ControlAreaGuide extends StatelessWidget {
+  static const String routeName = "ControlAreaGuide";
+
+  static Future showAreaGuide(BuildContext context, double pagingAreaSizePercentage) => showDialog(
+        context: context,
+        builder: (context) => ControlAreaGuide(pagingAreaSizePercentage: pagingAreaSizePercentage),
+        useSafeArea: false,
+        routeSettings: RouteSettings(name: routeName),
+      );
+
+  final double pagingAreaSizePercentage;
+
+  const ControlAreaGuide({Key key, this.pagingAreaSizePercentage}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     final appTheme = context.watch<AppTheme>();
 
     final backgroundColor = appTheme.palette.controlPanelBackgroundColor;
     final foregroundColor = appTheme.palette.controlPanelForegroundColor;
 
-    return Stack(
-      fit: StackFit.expand,
-      children: <Widget>[
-        widget.child,
-        GestureDetector(
-          onTap: dismissAreaGuide,
-          child: Container(
-            color: backgroundColor,
-            child: DefaultTextStyle(
-              style: TextStyle(color: foregroundColor),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Flexible(
-                    flex: _percentageToFlex(widget.pagingAreaSizePercentage),
-                    child: const Center(child: Text("雙擊向上翻頁")),
-                  ),
-                  Flexible(
-                    flex: _percentageToFlex(1 - 2 * widget.pagingAreaSizePercentage),
-                    child: Container(
-                      alignment: Alignment.center,
-                      decoration:
-                          BoxDecoration(border: Border.symmetric(horizontal: BorderSide(color: foregroundColor))),
-                      child: const Text("雙擊顯示控制面板"),
-                    ),
-                  ),
-                  Flexible(
-                    flex: _percentageToFlex(widget.pagingAreaSizePercentage),
-                    child: const Center(child: Text("雙擊向下翻頁")),
-                  ),
-                ],
+    return GestureDetector(
+      onTap: () => Navigator.of(context).pop(),
+      child: Container(
+        color: backgroundColor,
+        child: DefaultTextStyle(
+          style: TextStyle(color: foregroundColor),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Flexible(
+                flex: _percentageToFlex(pagingAreaSizePercentage),
+                child: const Center(child: Text("雙擊向上翻頁")),
               ),
-            ),
+              Flexible(
+                flex: _percentageToFlex(1 - 2 * pagingAreaSizePercentage),
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(border: Border.symmetric(horizontal: BorderSide(color: foregroundColor))),
+                  child: const Text("雙擊顯示控制面板"),
+                ),
+              ),
+              Flexible(
+                flex: _percentageToFlex(pagingAreaSizePercentage),
+                child: const Center(child: Text("雙擊向下翻頁")),
+              ),
+            ],
           ),
-        )
-      ],
+        ),
+      ),
     );
   }
 
   int _percentageToFlex(double percentage) => (percentage * 100).toInt();
-
-  void showAreaGuide() {
-    setState(() {
-      _isAreaGuideVisible = true;
-    });
-  }
-
-  void dismissAreaGuide() {
-    setState(() {
-      _isAreaGuideVisible = false;
-    });
-  }
 }
-
-enum TapSection { PageUp, ControlPanel, PageDown }

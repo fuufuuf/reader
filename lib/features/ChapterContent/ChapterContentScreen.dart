@@ -6,7 +6,7 @@ import 'package:screen/screen.dart';
 import 'package:timnew_reader/arch/Request.dart';
 import 'package:timnew_reader/features/App/common.dart';
 import 'package:timnew_reader/arch/RenderMixin.dart';
-import 'package:timnew_reader/features/ChapterContent/IndexedTrackingScrollController.dart';
+import 'package:timnew_reader/widgets/IndexedTrackingScrollController.dart';
 import 'package:timnew_reader/features/ChapterContent/ChapterContentWithScroll.dart';
 import 'package:timnew_reader/features/ChapterContent/ReadingTheme.dart';
 import 'package:timnew_reader/features/Theme/AppTheme.dart';
@@ -37,8 +37,6 @@ class ChapterContentScreen extends StatefulWidget {
 
 class _ChapterContentScreenState extends State<ChapterContentScreen>
     with RenderAsyncSnapshot<ChapterContentWithScroll> {
-  final GlobalKey contentKey = GlobalKey();
-
   ChapterContentRequest get request => widget.request;
 
   IndexedTrackingScrollController _scrollController;
@@ -81,7 +79,7 @@ class _ChapterContentScreenState extends State<ChapterContentScreen>
   Widget build(BuildContext context) {
     return ReadingScaffold(
       builder: _buildGestureDetector,
-      content: buildStream(request.valueStream, key: contentKey),
+      content: buildStream(request.valueStream),
     );
   }
 
