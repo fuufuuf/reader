@@ -4,6 +4,7 @@ class OverscrollDetector extends StatefulWidget {
   static const double _defaultThreshold = 100;
 
   final Widget child;
+  final ScrollController scrollController;
   final bool allowUpwardOverscroll;
   final bool allowDownwardOverscroll;
   final double displacementThreshold;
@@ -13,6 +14,7 @@ class OverscrollDetector extends StatefulWidget {
   const OverscrollDetector({
     Key key,
     @required this.child,
+    @required this.scrollController,
     this.allowUpwardOverscroll = true,
     this.allowDownwardOverscroll = true,
     this.onUpwardNavigate,
@@ -24,14 +26,19 @@ class OverscrollDetector extends StatefulWidget {
         super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _OverscrollDetectorState();
+  State<StatefulWidget> createState() => _OverscrollDetectorState(scrollController);
 }
 
 enum _Mode { Loading, Normal, UpOver, UpArmed, Down, DownArmed }
 
 class _OverscrollDetectorState extends State<OverscrollDetector> {
+  final ScrollController scrollController;
+
+  _OverscrollDetectorState(this.scrollController);
+
   double _upDisplacement = 0;
   double _downDisplacement = 0;
+
   _Mode _mode;
 
   _Mode get mode => _mode;
@@ -46,6 +53,13 @@ class _OverscrollDetectorState extends State<OverscrollDetector> {
   void initState() {
     super.initState();
     _mode = _Mode.Normal;
+    widget.scrollController.addListener(_onScrollNotification);
+  }
+
+  @override
+  void dispose() {
+    widget.scrollController.removeListener(_onScrollNotification);
+    super.dispose();
   }
 
   @override
@@ -59,10 +73,7 @@ class _OverscrollDetectorState extends State<OverscrollDetector> {
       children: <Widget>[
         if (upIndicator != null) upIndicator,
         if (downIndicator != null) downIndicator,
-        NotificationListener<ScrollNotification>(
-          onNotification: _onScrollNotification,
-          child: widget.child,
-        )
+        widget.child,
       ],
     );
   }
@@ -101,24 +112,26 @@ class _OverscrollDetectorState extends State<OverscrollDetector> {
     }
   }
 
-  bool _onScrollNotification(ScrollNotification notification) {
-    final metrics = notification.metrics;
+  void _onScrollNotification() {
+    final position = scrollController.position;
 
-    if (widget.allowDownwardOverscroll && metrics.pixels > metrics.maxScrollExtent) {
+    if (widget.allowDownwardOverscroll && position.pixels > position.maxScrollExtent) {
       setState(() {
         _downDisplacement =
-            _normalizeDisplacement(metrics.pixels - metrics.maxScrollExtent, widget.displacementThreshold);
+            _normalizeDisplacement(position.pixels - position.maxScrollExtent, widget.displacementThreshold);
 
         if (_mode != _Mode.DownArmed) {
           mode = _Mode.Down;
         }
 
-        if (_downDisplacement >= 1.0) mode = _Mode.DownArmed;
+        if (_downDisplacement >= 1.0) {
+          mode = _Mode.DownArmed;
+        }
       });
-    } else if (widget.allowUpwardOverscroll && metrics.pixels < metrics.minScrollExtent) {
+    } else if (widget.allowUpwardOverscroll && position.pixels < position.minScrollExtent) {
       setState(() {
         _upDisplacement =
-            _normalizeDisplacement(metrics.minScrollExtent - metrics.pixels, widget.displacementThreshold);
+            _normalizeDisplacement(position.minScrollExtent - position.pixels, widget.displacementThreshold);
 
         if (_mode != _Mode.UpArmed) {
           mode = _Mode.UpOver;
@@ -140,20 +153,6 @@ class _OverscrollDetectorState extends State<OverscrollDetector> {
       }
     }
 
-    if (notification is ScrollUpdateNotification && notification.dragDetails == null) {
-      _tryFire();
-      return true;
-    }
-
-    if (notification is ScrollEndNotification) {
-      _tryFire();
-      return true;
-    }
-
-    return true;
-  }
-
-  void _tryFire() {
     switch (_mode) {
       case _Mode.DownArmed:
         setState(() {

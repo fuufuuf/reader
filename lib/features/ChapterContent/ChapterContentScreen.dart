@@ -72,6 +72,13 @@ class _ChapterContentScreenState extends State<ChapterContentScreen>
 
     final itemIndex = _scrollController.findFirstVisibleIndex();
 
+    if (itemIndex == null) {
+      // Rendering is not finished, wait for end of the frame
+      WidgetsBinding.instance.scheduleFrameCallback((_) => _saveCurrentParagraph());
+
+      return;
+    }
+
     await request.bookIndex.saveCurrentParagraph(itemIndex);
   }
 
@@ -148,6 +155,7 @@ class _ChapterContentScreenState extends State<ChapterContentScreen>
         allowDownwardOverscroll: request.hasNextChapter,
         onUpwardNavigate: loadPreviousChapter,
         onDownwardNavigate: loadNextChapter,
+        scrollController: _scrollController,
         child: ChapterContentView(
           scrollController: _scrollController,
           content: content,
@@ -155,23 +163,35 @@ class _ChapterContentScreenState extends State<ChapterContentScreen>
       );
 
   void loadPreviousChapter() {
-    request.loadPreviousChapter();
+    if (request.hasPreviousChapter) {
+      request.loadPreviousChapter();
+    }
   }
 
   void loadNextChapter() {
-    request.loadNextChapter();
+    if (request.hasNextChapter) {
+      request.loadNextChapter();
+    }
   }
 
   void pageUp() async {
-    final appTheme = context.read<AppTheme>();
+    if (_scrollController.isAtTop) {
+      loadPreviousChapter();
+    } else {
+      final appTheme = context.read<AppTheme>();
 
-    _scrollController.moveToPreviousScreen(duration: appTheme.pagingDuration);
+      _scrollController.moveToPreviousScreen(duration: appTheme.pagingDuration);
+    }
   }
 
   void pageDown() async {
-    final appTheme = context.read<AppTheme>();
+    if (_scrollController.isAtBottom) {
+      loadNextChapter();
+    } else {
+      final appTheme = context.read<AppTheme>();
 
-    _scrollController.moveToNextScreen(duration: appTheme.pagingDuration);
+      _scrollController.moveToNextScreen(duration: appTheme.pagingDuration);
+    }
   }
 }
 

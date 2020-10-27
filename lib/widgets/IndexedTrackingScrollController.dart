@@ -1,5 +1,4 @@
 import 'package:flutter/rendering.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:timnew_reader/features/App/common.dart';
 
@@ -11,12 +10,17 @@ class IndexedTrackingScrollController extends TrackingScrollController {
     String debugLabel,
   }) : super(keepScrollOffset: keepScrollOffset, debugLabel: debugLabel);
 
+  bool get isAtTop => position.pixels <= position.minScrollExtent;
+
+  bool get isAtBottom => position.pixels >= position.maxScrollExtent;
+
   Future moveToTop({Duration duration, Curve curve}) async {
     position.moveTo(position.minScrollExtent, duration: duration, curve: curve, clamp: true);
   }
 
-  Future moveToBottom({Duration duration, Curve curve}) async =>
-      position.moveTo(position.maxScrollExtent, duration: duration, curve: curve, clamp: true);
+  Future moveToBottom({Duration duration, Curve curve}) async {
+    await position.moveTo(position.maxScrollExtent, duration: duration, curve: curve, clamp: true);
+  }
 
   Future moveToPreviousScreen({Duration duration, Curve curve}) async =>
       moveByOffset(-position.viewportDimension, duration: duration, curve: curve);
@@ -30,12 +34,16 @@ class IndexedTrackingScrollController extends TrackingScrollController {
     return position.moveTo(targetOffset, duration: duration, curve: curve, clamp: true);
   }
 
-  int findFirstVisibleIndex() => (findFirstVisibleRenderObject().parentData as SliverMultiBoxAdaptorParentData).index;
+  int findFirstVisibleIndex() => (findFirstVisibleRenderObject()?.parentData as SliverMultiBoxAdaptorParentData)?.index;
 
   RenderObject findFirstVisibleRenderObject() {
     var current = renderSliverList.firstChild;
+
+    if (current == null) return null;
+
     while ((current.parentData as SliverMultiBoxAdaptorParentData).layoutOffset + current.size.height < offset) {
       current = renderSliverList.childAfter(current);
+      if (current == null) return null;
     }
 
     return current;
@@ -58,14 +66,14 @@ class IndexedTrackingScrollController extends TrackingScrollController {
       if (index < firstParentData.index) {
         debugPrint("Go to previous screen");
         moveByOffset(-position.viewportDimension);
-        SchedulerBinding.instance.addPostFrameCallback((_) => jumpToIndex(index));
+        WidgetsBinding.instance.addPostFrameCallback((_) => jumpToIndex(index));
         return;
       }
 
       if (index > lastParentData.index) {
         debugPrint("Go to next screen");
         moveByOffset(lastParentData.layoutOffset);
-        SchedulerBinding.instance.addPostFrameCallback((_) => jumpToIndex(index));
+        WidgetsBinding.instance.addPostFrameCallback((_) => jumpToIndex(index));
         return;
       }
     }

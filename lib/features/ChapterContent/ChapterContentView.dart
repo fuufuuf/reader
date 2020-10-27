@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:timnew_reader/features/App/common.dart';
 import 'package:timnew_reader/widgets/IndexedTrackingScrollController.dart';
 import 'package:timnew_reader/features/ChapterContent/ScrollTarget.dart';
@@ -22,7 +21,9 @@ class ChapterContentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SchedulerBinding.instance.addPostFrameCallback((_) => _updateScroll());
+    // Schedule a scroll next frame. the MaxExtend is not properly populated in current frame
+    WidgetsBinding.instance.scheduleFrameCallback((_) => _updateScroll());
+
     return ReadingTheme(
       child: CustomScrollView(
         physics: const BouncingScrollPhysics(),

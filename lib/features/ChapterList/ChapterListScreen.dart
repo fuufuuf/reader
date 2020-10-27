@@ -152,7 +152,7 @@ class _ChapterListView extends StatelessWidget {
   }
 
   void scheduleJumpToCurrentPage(BuildContext context) {
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       scrollController.jumpToCurrentChapter(context, request);
     });
   }
