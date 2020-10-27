@@ -74,7 +74,7 @@ class _ChapterContentScreenState extends State<ChapterContentScreen>
 
     if (itemIndex == null) {
       // Rendering is not finished, wait for end of the frame
-      WidgetsBinding.instance.scheduleFrameCallback((_) => _saveCurrentParagraph());
+      WidgetsBinding.instance.addPostFrameCallback((_) => _saveCurrentParagraph());
 
       return;
     }

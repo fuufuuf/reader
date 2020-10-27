@@ -1,10 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:timnew_reader/widgets/IndexedTrackingScrollController.dart';
 
 class OverscrollDetector extends StatefulWidget {
   static const double _defaultThreshold = 100;
 
   final Widget child;
-  final ScrollController scrollController;
+  final IndexedTrackingScrollController scrollController;
   final bool allowUpwardOverscroll;
   final bool allowDownwardOverscroll;
   final double displacementThreshold;
@@ -26,16 +29,12 @@ class OverscrollDetector extends StatefulWidget {
         super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _OverscrollDetectorState(scrollController);
+  State<StatefulWidget> createState() => _OverscrollDetectorState();
 }
 
-enum _Mode { Loading, Normal, UpOver, UpArmed, Down, DownArmed }
+enum _Mode { AutoScrolling, Normal, Up, UpArmed, Down, DownArmed }
 
 class _OverscrollDetectorState extends State<OverscrollDetector> {
-  final ScrollController scrollController;
-
-  _OverscrollDetectorState(this.scrollController);
-
   double _upDisplacement = 0;
   double _downDisplacement = 0;
 
@@ -52,8 +51,21 @@ class _OverscrollDetectorState extends State<OverscrollDetector> {
   @override
   void initState() {
     super.initState();
+    debugPrintBeginFrameBanner = true;
+    debugPrintEndFrameBanner = true;
+
     _mode = _Mode.Normal;
     widget.scrollController.addListener(_onScrollNotification);
+  }
+
+  @override
+  void didUpdateWidget(OverscrollDetector oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.scrollController != widget.scrollController) {
+      oldWidget.scrollController.removeListener(_onScrollNotification);
+      widget.scrollController.addListener(_onScrollNotification);
+    }
   }
 
   @override
@@ -80,7 +92,7 @@ class _OverscrollDetectorState extends State<OverscrollDetector> {
 
   Widget _renderUpIndicator() {
     switch (_mode) {
-      case _Mode.UpOver:
+      case _Mode.Up:
       case _Mode.UpArmed:
         return Align(
           alignment: Alignment.topCenter,
@@ -113,7 +125,27 @@ class _OverscrollDetectorState extends State<OverscrollDetector> {
   }
 
   void _onScrollNotification() {
-    final position = scrollController.position;
+    debugPrint("OverscrollDetector: $_mode, ${widget.scrollController.isAutoScrolling}");
+
+    if (_mode != _Mode.AutoScrolling && widget.scrollController.isAutoScrolling) {
+      debugPrint("OverscrollDetector: Begin AutoScrolling");
+      _mode = _Mode.AutoScrolling;
+      return;
+    }
+
+    if (_mode == _Mode.AutoScrolling) {
+      if (!widget.scrollController.isAutoScrolling) {
+        debugPrint("OverscrollDetector: End AutoScrolling");
+        print(widget.scrollController.position);
+
+        _mode = _Mode.Normal;
+      } else {
+        print("OverscrollDetector: Skip due to AutoScrolling");
+        return;
+      }
+    }
+
+    final position = widget.scrollController.position;
 
     if (widget.allowDownwardOverscroll && position.pixels > position.maxScrollExtent) {
       setState(() {
@@ -121,10 +153,14 @@ class _OverscrollDetectorState extends State<OverscrollDetector> {
             _normalizeDisplacement(position.pixels - position.maxScrollExtent, widget.displacementThreshold);
 
         if (_mode != _Mode.DownArmed) {
+          debugPrint("OverscrollDetector: Down");
           mode = _Mode.Down;
         }
 
         if (_downDisplacement >= 1.0) {
+          debugPrint("OverscrollDetector: Down Armed");
+          debugPrint("$position}");
+
           mode = _Mode.DownArmed;
         }
       });
@@ -134,10 +170,12 @@ class _OverscrollDetectorState extends State<OverscrollDetector> {
             _normalizeDisplacement(position.minScrollExtent - position.pixels, widget.displacementThreshold);
 
         if (_mode != _Mode.UpArmed) {
-          mode = _Mode.UpOver;
+          debugPrint("OverscrollDetector: Up");
+          mode = _Mode.Up;
         }
 
         if (_upDisplacement >= 1.0) {
+          debugPrint("OverscrollDetector: Up Armed");
           mode = _Mode.UpArmed;
         }
       });
@@ -147,6 +185,8 @@ class _OverscrollDetectorState extends State<OverscrollDetector> {
           _upDisplacement = 0;
           _downDisplacement = 0;
           if (_mode != _Mode.UpArmed || _mode != _Mode.DownArmed) {
+            debugPrint("OverscrollDetector: Return Normal");
+
             mode = _Mode.Normal;
           }
         });
@@ -156,13 +196,15 @@ class _OverscrollDetectorState extends State<OverscrollDetector> {
     switch (_mode) {
       case _Mode.DownArmed:
         setState(() {
-          mode = _Mode.Loading;
+          debugPrint("OverscrollDetector: Down Fired");
+          mode = _Mode.Normal;
           widget.onDownwardNavigate();
         });
         break;
       case _Mode.UpArmed:
         setState(() {
-          mode = _Mode.Loading;
+          debugPrint("OverscrollDetector: Up Fired");
+          mode = _Mode.Normal;
           widget.onUpwardNavigate();
         });
         break;

@@ -22,7 +22,7 @@ class ChapterContentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Schedule a scroll next frame. the MaxExtend is not properly populated in current frame
-    WidgetsBinding.instance.scheduleFrameCallback((_) => _updateScroll());
+    WidgetsBinding.instance.addPostFrameCallback((_) => _updateScroll());
 
     return ReadingTheme(
       child: CustomScrollView(
